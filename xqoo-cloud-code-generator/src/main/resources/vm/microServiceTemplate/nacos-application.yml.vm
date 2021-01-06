@@ -1,0 +1,14 @@
+server:
+  port: ${modulePort}
+spring:
+  # 使用默认数据库连接属性请注释此三项,如果使用默认数据库连接可不更改此配置
+  #datasource:
+    #druid:
+      #password: gao2236
+      # url: jdbc:mysql://127.0.0.1:3306/xqoo_code_generator?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+      #username: root
+  #使用默认redis库以及连接属性请注释以下内容，如需自定义属性，请在当前配置文件单独写明
+  #redis:
+    #database: 1
+      #host: 127.0.0.1
+      #password: A123456bexqoo

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.mapper.${className}Mapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+#set($ArrLength=$columns.size())
+#foreach($column in $columns)
+#if($column.javaFieldType == 'String')
+    <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+        and ${column.columnName} = #{${column.javaFieldName}}
+    </if>
+#else
+    <if test="${column.javaFieldName} != null">
+        and ${column.columnName} = #{${column.javaFieldName}}
+    </if>
+#end
+#end
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into ${schemaName}.${tableName}(
+#foreach($column in $columns)
+#if(!$column.autoIncrement)
+#if($foreach.index < $ArrLength - 1)
+            ${column.columnName},
+#end
+#if($foreach.index >= $ArrLength - 1)
+            ${column.columnName}
+#end
+#end
+#end
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+#foreach($column in $columns)
+#if(!$column.autoIncrement)
+#if($foreach.index < $ArrLength - 1)
+            #{item.${column.javaFieldName}},
+#end
+#if($foreach.index >= $ArrLength - 1)
+            #{item.${column.javaFieldName}}
+#end
+#end
+#end
+        )
+        </foreach>
+    </insert>
+
+</mapper>

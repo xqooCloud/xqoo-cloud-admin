@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.gateway.mapper.GatewayRouteMapper">
+    <resultMap id="gatewayRouteRes"
+               type="com.xqoo.gateway.bean.GatewayRouteEntity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="service_status" jdbcType="INTEGER" property="serviceStatus" />
+        <result column="service_id" jdbcType="VARCHAR" property="serviceId" />
+        <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+        <result column="uri" jdbcType="VARCHAR" property="uri" />
+        <result column="predicates" jdbcType="VARCHAR" property="predicates" />
+        <result column="filters" jdbcType="VARCHAR" property="filters" />
+        <result column="order_no" jdbcType="INTEGER" property="orderNo" />
+        <result column="service_cname" jdbcType="VARCHAR" property="serviceCname" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+        <result column="remark_tips" jdbcType="VARCHAR" property="remarkTips" />
+    </resultMap>
+
+    <select id="queryRoutes" resultMap="gatewayRouteRes" parameterType="com.xqoo.gateway.bean.GatewayRouteBO">
+		SELECT
+        id,
+        service_status,
+        service_id,
+        service_type,
+        uri,
+        predicates,
+        filters,
+        order_no,
+        service_cname,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remark_tips
+		FROM
+		sys_gateway_route
+		<where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="serviceStatus != null">
+                AND service_status = #{serviceStatus}
+            </if>
+            <if test="serviceId != null and serviceId != ''">
+                AND service_id = #{serviceId}
+            </if>
+            <if test="serviceType != null and serviceType != ''">
+                AND service_type = #{serviceType}
+            </if>
+            <if test="serviceCname != null and serviceCname != ''">
+                AND service_cname LIKE concat(#{serviceCname},'%')
+            </if>
+            <!--<if test="createStartDate!=null and createStartDate != ''">
+                AND create_date &gt; #{createStartDate}
+            </if>
+            <if test="createEndDate!=null and createEndDate != ''">
+                AND create_date &lt; #{createEndDate}
+            </if>-->
+            <if test="createBy != null and createBy != ''">
+                AND create_by = #{createBy}
+            </if>
+            <!--<if test="updateStartDate!=null and updateStartDate != ''">
+                AND update_date &gt; #{updateStartDate}
+            </if>
+            <if test="updateEndDate!=null and updateEndDate != ''">
+                AND update_date &lt; #{updateEndDate}
+            </if>-->
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by = #{updateBy}
+            </if>
+        </where>
+        ORDER BY service_status
+	</select>
+
+    <select id="queryRoutesCount" resultType="java.lang.Integer" parameterType="com.xqoo.gateway.bean.GatewayRouteBO">
+        SELECT
+            COUNT(*)
+        FROM
+        sys_gateway_route
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="serviceStatus != null">
+                AND service_status = #{serviceStatus}
+            </if>
+            <if test="serviceId != null and serviceId != ''">
+                AND service_id LIKE concat('%',#{serviceCname},'%')
+            </if>
+            <if test="serviceType != null and serviceType != ''">
+                AND service_type = #{serviceType}
+            </if>
+            <if test="serviceCname != null and serviceCname != ''">
+                AND service_cname LIKE concat(#{serviceCname},'%')
+            </if>
+            <!--<if test="createStartDate!=null and createStartDate != ''">
+                AND create_date &gt; #{createStartDate}
+            </if>
+            <if test="createEndDate!=null and createEndDate != ''">
+                AND create_date &lt; #{createEndDate}
+            </if>-->
+            <if test="createBy != null and createBy != ''">
+                AND create_by = #{createBy}
+            </if>
+            <!--<if test="updateStartDate!=null and updateStartDate != ''">
+                AND update_date &gt; #{updateStartDate}
+            </if>
+            <if test="updateEndDate!=null and updateEndDate != ''">
+                AND update_date &lt; #{updateEndDate}
+            </if>-->
+            <if test="updateBy != null and updateBy != ''">
+                AND update_by = #{updateBy}
+            </if>
+        </where>
+    </select>
+
+    <update id="changeRouteStatus" parameterType="com.xqoo.gateway.bean.GatewayRouteBO">
+        UPDATE sys_gateway_route
+        SET service_status = #{serviceStatus}
+        WHERE
+            service_id = #{serviceId}
+    </update>
+
+    <update id="updateRouteInfo" parameterType="com.xqoo.gateway.bean.GatewayRouteEntity">
+        UPDATE sys_gateway_route
+        <set>
+            <if test="serviceStatus != null">service_status = #{serviceStatus},</if>
+            <if test="serviceType != null and serviceType != ''">service_type = #{serviceType},</if>
+            <if test="uri != null and uri != ''">uri = #{uri},</if>
+            <if test="predicates != null and predicates != ''">predicates = #{predicates},</if>
+            <if test="filters != null and filters != ''">filters = #{filters},</if>
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
+            <if test="serviceCname != null and serviceCname != ''">service_cname = #{serviceCname},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="remarkTips != null and remarkTips != ''">remark_tips = #{remarkTips},</if>
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+    <insert id="insertRouteInfo" parameterType="com.xqoo.gateway.bean.GatewayRouteEntity">
+        INSERT INTO sys_gateway_route(
+        service_status,
+        service_id,
+        service_type,
+        uri,
+        predicates,
+        filters,
+        order_no,
+        service_cname,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remark_tips)
+         VALUES (
+         #{serviceStatus},
+         #{serviceId},
+         #{serviceType},
+         #{uri},
+         #{predicates},
+         #{filters},
+         #{orderNo},
+         #{serviceCname},
+         #{createBy},
+         #{createDate},
+         #{updateBy},
+         #{updateDate},
+         #{remarkTips}
+         )
+    </insert>
+
+</mapper>

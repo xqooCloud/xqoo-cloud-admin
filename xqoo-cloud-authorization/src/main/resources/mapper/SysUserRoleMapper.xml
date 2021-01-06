@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.authorization.mapper.SysUserRoleMapper">
+
+    <resultMap type="com.xqoo.authorization.entity.SysUserRoleEntity" id="SysUserRoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remarkTips" column="remark_tips" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <select id="getUserRoleMap" parameterType="java.lang.String" resultType="com.xqoo.authorization.bo.SysUserRoleMapBO">
+        select
+	        userRole.role_id as "roleId",
+	        role.role_name as "roleName",
+	        role.admin as "admin"
+        from sys_user_role userRole right join sys_role role on userRole.role_id = role.id
+        where
+	        userRole.user_id = #{userId}
+    </select>
+
+    <select id="getUserRoleListInfo" resultType="com.xqoo.authorization.vo.SysUserRoleInfoVO" parameterType="java.lang.String">
+        select
+            usrRole.id as "id",
+            usrRole.user_id as "userId",
+            usrRole.role_id as "roleId",
+            ifnull(role.role_name, '未知角色') as "roleName",
+            ifnull(role.role_key, 'none') as "roleKey",
+            ifnull(role.admin, false) as "admin",
+            usrRole.create_by as "createBy",
+            usrRole.create_date as "createDate",
+            usrRole.update_by as "updateBy",
+            usrRole.update_date as "updateDate",
+            role.remark_tips as "remarkTips"
+        from
+        sys_user_role usrRole left join sys_role role on usrRole.role_id = role.id
+        where
+        usrRole.user_id = #{userId}
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysUserRoleMap">
+        select
+          id, user_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysUserRoleMap">
+        select
+          id, user_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user_role
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysUserRoleMap">
+        select
+          id, user_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remarkTips != null and remarkTips != ''">
+                and remark_tips = #{remarkTips}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT INTO xqoo_system_console.sys_user_role(
+        user_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.userId},
+            #{item.roleId},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate},
+            #{item.remarkTips}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,37 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+xqoo-apollo-config
+xqoo-third-party-pay
+third-party-jar/nacos/data
+third-party-jar/nacos/logs
+third-party-jar/nacos/bin/logs
+third-party-jar/nacos/bin/work
+application-local-test.yml
+*.iml
+out
+gen
+target
+work
+logs
+test
+将删除 xqoo-client-two/target/classes/com/xqoo/client/two/controller/demo/feign/
+将删除 xqoo-client-two/target/generated-sources/
+将删除 xqoo-client/target/generated-sources/
+将删除 xqoo-cloud-gateway/target/classes/com/xqoo/gateway/config/
+将删除 xqoo-cloud-gateway/target/classes/com/xqoo/gateway/fitter/
+将删除 xqoo-cloud-gateway/target/classes/com/xqoo/gateway/handler/
+将删除 xqoo-cloud-gateway/target/generated-sources/
+将删除 xqoo-common/xqoo-common-core/src/main/resources/
+将删除 xqoo-common/xqoo-common-core/target/
+将删除 xqoo-common/xqoo-common-redis/src/main/resources/
+将删除 xqoo-common/xqoo-common-redis/target/
+将删除 xqoo-common/xqoo-common-swagger2/src/main/resources/
+将删除 xqoo-common/xqoo-common-swagger2/target/
+将删除 xqoo-client-two/target/classes/META-INF/
+将删除 xqoo-cloud-feign/target/generated-sources/
+将删除 xqoo-common/xqoo-common-auth/src/main/resources/
+将删除 xqoo-common/xqoo-common-bean/src/main/resources/

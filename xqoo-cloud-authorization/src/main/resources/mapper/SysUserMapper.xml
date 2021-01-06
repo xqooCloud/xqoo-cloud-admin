@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.authorization.mapper.SysUserMapper">
+
+    <resultMap type="com.xqoo.authorization.entity.SysUserEntity" id="SysUserMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+        <result property="loginId" column="login_id" jdbcType="VARCHAR"/>
+        <result property="userStatus" column="user_status" jdbcType="INTEGER"/>
+        <result property="userType" column="user_type" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="profileUrl" column="profile_url" jdbcType="VARCHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remarkTips" column="remark_tips" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="pageQueryUserInfo" resultType="com.xqoo.authorization.vo.UserInfoVO" parameterType="com.xqoo.authorization.bo.QueryUserInfoBO">
+        select
+	        usr.user_id as "userId",
+	        usr.del_flag as "delFlag",
+	        usr.login_id as "loginId",
+	        usr.user_status as "userStatus",
+	        (case
+	        usr.user_status
+	        when 0 then '正常'
+	        when 1 then '封禁'
+	        when 2 then '停用'
+	        else '未知'
+	        end) as "userStatusName",
+	        usr.user_type as "userType",
+	        (case
+	        usr.user_type
+	        when 99 then '超级管理员'
+	        when 88 then '后台用户'
+	        when 10 then 'web端用户'
+	        when 9 then '临时用户'
+	        else '未知'
+	        end) as "userTypeName",
+	        false as "checked",
+	        count(usrRole.role_id) as "roleCount",
+	        usr.user_name as "userName",
+	        usr.last_login_time as "lastLoginTime",
+	        usr.profile_url as "profileUrl",
+	        usr.create_by as "createBy",
+	        usr.create_date as "createData",
+	        usr.update_by as "updateBy",
+	        usr.update_date as "updateDate",
+	        usr.remark_tips as "remartTips"
+        from sys_user usr left join sys_user_role usrRole on usr.user_id = usrRole.user_id
+        where
+	        usr.del_flag = 0
+	        <if test="bo.userId != null and bo.userId != ''">
+                and usr.user_id = #{bo.userId}
+            </if>
+            <if test="bo.loginId != null and bo.loginId != ''">
+                and usr.login_id like concat('%',#{bo.loginId},'%')
+            </if>
+            <if test="bo.userStatus != null">
+                and usr.user_status = #{bo.userStatus}
+            </if>
+            <if test="bo.userType != null">
+                and usr.user_type = #{bo.userType}
+            </if>
+            <if test="bo.userName != null and bo.userName != ''">
+                and usr.user_name like concat('%',#{bo.userName},'%')
+            </if>
+        group by usr.user_id
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysUserMap">
+        select
+          user_id, del_flag, login_id, user_status, user_type, user_name, password, salt, last_login_time, profile_url, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user
+        where user_id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysUserMap">
+        select
+          user_id, del_flag, login_id, user_status, user_type, user_name, password, salt, last_login_time, profile_url, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysUserMap">
+        select
+          user_id, del_flag, login_id, user_status, user_type, user_name, password, salt, last_login_time, profile_url, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_user
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="loginId != null and loginId != ''">
+                and login_id = #{loginId}
+            </if>
+            <if test="userStatus != null">
+                and user_status = #{userStatus}
+            </if>
+            <if test="userType != null">
+                and user_type = #{userType}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="salt != null and salt != ''">
+                and salt = #{salt}
+            </if>
+            <if test="lastLoginTime != null">
+                and last_login_time = #{lastLoginTime}
+            </if>
+            <if test="profileUrl != null and profileUrl != ''">
+                and profile_url = #{profileUrl}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remarkTips != null and remarkTips != ''">
+                and remark_tips = #{remarkTips}
+            </if>
+        </where>
+    </select>
+
+</mapper>

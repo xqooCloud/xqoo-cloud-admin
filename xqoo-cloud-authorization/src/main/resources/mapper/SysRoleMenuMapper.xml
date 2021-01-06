@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.authorization.mapper.SysRoleMenuMapper">
+
+    <resultMap type="com.xqoo.authorization.entity.SysRoleMenuEntity" id="SysRoleMenuMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="menuId" column="menu_id" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remarkTips" column="remark_tips" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="getRoleMenuIds" resultType="java.lang.Integer" parameterType="java.util.List">
+        select
+          menu_id
+        from xqoo_system_console.sys_role_menu
+        where role_id in
+        <foreach collection="roleIds" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysRoleMenuMap">
+        select
+          id, menu_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role_menu
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysRoleMenuMap">
+        select
+          id, menu_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role_menu
+        limit #{offset}, #{limit}
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT INTO xqoo_system_console.sys_role_menu(
+        menu_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.menuId},
+            #{item.roleId},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate},
+            #{item.remarkTips}
+            )
+        </foreach>
+    </insert>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysRoleMenuMap">
+        select
+        id, menu_id, role_id, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role_menu
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="menuId != null">
+                and menu_id = #{menuId}
+            </if>
+            <if test="roleId != null">
+                and role_id = #{roleId}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remarkTips != null and remarkTips != ''">
+                and remark_tips = #{remarkTips}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

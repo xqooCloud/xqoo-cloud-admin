@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.authorization.mapper.SysRoleMapper">
+
+    <resultMap type="com.xqoo.authorization.entity.SysRoleEntity" id="SysRoleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="admin" column="admin" jdbcType="INTEGER"/>
+        <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+        <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="remarkTips" column="remark_tips" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getBindRoleUser" parameterType="com.xqoo.authorization.bo.QueryRoleBO" resultType="com.xqoo.authorization.vo.SysRoleInfoVO">
+        select
+        role.id as "id",
+        role.admin as "admin",
+        role.del_flag as "delFlag",
+        role.role_key as "roleKey",
+        role.role_name as "roleName",
+        count(userRole.role_id) as "bindUserCount",
+        role.create_by as "createBy",
+        role.create_date as "createDate",
+        role.update_by as "updateBy",
+        role.update_date as "updateDate",
+        role.remark_tips as "remarkTips"
+        from sys_role role left join
+        sys_user_role userRole on role.id = userRole.role_id
+        where
+            role.del_flag = 0
+            <if test="bo.roleId != null and bo.roleId != 0">
+                and role.id = #{bo.id}
+            </if>
+            <if test="bo.roleId == null or bo.roleId == 0">
+                <if test="bo.roleKey != null and bo.roleKey != ''">
+                    and role.role_key like concat(#{bo.roleKey},'%')
+                </if>
+                <if test="bo.roleName != null and bo.roleName != ''">
+                    and role.role_name like concat('%',#{bo.roleName},'%')
+                </if>
+            </if>
+
+        group by role.id
+    </select>
+
+    <select id="queryUserNoRoleCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select
+            count(id)
+        from sys_role
+        where
+        del_flag = 0
+        and not exists (
+        select role_id from
+        sys_user_role
+        where role_id = sys_role.id and user_id = #{userId}
+        )
+    </select>
+
+    <select id="queryUserNoRole" parameterType="java.lang.String" resultMap="SysRoleMap">
+        select
+            id, admin, del_flag, role_key, role_name, create_by, create_date, update_by, update_date, remark_tips
+        from sys_role
+        where
+        del_flag = 0
+        and not exists (
+        select role_id from
+        sys_user_role
+        where role_id = sys_role.id and user_id = #{userId}
+        )
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysRoleMap">
+        select
+          id, admin, del_flag, role_key, role_name, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysRoleMap">
+        select
+          id, admin, del_flag, role_key, role_name, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysRoleMap">
+        select
+          id, admin, del_flag, role_key, role_name, create_by, create_date, update_by, update_date, remark_tips
+        from xqoo_system_console.sys_role
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="admin != null">
+                and admin = #{admin}
+            </if>
+            <if test="delFlag != null">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="roleKey != null and roleKey != ''">
+                and role_key = #{roleKey}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+            <if test="createBy != null and createBy != ''">
+                and create_by = #{createBy}
+            </if>
+            <if test="createDate != null">
+                and create_date = #{createDate}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="updateDate != null">
+                and update_date = #{updateDate}
+            </if>
+            <if test="remarkTips != null and remarkTips != ''">
+                and remark_tips = #{remarkTips}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,108 @@
+package ${packageName}.service.impl;
+
+import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import ${packageName}.service.${className}Service;
+import ${packageName}.entity.${className}Entity;
+import ${packageName}.mapper.${className}Mapper;
+import com.github.pagehelper.PageHelper;
+import com.xqoo.common.constants.SqlQueryConstant;
+import com.xqoo.common.page.PageRequestBean;
+import com.xqoo.common.page.PageResponseBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import com.xqoo.common.core.entity.CurrentUser;
+import com.xqoo.common.entity.ResultEntity;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 数据源表(${tableName})表服务实现类
+ *
+ * @author ${author}
+ * @date ${dateTime}
+ */
+@Service("${classNameFirstLower}Service")
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}Entity> implements ${className}Service {
+
+    private final static Logger logger = LoggerFactory.getLogger(${className}ServiceImpl.class);
+
+#set($hasCreate=false)
+#set($pkJavaFieldType='Integer')
+#set($pkJavaFieldName='id')
+#set($pkJavaFieldNameGet='getId')
+#set($hasDelFlag=false)
+#foreach($column in $columns)
+#if($column.javaFieldName == 'createBy' || $column.javaFieldName == 'createDate')
+    #set($hasCreate=true)
+#end
+#if($column.primaryKey)
+    #set($pkJavaFieldType=${column.javaFieldType})
+    #set($pkJavaFieldName=${column.javaFieldName})
+    #set($pkJavaFieldNameGet=${column.javaFieldName.substring(0,1).toUpperCase()} + ${column.javaFieldName.substring(1)})
+#end
+#if($column.javaFieldName == 'delFlag')
+    #set($hasDelFlag=true)
+#end
+#end
+
+    @Autowired
+    private ${className}Mapper ${classNameFirstLower}Mapper;
+
+    @Override
+    public ResultEntity<PageResponseBean<${className}Entity>> pageGetList(PageRequestBean page){
+        LambdaQueryWrapper<${className}Entity> queryWrapper = new LambdaQueryWrapper<>();
+#if($hasDelFlag)
+         queryWrapper.eq(${className}Entity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+#end
+        Integer count = ${classNameFirstLower}Mapper.selectCount(queryWrapper);
+        PageResponseBean<${className}Entity> result = new PageResponseBean<>(page.getPage(), page.getPageSize(), count);
+        if(count == null || count < 1){
+            result.setContent(Collections.emptyList());
+            return new ResultEntity<>(HttpStatus.OK, "ok", result);
+        }
+        PageHelper.startPage(page.getPage(), page.getPageSize());
+        List<${className}Entity> list = ${classNameFirstLower}Mapper.selectList(queryWrapper);
+        result.setContent(list);
+        return new ResultEntity<>(HttpStatus.OK, "ok", result);
+    }
+
+    @Override
+    public ResultEntity insertList(List<${className}Entity> list, CurrentUser currentUser){
+        if(CollUtil.isEmpty(list)){
+            return new ResultEntity<>(HttpStatus.OK, "新增完成");
+        }
+#if($hasCreate)
+        list.forEach(item -> {
+            item.setCreateBy(currentUser.getUserId());
+            item.setCreateDate(new Date());
+        });
+#end
+        try{
+            ${classNameFirstLower}Mapper.insertList(list);
+            return new ResultEntity<>(HttpStatus.OK, "新增完成");
+        }catch (RuntimeException e){
+            logger.error("[${packageName}]数据库批量新增错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "新增失败");
+        }
+    }
+
+    public ${className}Entity getOne${className}EntityByPrimaryKey(${pkJavaFieldType} ${pkJavaFieldName}){
+        LambdaQueryWrapper<${className}Entity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(${className}Entity::get${pkJavaFieldNameGet}, ${pkJavaFieldName});
+#if($hasDelFlag)
+        queryWrapper.eq(${className}Entity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+#end
+        ${className}Entity entity = ${classNameFirstLower}Mapper.selectOne(queryWrapper);
+        if(entity != null){
+            return entity;
+        }
+        return new ${className}Entity();
+    }
+}

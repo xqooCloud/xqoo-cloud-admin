@@ -1,0 +1,84 @@
+nacos:
+  public:
+    # 正式
+    #    namespace: xqoo-cloud-namespace-asdfghjk
+    #    dicovery-ip: 172.26.70.240
+    #    server-addr: 47.92.195.115:8184
+    #    public-config-group: PUBLIC_CONFIG_GROUP
+    #    sentinel-group: SENTINEL_GROUP
+    #    sentinel-dashboard: 127.0.0.1:8718
+    #    sentinel-port: 8719
+    # 测试
+    namespace: xqoo-cloud-namespace-asdfghjk-dev
+    dicovery-ip: 127.0.0.1
+    server-addr: 127.0.0.1:8184
+    public-config-group: PUBLIC_CONFIG_GROUP
+    sentinel-group: SENTINEL_GROUP
+    sentinel-dashboard: 127.0.0.1:8718
+    sentinel-port: 8719
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: xqoo-cloud-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacos.public.server-addr}
+        ip: ${nacos.public.dicovery-ip}
+        namespace: ${nacos.public.namespace}
+        port: 8080
+      config:
+        shared-configs:
+          - data-id: public-mysql-config.yml # 配置文件名-Data Id
+            group: ${nacos.public.public-config-group} # 分组名
+            efresh: false   # 是否动态刷新，默认为false
+          - data-id: public-redis-config.yml # 配置文件名-Data Id
+            group: ${nacos.public.public-config-group} # 分组名
+            efresh: false   # 是否动态刷新，默认为false
+          - data-id: module-share-config.yml # 配置文件名-Data Id
+            group: ${nacos.public.public-config-group} # 分组名
+            refresh: true   # 是否动态刷新，默认为false
+          - data-id: public-xqoo-config.yml
+            group: ${nacos.public.public-config-group}
+            refresh: true
+          - data-id: public-xqoo-gateway-config.yml
+            group: ${nacos.public.public-config-group}
+            refresh: true
+        namespace: ${nacos.public.namespace}
+        server-addr: ${nacos.public.server-addr}
+        file-extension: yml
+    inetutils:
+      ignored-interfaces: eth.*              # 忽略网卡，eth.*，正则表达式
+      # 选择符合前缀的IP作为服务注册IP, discovery.server-ip就是你的公网IP
+      preferred-networks: ${nacos.public.dicovery-ip}
+    sentinel:
+      # 取消控制台懒加载
+      eager: true
+      transport:
+        # 控制台地址
+        dashboard: ${nacos.public.sentinel-dashboard}
+        port: ${nacos.public.sentinel-pord}
+      # nacos配置持久化
+      datasource:
+        gate-way-flow:
+          nacos:
+            server-addr: ${nacos.public.server-addr}
+            namespace: ${nacos.public.namespace}
+            dataId: ${spring.application.name}-sentinel
+            groupId: ${nacos.public.sentinel-group}
+            data-type: json
+            rule-type: gw_flow
+        gate-way-api-group:
+          nacos:
+            server-addr: ${nacos.public.server-addr}
+            namespace: ${nacos.public.namespace}
+            dataId: ${spring.application.name}-api-sentinel
+            groupId: ${nacos.public.sentinel-group}
+            rule-type: gw_api_group
+      scg:
+        fallback:
+          mode: response
+          response-status: 200
+          response-body: '{"code":429,"message":"当前服务器太繁忙了，请稍后再试"}'
+

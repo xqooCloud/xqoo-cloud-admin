@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>xqoo-cloud</artifactId>
+        <groupId>xqoo.cloud</groupId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>xqoo-spring-admin-watch</artifactId>
+
+    <dependencies>
+
+        <!-- Spring框架基本的核心工具 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-server</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- common公共库Redis -->
+        <dependency>
+            <groupId>xqoo.cloud</groupId>
+            <artifactId>xqoo-common-redis</artifactId>
+        </dependency>
+
+        <!-- 公共库Feign -->
+        <dependency>
+            <groupId>xqoo.cloud</groupId>
+            <artifactId>xqoo-cloud-feign</artifactId>
+        </dependency>
+    </dependencies>
+</project>

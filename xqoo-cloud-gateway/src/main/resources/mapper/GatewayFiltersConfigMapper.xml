@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.gateway.mapper.GatewayFiltersConfigMapper">
+    <resultMap id="gatewayFiltersConfigRes"
+               type="com.xqoo.gateway.bean.GatewayFiltersConfigEntity">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="filters_type" jdbcType="VARCHAR" property="filtersType" />
+        <result column="filters_name" jdbcType="VARCHAR" property="filtersName" />
+        <result column="filters_tips" jdbcType="VARCHAR" property="filtersTips" />
+        <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+        <result column="remark_tips" jdbcType="VARCHAR" property="remarkTips" />
+    </resultMap>
+
+    <select id="getFiltersConfigList" resultMap="gatewayFiltersConfigRes" parameterType="com.xqoo.gateway.bean.GatewayFiltersConfigEntity">
+        SELECT
+        id,
+        filters_type,
+        filters_name,
+        filters_tips,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remark_tips
+        FROM
+        sys_gateway_route_filters_config
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="filtersType != null and filtersType != ''">
+                AND filters_type = #{filtersType}
+            </if>
+            <if test="filtersName != null and filtersName != ''">
+                AND filters_name = #{filtersName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

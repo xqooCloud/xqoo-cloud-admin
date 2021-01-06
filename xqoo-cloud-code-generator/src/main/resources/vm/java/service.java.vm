@@ -1,0 +1,34 @@
+package ${packageName}.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import ${packageName}.entity.${className}Entity;
+import com.xqoo.common.core.entity.CurrentUser;
+import com.xqoo.common.entity.ResultEntity;
+import com.xqoo.common.page.PageRequestBean;
+import com.xqoo.common.page.PageResponseBean;
+
+import java.util.List;
+
+/**
+ * 数据源表(${tableName})表服务接口
+ *
+ * @author ${author}
+ * @date ${dateTime}
+ */
+
+public interface ${className}Entity extends IService<${className}Entity> {
+
+#set($pkJavaFieldType='Integer')
+#set($pkJavaFieldName='id')
+#foreach($column in $columns)
+#if($column.primaryKey)
+    #set($pkJavaFieldType=${column.javaFieldType})
+    #set($pkJavaFieldName=${column.javaFieldName})
+#end
+#end
+    ResultEntity<PageResponseBean<${className}Entity>> pageGetList(PageRequestBean page);
+
+    ResultEntity insertList(List<${className}Entity> list, CurrentUser currentUser);
+
+    ${className}Entity getOne${className}EntityByPrimaryKey(${pkJavaFieldType} ${pkJavaFieldName});
+}

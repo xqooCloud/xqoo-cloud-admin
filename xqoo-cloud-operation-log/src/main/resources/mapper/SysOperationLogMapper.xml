@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.operlog.mapper.SysOperationLogMapper">
+
+    <resultMap type="com.xqoo.operlog.entity.SysOperationLogEntity" id="SysOperationLogMap">
+        <result property="logId" column="log_id" jdbcType="VARCHAR"/>
+        <result property="operationStatus" column="operation_status" jdbcType="INTEGER"/>
+        <result property="operationType" column="operation_type" jdbcType="INTEGER"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="methodName" column="method_name" jdbcType="VARCHAR"/>
+        <result property="requestUrl" column="request_url" jdbcType="VARCHAR"/>
+        <result property="operatorId" column="operator_id" jdbcType="VARCHAR"/>
+        <result property="operatorName" column="operator_name" jdbcType="VARCHAR"/>
+        <result property="operatorRemoteIp" column="operator_remote_ip" jdbcType="VARCHAR"/>
+        <result property="operatorMessage" column="operator_message" jdbcType="VARCHAR"/>
+        <result property="tipsMessage" column="tips_message" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="BIGINT"/>
+        <result property="loginSource" column="login_source" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getOperationListCount" resultType="java.lang.Integer" parameterType="com.xqoo.operlog.bo.QueryOperatorBO">
+        select ifnull(count(result.logId), 0) from
+        (
+        select
+        log.log_id as "logId",
+        log.operation_status as "operationStatus",
+        log.operation_type as "operationType",
+        log.request_method as "requestMethod",
+        log.method_name as "methodName",
+        log.request_url as "requestUrl",
+        log.operator_id as "operatorId",
+        log.operator_name as "operatorName",
+        log.operator_remote_ip as "operatorRemoteIp",
+        log.operator_message as "operatorMessage",
+        log.tips_message as "tipsMessage",
+        from_unixtime(round(log.create_time/1000), '%Y-%m-%d %T') as "createTime",
+        log.login_source as "loginSource",
+        count(request.id) as "hasRequestData",
+        count(response.id) as "hasResponseData"
+        from xqoo_system_operation_log.sys_operation_log log left join
+        xqoo_system_operation_log.sys_operation_log_request_info request on log.log_id = request.parent_id
+        left join xqoo_system_operation_log.sys_operation_log_response_info response on log.log_id = response.parent_id
+        <where>
+            <if test="bo.operationStatus != null">
+                and log.operation_status = #{bo.operationStatus}
+            </if>
+            <if test="bo.operationType != null">
+                and log.operation_type = #{bo.operationType}
+            </if>
+            <if test="bo.requestMethod != null and bo.requestMethod != ''">
+                and log.request_method = #{bo.requestMethod}
+            </if>
+            <if test="bo.requestUrl != null and bo.requestUrl != ''">
+                and log.request_url like concat(#{bo.requestUrl}, '%')
+            </if>
+            <if test="bo.operatorId != null and bo.operatorId != ''">
+                and log.operator_id = #{bo.operatorId}
+            </if>
+            <if test="bo.operatorName != null and bo.operatorName != ''">
+                and log.operator_name like concat('%', #{bo.operatorName}, '%')
+            </if>
+        </where>
+        group by log.log_id
+        ) result
+    </select>
+
+    <select id="getOperationList" resultType="com.xqoo.operlog.vo.OperationLogVO" parameterType="com.xqoo.operlog.bo.QueryOperatorBO">
+        select
+	        log.log_id as "logId",
+	        log.operation_status as "operationStatus",
+	        log.operation_type as "operationType",
+	        log.request_method as "requestMethod",
+	        log.method_name as "methodName",
+	        log.request_url as "requestUrl",
+	        log.operator_id as "operatorId",
+	        log.operator_name as "operatorName",
+	        log.operator_remote_ip as "operatorRemoteIp",
+	        log.operator_message as "operatorMessage",
+	        log.tips_message as "tipsMessage",
+            from_unixtime(round(log.create_time/1000), '%Y-%m-%d %T') as "createTime",
+	        log.login_source as "loginSource",
+	        count(request.id) as "hasRequestData",
+	        count(response.id) as "hasResponseData"
+        from xqoo_system_operation_log.sys_operation_log log left join xqoo_system_operation_log.sys_operation_log_request_info request on log.log_id = request.parent_id
+        left join xqoo_system_operation_log.sys_operation_log_response_info response on log.log_id = response.parent_id
+        <where>
+            <if test="bo.operationStatus != null">
+                and log.operation_status = #{bo.operationStatus}
+            </if>
+            <if test="bo.operationType != null">
+                and log.operation_type = #{bo.operationType}
+            </if>
+            <if test="bo.requestMethod != null and bo.requestMethod != ''">
+                and log.request_method = #{bo.requestMethod}
+            </if>
+            <if test="bo.requestUrl != null and bo.requestUrl != ''">
+                and log.request_url like concat(#{bo.requestUrl}, '%')
+            </if>
+            <if test="bo.operatorId != null and bo.operatorId != ''">
+                and log.operator_id = #{bo.operatorId}
+            </if>
+            <if test="bo.operatorName != null and bo.operatorName != ''">
+                and log.operator_name like concat('%', #{bo.operatorName}, '%')
+            </if>
+        </where>
+        group by log.log_id order by log.create_time desc
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysOperationLogMap">
+        select
+          log_id, operation_status, operation_type, request_method, method_name, request_url, operator_id, operator_name, operator_remote_ip, operator_message, tips_message, create_time, login_source
+        from xqoo_system_operation_log.sys_operation_log
+        where log_id = #{logId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="SysOperationLogMap">
+        select
+          log_id, operation_status, operation_type, request_method, method_name, request_url, operator_id, operator_name, operator_remote_ip, operator_message, tips_message, create_time, login_source
+        from xqoo_system_operation_log.sys_operation_log
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysOperationLogMap">
+        select
+        log_id, operation_status, operation_type, request_method, method_name, request_url, operator_id, operator_name,
+        operator_remote_ip, operator_message, tips_message, create_time, login_source
+        from xqoo_system_operation_log.sys_operation_log
+        <where>
+            <if test="logId != null and logId != ''">
+                and log_id = #{logId}
+            </if>
+            <if test="operationStatus != null">
+                and operation_status = #{operationStatus}
+            </if>
+            <if test="operationType != null">
+                and operation_type = #{operationType}
+            </if>
+            <if test="requestMethod != null and requestMethod != ''">
+                and request_method = #{requestMethod}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                and method_name = #{methodName}
+            </if>
+            <if test="requestUrl != null and requestUrl != ''">
+                and request_url = #{requestUrl}
+            </if>
+            <if test="operatorId != null and operatorId != ''">
+                and operator_id = #{operatorId}
+            </if>
+            <if test="operatorName != null and operatorName != ''">
+                and operator_name = #{operatorName}
+            </if>
+            <if test="operatorRemoteIp != null and operatorRemoteIp != ''">
+                and operator_remote_ip = #{operatorRemoteIp}
+            </if>
+            <if test="operatorMessage != null and operatorMessage != ''">
+                and operator_message = #{operatorMessage}
+            </if>
+            <if test="tipsMessage != null and tipsMessage != ''">
+                and tips_message = #{tipsMessage}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="loginSource != null and loginSource != ''">
+                and login_source = #{loginSource}
+            </if>
+        </where>
+    </select>
+
+</mapper>

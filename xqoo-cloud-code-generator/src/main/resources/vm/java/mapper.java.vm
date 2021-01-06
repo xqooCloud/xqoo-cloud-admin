@@ -1,0 +1,23 @@
+package ${packageName}.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import ${packageName}.entity.${className}Entity;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * 数据源表(${tableName})表数据库访问层
+ *
+ * @author ${author}
+ * @date ${dateTime}
+ */
+
+@Mapper
+@Repository
+public interface ${className}Mapper extends BaseMapper<${className}Entity> {
+
+    void insertList(@Param("list") List<${className}Entity> list) throws RuntimeException;
+}

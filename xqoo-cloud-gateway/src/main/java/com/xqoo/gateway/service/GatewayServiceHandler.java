@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -115,9 +116,8 @@ public class GatewayServiceHandler implements ApplicationEventPublisherAware, Co
                 new PageResponseBean<>(gatewayRouteBO.getPage(), gatewayRouteBO.getPageSize(), count);
         PageHelper.startPage(gatewayRouteBO.getPage(), gatewayRouteBO.getPageSize());
         List<GatewayRouteEntity> routeList = this.getRouteInfo(gatewayRouteBO);
-        List<GatewayRouteEntityVO> routeVOList = new ArrayList<>();
-        List<String> nowRouteList = this.getRouteNow();
-        routeList.forEach(routeSingleInfo -> {
+//        List<String> nowRouteList = this.getRouteNow();
+        List<GatewayRouteEntityVO> routeVOList = routeList.stream().map(routeSingleInfo -> {
                     GatewayRouteEntityVO gatewayRouteVO = new GatewayRouteEntityVO();
                     BeanUtils.copyProperties(routeSingleInfo, gatewayRouteVO);
                     List<PredicateDefinition> predicateList = this.getPredicateList(routeSingleInfo.getPredicates());
@@ -125,10 +125,10 @@ public class GatewayServiceHandler implements ApplicationEventPublisherAware, Co
                     gatewayRouteVO.setFilterDefinitionList(filterDefinitionList);
                     gatewayRouteVO.setPredicateDefinitionList(predicateList);
                     gatewayRouteVO.setIsActive(0);
-                    routeVOList.add(gatewayRouteVO);
-                });
-        routeVOList.stream().filter(tmp -> nowRouteList.contains(tmp.getServiceId()))
-                .forEach(item -> item.setIsActive(1));
+                    return gatewayRouteVO;
+                }).collect(Collectors.toList());
+        /*routeVOList.stream().filter(tmp -> nowRouteList.contains(tmp.getServiceId()))
+                .forEach(item -> item.setIsActive(1));*/
         responseBean.setContent(routeVOList);
         return responseBean;
     }

@@ -1,5 +1,6 @@
 package com.xqoo.authorization.controller.authentication;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.xqoo.authorization.service.authentication.AuthenticationDefaultService;
 import com.xqoo.common.core.config.JWTUtils;
 import com.xqoo.common.core.entity.CurrentUser;
@@ -46,6 +47,9 @@ public class AuthentictionCenterController {
             return new CurrentUser();
         }
         CurrentUser currentUser = authentictionDefaultService.getUserBaseInfo(token);
+        if(currentUser == null){
+            return new CurrentUser();
+        }
         return currentUser;
     }
 }

@@ -1,22 +1,27 @@
 package com.xqoo.gateway.controller;
 
-import com.google.common.base.Optional;
+import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.core.exception.SystemException;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.gateway.bean.GatewayFiltersConfigEntity;
-import com.xqoo.gateway.bean.GatewayPredicatesConfigEntity;
-import com.xqoo.gateway.bean.GatewayRouteBO;
-import com.xqoo.gateway.bean.GatewayRouteEntity;
+import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.feign.annotations.LoginUser;
+import com.xqoo.feign.service.auth.AuthFeign;
+import com.xqoo.feign.utils.FeignReturnDataGzip;
+import com.xqoo.gateway.bean.*;
 import com.xqoo.gateway.service.GatewayServiceHandler;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/sysConsole/gatewayRoute")
@@ -27,11 +32,19 @@ public class RouteController {
     @Autowired
     private GatewayServiceHandler gatewayServiceHandler;
 
+    @Autowired
+    private AuthFeign authFeign;
+
+
     /**
      * 刷新路由配置
      */
     @GetMapping("/refresh")
-    public ResultEntity refresh(){
+    public ResultEntity refresh(@RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         try{
             GatewayRouteBO routeQueyr = new GatewayRouteBO();
             routeQueyr.setServiceStatus(1);
@@ -50,7 +63,12 @@ public class RouteController {
      * 查询路由配置
      */
     @PostMapping("/getRouteList")
-    public ResultEntity getRouteList(@RequestBody GatewayRouteBO gatewayRouteBO){
+    public ResultEntity<PageResponseBean<GatewayRouteEntityVO>> getRouteList(@RequestBody GatewayRouteBO gatewayRouteBO,
+                                                                             @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         try{
             return new ResultEntity<>(HttpStatus.OK,"获取网关路由成功", gatewayServiceHandler.getRouteList(gatewayRouteBO));
         }catch(Exception e){
@@ -61,13 +79,32 @@ public class RouteController {
     }
 
     /**
+     * 查询单个路由信息
+     */
+    @GetMapping("/getSingleRouteInfo")
+    public ResultEntity<GatewayRouteEntity> getSingleRouteInfo(@RequestParam(value = "routeId") Long routeId,
+                                                               @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
+        return gatewayServiceHandler.getSingleRouteInfo(routeId);
+    }
+
+    /**
      * 开启路由接口
      *
      * @param serviceId
      * @return
      */
+
+    @Deprecated
     @GetMapping("/openClient")
-    public ResultEntity add(@RequestParam String serviceId){
+    public ResultEntity add(@RequestParam String serviceId, @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         if(StringUtils.isEmpty(serviceId)){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "操作失败，必须指定一个需要开启的路由的id");
         }
@@ -92,11 +129,15 @@ public class RouteController {
 
     /**
      * 关闭服务路由接口
-
      */
 
+    @Deprecated
     @GetMapping("/closeClient")
-    public ResultEntity delete(@RequestParam String serviceId){
+    public ResultEntity delete(@RequestParam String serviceId, @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         if(StringUtils.isEmpty(serviceId)){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "操作失败，必须指定一个需要关闭的路由的id");
         }
@@ -118,7 +159,11 @@ public class RouteController {
      */
 
     @PostMapping("/denyClient")
-    public ResultEntity denyClient(@RequestBody GatewayRouteBO gatewayRouteBO){
+    public ResultEntity denyClient(@RequestBody GatewayRouteBO gatewayRouteBO, @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         if(StringUtils.isEmpty(gatewayRouteBO.getServiceId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "操作失败，必须指定一个需要删除的路由的id");
         }
@@ -142,7 +187,11 @@ public class RouteController {
      */
 
     @PostMapping("/resetClient")
-    public ResultEntity resetClient(@RequestBody GatewayRouteBO gatewayRouteBO){
+    public ResultEntity resetClient(@RequestBody GatewayRouteBO gatewayRouteBO, @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         if(StringUtils.isEmpty(gatewayRouteBO.getServiceId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "操作失败，必须指定一个需要恢复的路由的id");
         }
@@ -164,7 +213,11 @@ public class RouteController {
 
      */
     @GetMapping("/getPredicatesList")
-    public ResultEntity getPredicatesList(){
+    public ResultEntity getPredicatesList(@RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         GatewayPredicatesConfigEntity gatewayPredicatesConfigEntity = new GatewayPredicatesConfigEntity();
         return new ResultEntity<>(HttpStatus.OK, "获取断言器配置成功", this.gatewayServiceHandler.getPredicatesConfigList(gatewayPredicatesConfigEntity));
     }
@@ -173,27 +226,35 @@ public class RouteController {
      * 获取过滤器配置信息
      * */
     @GetMapping("/getFiltersList")
-    public ResultEntity getFiltersList(){
+    public ResultEntity getFiltersList(@RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         GatewayFiltersConfigEntity gatewayFiltersConfigEntity = new GatewayFiltersConfigEntity();
         return new ResultEntity<>(HttpStatus.OK, "获取过滤器配置成功", this.gatewayServiceHandler.getFiltersConfigList(gatewayFiltersConfigEntity));
     }
 
     /**
-     * 获取过滤器配置信息
+     * 新增过滤器配置信息
      * */
     @PostMapping("/putRouteInfo")
-    public ResultEntity putRouteInfo(@RequestBody GatewayRouteEntity gatewayRouteEntity){
+    public ResultEntity putRouteInfo(@RequestBody GatewayRouteEntity gatewayRouteEntity, @RequestParam(value = "token") String token){
+        CurrentUser currentUser = getLoginUser(token);
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前未登录或登录已过期");
+        }
         GatewayRouteBO routeQueyr = new GatewayRouteBO();
         routeQueyr.setServiceId(gatewayRouteEntity.getServiceId());
         List<GatewayRouteEntity> list = gatewayServiceHandler.getRouteInfo(routeQueyr);
-        String userId = "userId";
+        String userId = currentUser.getUserId();
         if(StringUtils.isEmpty(gatewayRouteEntity.getFilters()) || "[]".equals(gatewayRouteEntity.getFilters())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"新增路由信息失败:[过滤器属性为空，不允许新增]");
         }
         if(StringUtils.isEmpty(gatewayRouteEntity.getPredicates()) || "[]".equals(gatewayRouteEntity.getPredicates())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"新增路由信息失败:[断言属性为空，不允许新增]");
         }
-        if(!Optional.fromNullable(gatewayRouteEntity.getId()).isPresent()){
+        if(!Optional.ofNullable(gatewayRouteEntity.getId()).isPresent()){
             if(list.size() > 0){
                 return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"新增路由信息失败:["
                         + gatewayRouteEntity.getServiceId() + "]信息已存在，不能新增");
@@ -224,5 +285,9 @@ public class RouteController {
             }
         }
 
+    }
+
+    private CurrentUser getLoginUser (String token){
+        return FeignReturnDataGzip.Unzip(authFeign.getLoginUserInfo(token), CurrentUser.class);
     }
 }

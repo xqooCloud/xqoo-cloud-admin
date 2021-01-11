@@ -1,9 +1,11 @@
 package com.xqoo.gateway.service;
 
+import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.pagehelper.PageHelper;
 import com.xqoo.common.core.utils.JacksonUtils;
+import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.gateway.bean.*;
 import com.xqoo.gateway.config.GetRoutesConfig;
@@ -22,6 +24,7 @@ import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -30,6 +33,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -115,9 +119,8 @@ public class GatewayServiceHandler implements ApplicationEventPublisherAware, Co
                 new PageResponseBean<>(gatewayRouteBO.getPage(), gatewayRouteBO.getPageSize(), count);
         PageHelper.startPage(gatewayRouteBO.getPage(), gatewayRouteBO.getPageSize());
         List<GatewayRouteEntity> routeList = this.getRouteInfo(gatewayRouteBO);
-        List<GatewayRouteEntityVO> routeVOList = new ArrayList<>();
-        List<String> nowRouteList = this.getRouteNow();
-        routeList.forEach(routeSingleInfo -> {
+//        List<String> nowRouteList = this.getRouteNow();
+        List<GatewayRouteEntityVO> routeVOList = routeList.stream().map(routeSingleInfo -> {
                     GatewayRouteEntityVO gatewayRouteVO = new GatewayRouteEntityVO();
                     BeanUtils.copyProperties(routeSingleInfo, gatewayRouteVO);
                     List<PredicateDefinition> predicateList = this.getPredicateList(routeSingleInfo.getPredicates());
@@ -125,12 +128,25 @@ public class GatewayServiceHandler implements ApplicationEventPublisherAware, Co
                     gatewayRouteVO.setFilterDefinitionList(filterDefinitionList);
                     gatewayRouteVO.setPredicateDefinitionList(predicateList);
                     gatewayRouteVO.setIsActive(0);
-                    routeVOList.add(gatewayRouteVO);
-                });
-        routeVOList.stream().filter(tmp -> nowRouteList.contains(tmp.getServiceId()))
-                .forEach(item -> item.setIsActive(1));
+                    return gatewayRouteVO;
+                }).collect(Collectors.toList());
+        /*routeVOList.stream().filter(tmp -> nowRouteList.contains(tmp.getServiceId()))
+                .forEach(item -> item.setIsActive(1));*/
         responseBean.setContent(routeVOList);
         return responseBean;
+    }
+
+    public ResultEntity<GatewayRouteEntity> getSingleRouteInfo(Long routeId){
+        GatewayRouteBO bo = new GatewayRouteBO();
+        bo.setId(routeId);
+        List<GatewayRouteEntity> list = this.getRouteInfo(bo);
+        if(CollUtil.isEmpty(list)){
+            return new ResultEntity<>(HttpStatus.OK,"获取网关路由成功", null);
+        }
+        if(list.size() > 1){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"查询到的路由信息大于一条，数据错误");
+        }
+        return new ResultEntity<>(HttpStatus.OK,"获取网关路由成功", list.get(0));
     }
 
 

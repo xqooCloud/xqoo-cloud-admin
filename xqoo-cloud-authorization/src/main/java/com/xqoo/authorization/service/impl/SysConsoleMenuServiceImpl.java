@@ -267,7 +267,7 @@ public class SysConsoleMenuServiceImpl extends ServiceImpl<SysConsoleMenuMapper,
                 vo.setComponent(item.getComponent());
             }
             if(StringUtils.isNotEmpty(item.getName())){
-                vo.setTitle(item.getName());
+                vo.setTitle(item.getHideInMenu() ? "(已隐藏)" + item.getName() : item.getName());
                 vo.setName(item.getName());
             }
             if(StringUtils.isNotEmpty(item.getIcon())){

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.email.mapper.EmailTemplateMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="templateName != null and templateName != ''">
+        and template_name = #{templateName}
+    </if>
+    <if test="templateType != null">
+        and template_type = #{templateType}
+    </if>
+    <if test="emailSubject != null and emailSubject != ''">
+        and email_subject = #{emailSubject}
+    </if>
+    <if test="emailText != null and emailText != ''">
+        and email_text = #{emailText}
+    </if>
+    <if test="emailFilePath != null and emailFilePath != ''">
+        and email_file_path = #{emailFilePath}
+    </if>
+    <if test="emailFileName != null and emailFileName != ''">
+        and email_file_name = #{emailFileName}
+    </if>
+    <if test="delFlag != null">
+        and del_flag = #{delFlag}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_system_email.email_template(
+            template_name,
+            template_type,
+            email_subject,
+            email_text,
+            email_file_path,
+            email_file_name,
+            del_flag,
+            create_by,
+            create_date,
+            update_by,
+            update_date
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.templateName},
+            #{item.templateType},
+            #{item.emailSubject},
+            #{item.emailText},
+            #{item.emailFilePath},
+            #{item.emailFileName},
+            #{item.delFlag},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

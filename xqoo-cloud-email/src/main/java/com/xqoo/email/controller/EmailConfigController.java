@@ -47,7 +47,6 @@ public class EmailConfigController{
     @Autowired
     private EmailConfigService EmailConfigService;
 
-
     @ApiOperation("分页获取email_config表数据")
     @PostMapping("/pageGetList")
     public ResultEntity<PageResponseBean<EmailConfigEntity>> pageGetList(@RequestBody PageRequestBean page){

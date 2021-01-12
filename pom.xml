@@ -23,6 +23,7 @@
         <module>xqoo-cloud-authorization</module>
         <module>xqoo-cloud-operation-log</module>
         <module>xqoo-cloud-code-generator</module>
+        <module>xqoo-cloud-email</module>
     </modules>
     <packaging>pom</packaging>
 

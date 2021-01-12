@@ -1,9 +1,11 @@
 package com.xqoo.gateway.service;
 
+import cn.hutool.core.collection.CollUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.pagehelper.PageHelper;
 import com.xqoo.common.core.utils.JacksonUtils;
+import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.gateway.bean.*;
 import com.xqoo.gateway.config.GetRoutesConfig;
@@ -22,6 +24,7 @@ import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
@@ -131,6 +134,19 @@ public class GatewayServiceHandler implements ApplicationEventPublisherAware, Co
                 .forEach(item -> item.setIsActive(1));*/
         responseBean.setContent(routeVOList);
         return responseBean;
+    }
+
+    public ResultEntity<GatewayRouteEntity> getSingleRouteInfo(Long routeId){
+        GatewayRouteBO bo = new GatewayRouteBO();
+        bo.setId(routeId);
+        List<GatewayRouteEntity> list = this.getRouteInfo(bo);
+        if(CollUtil.isEmpty(list)){
+            return new ResultEntity<>(HttpStatus.OK,"获取网关路由成功", null);
+        }
+        if(list.size() > 1){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"查询到的路由信息大于一条，数据错误");
+        }
+        return new ResultEntity<>(HttpStatus.OK,"获取网关路由成功", list.get(0));
     }
 
 

@@ -51,4 +51,21 @@ public class SendSmsVo {
         this.smsParamJson = smsParamJson;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SendSmsVo").append('[')
+                .append("phoneNumbers=")
+                .append(phoneNumbers)
+                .append(",sign=")
+                .append(sign)
+                .append(",templateCode=")
+                .append(templateCode)
+                .append(",smsParamJson=")
+                .append(smsParamJson)
+                .append(']');
+        return sb.toString();
+    }
 }

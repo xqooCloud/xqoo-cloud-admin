@@ -9,4 +9,6 @@ public interface SmsSendService {
     public String servicePlatformId();
     ResultEntity sendShortMessage( SendSmsVo sendSmsVo);
     ResultEntity previewShortMessage(List phontNumber, SendSmsVo sendSmsVo);
+
+
 }

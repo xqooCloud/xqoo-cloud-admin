@@ -43,11 +43,9 @@ public class EmailConfigController{
     * 访问来源ip、端口、已登录人userId，userName在请求头中，请求头名字常量在com.xqoo.common.constants.SystemPublicConstant中
     *
     */
-
     @Autowired
     private EmailConfigService EmailConfigService;
 
-    
     @ApiOperation("分页获取email_config表数据")
     @PostMapping("/pageGetList")
     public ResultEntity<PageResponseBean<EmailConfigEntity>> pageGetList(@RequestBody PageRequestBean page){

@@ -22,10 +22,10 @@ public class SendSmsServiceTest {
     public void contextLoads() {
         SendSmsVo sendSmsVo = new SendSmsVo();
         sendSmsVo.setSign("1");
-        SendSmsVo sendSmsVo1 = new SendSmsVo();
-        sendSmsVo1.setSign("2");
+        //调用阿里
         sendSmsService.sendShortMessage("1",sendSmsVo);
-        sendSmsService.sendShortMessage("2",sendSmsVo1);
+        //调用腾讯 修改
+        sendSmsService.sendShortMessage("2",sendSmsVo);
     }
     @Test
     public void init() {

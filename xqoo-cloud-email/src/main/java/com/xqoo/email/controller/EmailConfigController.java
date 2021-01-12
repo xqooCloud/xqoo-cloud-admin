@@ -1,7 +1,9 @@
 package com.xqoo.email.controller;
 
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.email.bo.EmailConfigBO;
+import com.xqoo.email.service.EmailConfigService;
+import com.xqoo.email.vo.EmailConfigInfoVO;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import com.xqoo.email.service.EmailConfigService;
 import com.xqoo.email.entity.EmailConfigEntity;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
@@ -44,12 +47,12 @@ public class EmailConfigController{
     *
     */
     @Autowired
-    private EmailConfigService EmailConfigService;
+    private EmailConfigService emailConfigService;
 
     @ApiOperation("分页获取email_config表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<EmailConfigEntity>> pageGetList(@RequestBody PageRequestBean page){
-        return EmailConfigService.pageGetList(page);
+    public ResultEntity<PageResponseBean<EmailConfigEntity>> pageGetList(@RequestBody EmailConfigBO page){
+        return emailConfigService.pageGetList(page);
     }
 
     @ApiOperation("批量新增数据")
@@ -60,14 +63,35 @@ public class EmailConfigController{
         if(StringUtils.isEmpty(currentUser.getUserId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
         }
-        return EmailConfigService.insertList(list, currentUser);
+        return emailConfigService.insertList(list, currentUser);
+    }
+
+    @ApiOperation("删除邮件配置")
+    @GetMapping("/deleteEmailConfig")
+    @OperationLog(tips="删除email_config表数据", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = false)
+    public ResultEntity deleteEmailConfigByKey(@ApiIgnore @LoginUser CurrentUser currentUser,Integer id){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        emailConfigService.removeById(id);
+        return new ResultEntity<>(HttpStatus.OK, "删除成功");
     }
 
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<EmailConfigEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
                                                                       @NotNull(message = "主键值不能为空") Integer id){
-        EmailConfigEntity entity = EmailConfigService.getOneEmailConfigEntityByPrimaryKey(id);
+        EmailConfigEntity entity = emailConfigService.getOneEmailConfigEntityByPrimaryKey(id);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
+    }
+
+    @ApiOperation("新增/编辑邮件配置信息")
+    @PostMapping("/updateEmailConfig")
+    @OperationLog(tips = "新增/编辑邮件配置信息", operatorType = OperationTypeEnum.EDIT, isSaveRequestData = true)
+    public ResultEntity<String> updateDataSource(@RequestBody @Valid EmailConfigInfoVO vo){
+        if(vo.getId() == null || vo.getId() == 0){
+            return emailConfigService.addEmailConfig(vo);
+        }
+        return emailConfigService.updateEmailConfig(vo);
     }
 }

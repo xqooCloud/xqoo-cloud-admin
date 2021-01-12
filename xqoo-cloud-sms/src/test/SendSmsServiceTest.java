@@ -24,7 +24,7 @@ public class SendSmsServiceTest {
         sendSmsVo.setSign("1");
         //调用阿里
         sendSmsService.sendShortMessage("1",sendSmsVo);
-        //调用腾讯
+        //调用腾讯 修改
         sendSmsService.sendShortMessage("2",sendSmsVo);
     }
     @Test

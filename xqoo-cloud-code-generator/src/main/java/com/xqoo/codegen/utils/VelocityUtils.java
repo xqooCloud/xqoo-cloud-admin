@@ -63,7 +63,14 @@ public class VelocityUtils {
         String downloadKey = path + File.separator + fileName;
         File pathFile = new File(path);
         if(!pathFile.exists()){
-            pathFile.mkdirs();
+            boolean success = pathFile.mkdirs();
+            if(!success){
+                pathFile.setWritable(true, false);
+                pathFile.getParentFile().mkdirs();
+            }
+            if(!success){
+                logger.error("[代码生成中心]创建文件夹失败，windows和linux执行方法均产生错误，请查看代码执行逻辑和系统用户权限");
+            }
         }
         File file = new File(downloadKey);
         try{

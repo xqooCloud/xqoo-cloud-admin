@@ -10,7 +10,7 @@ import java.util.List;
 public class TencentSmsService implements SmsSendService {
     @Override
     public String servicePlatformId() {
-        return "2";
+        return "Tencent";
     }
 
     @Override
@@ -23,4 +23,6 @@ public class TencentSmsService implements SmsSendService {
     public ResultEntity previewShortMessage(List phontNumber, SendSmsVo sendSmsVo) {
         return null;
     }
+
+
 }

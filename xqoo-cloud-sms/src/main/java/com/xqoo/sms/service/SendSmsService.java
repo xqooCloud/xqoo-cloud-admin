@@ -2,6 +2,7 @@ package com.xqoo.sms.service;
 
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.sms.vo.SendSmsVo;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,7 +20,10 @@ public class SendSmsService {
     }
 
     public ResultEntity sendShortMessage(String servicePlatformId, SendSmsVo sendSmsVo){
-        SmsSendService smsSendService = smsSendServiceMap.get(servicePlatformId);
+        SmsSendService smsSendService = smsSendServiceMap.getOrDefault(servicePlatformId,null);
+        if (smsSendService==null){
+            return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED,"qin");
+        }
         return smsSendService.sendShortMessage(sendSmsVo);
     }
 }

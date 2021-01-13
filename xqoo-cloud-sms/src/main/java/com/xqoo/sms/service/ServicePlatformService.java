@@ -1,6 +1,7 @@
 package com.xqoo.sms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.sms.entity.ServicePlatformEntity;
 
 /**
@@ -10,5 +11,5 @@ import com.xqoo.sms.entity.ServicePlatformEntity;
  * @since 2021-01-11 14:41:26
  */
 public interface ServicePlatformService extends IService<ServicePlatformEntity> {
-
+    ResultEntity changeServiceParam();
 }

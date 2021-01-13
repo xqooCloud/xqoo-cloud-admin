@@ -1,8 +1,9 @@
 package com.xqoo.sms.controller;
 
-import com.xqoo.sms.entity.SmsSignEntity;
 import com.xqoo.sms.service.SmsSignService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 

@@ -5,7 +5,6 @@ import com.xqoo.sms.service.SmsSendService;
 import com.xqoo.sms.vo.SendSmsVo;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 @Service
 public class TencentSmsService implements SmsSendService {
     @Override
@@ -20,7 +19,7 @@ public class TencentSmsService implements SmsSendService {
     }
 
     @Override
-    public ResultEntity previewShortMessage(List phontNumber, SendSmsVo sendSmsVo) {
+    public ResultEntity previewShortMessage( SendSmsVo sendSmsVo) {
         return null;
     }
 

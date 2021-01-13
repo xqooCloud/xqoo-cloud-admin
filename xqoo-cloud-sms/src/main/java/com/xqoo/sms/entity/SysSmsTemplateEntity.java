@@ -1,16 +1,15 @@
 package com.xqoo.sms.entity;
 
-import com.baomidou.mybatisplus.extension.activerecord.Model;
-
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author mumu
@@ -23,26 +22,49 @@ import io.swagger.annotations.ApiModelProperty;
 public class SysSmsTemplateEntity extends Model<SysSmsTemplateEntity> {
 
 
+        
     @TableId(value = "id")
     private String id;
 
-    @ApiModelProperty("模板编号")
-    private String templateCode;
+                        @ApiModelProperty("模板编号")
+        private String templateCode;
 
-    @ApiModelProperty("模板内容")
-    private String templateContent;
+                        @ApiModelProperty("模板名称")
+        private String templateName;
 
-    @ApiModelProperty("模板状态")
-    private Integer templateState;
+                        @ApiModelProperty("模板内容")
+        private String templateContent;
 
-    @ApiModelProperty("平台id")
-    private String servicePlatformId;
+                        @ApiModelProperty("模板类型")
+        private String templateType;
 
-    @ApiModelProperty("平台名称")
-    private String servicePlatformName;
+                        @ApiModelProperty("平台id")
+        private String servicePlatformId;
 
-    public SysSmsTemplateEntity() {
-    }
+                        @ApiModelProperty("平台名称")
+        private String servicePlatformName;
+
+                        @ApiModelProperty("模板状态0:可用 1:不可以")
+        private Integer state;
+
+        @TableField(value = "create_by", fill = FieldFill.INSERT)
+                        @ApiModelProperty("创建人")
+        private String createBy;
+
+            @TableField(value = "create_date", fill = FieldFill.INSERT)
+                    @ApiModelProperty("创建时间")
+        private Date createDate;
+
+                @TableField(value = "update_by", fill = FieldFill.UPDATE)
+                @ApiModelProperty("最近修改人")
+        private String updateBy;
+
+                    @TableField(value = "update_date", fill = FieldFill.UPDATE)
+            @ApiModelProperty("最近修改时间")
+        private Date updateDate;
+
+                        @ApiModelProperty("备注信息")
+        private String remarkTips;
 
     public String getId() {
         return id;
@@ -60,6 +82,14 @@ public class SysSmsTemplateEntity extends Model<SysSmsTemplateEntity> {
         this.templateCode = templateCode;
     }
 
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
     public String getTemplateContent() {
         return templateContent;
     }
@@ -68,12 +98,12 @@ public class SysSmsTemplateEntity extends Model<SysSmsTemplateEntity> {
         this.templateContent = templateContent;
     }
 
-    public Integer getTemplateState() {
-        return templateState;
+    public String getTemplateType() {
+        return templateType;
     }
 
-    public void setTemplateState(Integer templateState) {
-        this.templateState = templateState;
+    public void setTemplateType(String templateType) {
+        this.templateType = templateType;
     }
 
     public String getServicePlatformId() {
@@ -92,6 +122,54 @@ public class SysSmsTemplateEntity extends Model<SysSmsTemplateEntity> {
         this.servicePlatformName = servicePlatformName;
     }
 
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(String createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(String updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public String getRemarkTips() {
+        return remarkTips;
+    }
+
+    public void setRemarkTips(String remarkTips) {
+        this.remarkTips = remarkTips;
+    }
+
     /**
      * 获取主键值
      *
@@ -101,26 +179,5 @@ public class SysSmsTemplateEntity extends Model<SysSmsTemplateEntity> {
     protected Serializable pkVal() {
         return this.id;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("SysSmsTemplateEntity").append('[')
-                .append("id=")
-                .append(id)
-                .append(",templateCode=")
-                .append(templateCode)
-                .append(",templateContent=")
-                .append(templateContent)
-                .append(",templateState=")
-                .append(templateState)
-                .append(",servicePlatformId=")
-                .append(servicePlatformId)
-                .append(",servicePlatformName=")
-                .append(servicePlatformName)
-                .append(']');
-        return sb.toString();
-    }
+    
 }

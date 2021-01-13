@@ -1,9 +1,5 @@
 package com.xqoo.sms.bean;
 
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-
 import java.util.Map;
 
 
@@ -13,9 +9,18 @@ public class ALiSmsConfigBean {
     String regionId;//服务地区id
     String sysDomain;//服务器名称
     String version;//服务器名称
+    String name;
     Map<String, String> errCodeMap;
 
     public ALiSmsConfigBean() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAccessKeyId() {

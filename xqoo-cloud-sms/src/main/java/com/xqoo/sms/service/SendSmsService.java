@@ -22,8 +22,16 @@ public class SendSmsService {
     public ResultEntity sendShortMessage(String servicePlatformId, SendSmsVo sendSmsVo){
         SmsSendService smsSendService = smsSendServiceMap.getOrDefault(servicePlatformId,null);
         if (smsSendService==null){
-            return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED,"qin");
+            return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED,"短信服务出错");
         }
         return smsSendService.sendShortMessage(sendSmsVo);
+    }
+
+    public ResultEntity previewShortMessage(String servicePlatformId, SendSmsVo sendSmsVo){
+        SmsSendService smsSendService = smsSendServiceMap.getOrDefault(servicePlatformId,null);
+        if (smsSendService==null){
+            return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED,"短信服务出错");
+        }
+        return smsSendService.previewShortMessage(sendSmsVo);
     }
 }

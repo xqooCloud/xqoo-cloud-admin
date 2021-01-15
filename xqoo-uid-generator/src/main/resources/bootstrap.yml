@@ -38,8 +38,9 @@ spring:
         server-addr: ${nacos.public.server-addr}
         file-extension: yml
     inetutils:
-      ignored-interfaces: eth.*              # 忽略网卡，eth.*，正则表达式
-      # 选择符合前缀的IP作为服务注册IP, discovery.server-ip就是你的公网IP
+      # 忽略网卡，eth.*，正则表达式
+      ignored-interfaces: eth.*
+      # 选择符合前缀的IP作为服务注册IP, discovery.server-ip就是你的公网IP
       preferred-networks: ${nacos.public.dicovery-ip}
 
 

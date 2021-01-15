@@ -9,8 +9,8 @@ APP_NAME="${BASE_DIR}/zipkin-server-2.21.7-exec.jar"
 LOG_FILE="${BASE_DIR}/logs/zipkin-server.log"
 
 MYSQL_SOURCE_PORT=3306
-MYSQL_SOURCE_HOST="47.103.200.242"
-MYSQL_SOURCE_DB="kxst_system_zipkin"
+MYSQL_SOURCE_HOST="127.0.0.1"
+MYSQL_SOURCE_DB="xqoo_system_zipkin"
 MYSQL_SOURCE_USER="root"
 MYSQL_SOURCE_USER_PWD="gao2236"
 

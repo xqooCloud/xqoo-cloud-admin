@@ -17,6 +17,10 @@ public class BusinessException extends RuntimeException {
 
     private JsonNode data;
 
+    public BusinessException() {
+        super();
+    }
+
     public BusinessException(String message, HttpStatus errorCode, JsonNode data) {
         this.errorMessage = message;
         this.errorCode = errorCode;
@@ -49,6 +53,11 @@ public class BusinessException extends RuntimeException {
     public BusinessException(HttpStatus statusCode) {
         this.errorCode = statusCode;
         this.errorMessage = DEFAULT_MSG;
+    }
+    protected BusinessException(String message, Throwable cause,
+                                boolean enableSuppression,
+                                boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
     public HttpStatus getErrorCode() {

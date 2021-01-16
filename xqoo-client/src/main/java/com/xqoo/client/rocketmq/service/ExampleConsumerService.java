@@ -1,7 +1,5 @@
 package com.xqoo.client.rocketmq.service;
 
-import com.xqoo.common.core.rocket.config.RocketmqConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

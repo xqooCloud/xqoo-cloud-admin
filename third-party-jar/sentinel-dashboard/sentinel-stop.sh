@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export BASE_DIR=`cd $(dirname $0)/.; pwd`
 #jar包文件路径及名称（目录按照各自配置）
 APP_NAME="${BASE_DIR}/sentinel-dashboard.jar"
 

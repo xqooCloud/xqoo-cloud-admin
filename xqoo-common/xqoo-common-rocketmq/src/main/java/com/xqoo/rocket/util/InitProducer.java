@@ -1,12 +1,14 @@
-package com.xqoo.common.core.rocket.util;
+package com.xqoo.rocket.util;
 
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
 @Component
-public class InitProducer {/*
+public class InitProducer {
 
     @Value("${apache.rocketmq.producer.producerGroup}")
     private String producerGroup;
@@ -34,9 +36,9 @@ public class InitProducer {/*
         return this.producer;
     }
 
-    *//**
+    /**
      * 对象在使用之前必须要调用一次，只能初始化一次
-     *//*
+     */
     public void start(){
         try {
             this.producer.start();
@@ -45,10 +47,10 @@ public class InitProducer {/*
         }
     }
 
-    *//**
+    /**
      * 一般在应用上下文，使用上下文监听器，进行关闭
-     *//*
+     */
     public void shutdown(){
         this.producer.shutdown();
-    }*/
+    }
 }

@@ -1,4 +1,4 @@
-package com.xqoo.common.core.rocket.config;
+package com.xqoo.rocket.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

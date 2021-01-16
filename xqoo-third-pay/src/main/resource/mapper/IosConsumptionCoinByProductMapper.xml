@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xqoo.pay.mapper.goldcoin.IosConsumptionCoinByProductMapper">
+<mapper namespace="com.xqoo.paycenter.mapper.goldcoin.IosConsumptionCoinByProductMapper">
 
-    <select id="getCoinAccountInfoEntityInfo" parameterType="java.lang.String" resultType="com.xqoo.pay.entity.goldcoin.CoinAccountInfoEntity">
+    <select id="getCoinAccountInfoEntityInfo" parameterType="java.lang.String" resultType="com.xqoo.paycenter.entity.goldcoin.CoinAccountInfoEntity">
         SELECT
         a.user_id AS userId,
         a.del_flag AS delFlag,

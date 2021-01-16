@@ -1,5 +1,6 @@
 package com.xqoo;
 
+import com.xqoo.paycenter.rocketmq.until.MessgeQueneInitListener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -13,7 +14,7 @@ public class ApplicationXqooThirdPay {
     public static void main(String[] args) {
         SpringApplication sa = new SpringApplication(ApplicationXqooThirdPay.class);
         // 增加启动消息消费监听器代码，多个需要addListeners
-//        sa.addListeners(new ExampleMqListener());
+        sa.addListeners(new MessgeQueneInitListener());
         sa.run(args);
     }
 }

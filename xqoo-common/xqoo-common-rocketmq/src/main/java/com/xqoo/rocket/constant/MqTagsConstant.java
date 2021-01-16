@@ -1,4 +1,4 @@
-package com.xqoo.common.core.rocket.constant;
+package com.xqoo.rocket.constant;
 
 /**
  * 各模块所需消息主题下tag常量，用到时增加
@@ -168,7 +168,7 @@ public class MqTagsConstant {
     /**
      * 第三方支付模块的消息主题名
      */
-    public final static String THIRD_PARTY_PAY_TOPIC = "THIRD_PARTY_PAY_TOPIC";
+    public final static String THIRD_PAY_TOPIC = "THIRD_PAY_TOPIC";
 
     /**
      * 第三方支付模块消息主题的tag

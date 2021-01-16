@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xqoo.pay.mapper.goldcoin.CoinConfigMapper">
+<mapper namespace="com.xqoo.paycenter.mapper.goldcoin.CoinConfigMapper">
 
-    <select id="getCoinConfigs" parameterType="java.lang.String" resultType="com.xqoo.pay.entity.goldcoin.CoinConfigEntity">
+    <select id="getCoinConfigs" parameterType="java.lang.String" resultType="com.xqoo.paycenter.entity.goldcoin.CoinConfigEntity">
         SELECT
         a.charge_id AS chargeId,
         a.quota_money AS quotaMoney,

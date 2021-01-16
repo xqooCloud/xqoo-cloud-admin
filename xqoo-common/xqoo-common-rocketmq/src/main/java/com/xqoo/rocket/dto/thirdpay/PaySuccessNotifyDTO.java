@@ -1,9 +1,9 @@
-package com.xqoo.common.core.rocket.bo.thirdpay;
+package com.xqoo.rocket.dto.thirdpay;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class PaySuccessNotifyBO {
+public class PaySuccessNotifyDTO {
 
     // 支付单号
     private String payTransactionId;
@@ -64,7 +64,7 @@ public class PaySuccessNotifyBO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PaySuccessNotifyBO that = (PaySuccessNotifyBO) o;
+        PaySuccessNotifyDTO that = (PaySuccessNotifyDTO) o;
         return Objects.equals(payTransactionId, that.payTransactionId) &&
                 Objects.equals(transactionId, that.transactionId) &&
                 Objects.equals(ciPayId, that.ciPayId) &&

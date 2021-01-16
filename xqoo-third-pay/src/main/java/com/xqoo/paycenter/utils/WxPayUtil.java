@@ -1,7 +1,7 @@
 package com.xqoo.paycenter.utils;
 
 import cn.hutool.core.date.DateUtil;
-import com.xqoo.common.utils.MD5Util;
+import com.xqoo.common.core.utils.MD5Util;
 import org.apache.commons.lang.StringUtils;
 import org.jdom.Document;
 import org.jdom.Element;

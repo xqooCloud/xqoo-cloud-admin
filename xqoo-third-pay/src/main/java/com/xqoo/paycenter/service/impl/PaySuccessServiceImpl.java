@@ -2,9 +2,9 @@ package com.xqoo.paycenter.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xqoo.common.core.rocket.bo.thirdpay.PaySuccessNotifyBO;
-import com.xqoo.common.core.rocket.constant.MqTagsConstant;
-import com.xqoo.common.core.rocket.util.InitProducer;
+import com.xqoo.rocket.dto.thirdpay.PaySuccessNotifyDTO;
+import com.xqoo.rocket.constant.MqTagsConstant;
+import com.xqoo.rocket.util.InitProducer;
 import com.xqoo.feign.common.bo.paycenter.RefundConfirmBO;
 import com.xqoo.paycenter.bo.PayWaterFlowQueryBO;
 import com.xqoo.paycenter.constant.PayModuleConstant;
@@ -57,15 +57,15 @@ public class PaySuccessServiceImpl implements PaySuccessService {
             //创建一个消息实例，包含 topic、tag 和 消息体
             //如下：topic 为 "TopicTest"，tag 为 "push"
             Message message = new Message();
-            message.setTopic(MqTagsConstant.THIRD_PARTY_PAY_TOPIC);
+            message.setTopic(MqTagsConstant.THIRD_PAY_TOPIC);
             message.setTags(MqTagsConstant.PayModuleTopicTags.CONFIRM_MONEY);
-            PaySuccessNotifyBO bo = new PaySuccessNotifyBO();
-            bo.setCiPayId(ciPayId);
-            bo.setPayPlatType(payPlatType.getValue());
-            bo.setPayTransactionId(payTransactionId);
-            bo.setTotalAmount(totalAmount);
-            bo.setTransactionId(transactionId);
-            message.setBody(JSON.toJSONBytes(bo));
+            PaySuccessNotifyDTO dto = new PaySuccessNotifyDTO();
+            dto.setCiPayId(ciPayId);
+            dto.setPayPlatType(payPlatType.getValue());
+            dto.setPayTransactionId(payTransactionId);
+            dto.setTotalAmount(totalAmount);
+            dto.setTransactionId(transactionId);
+            message.setBody(JSON.toJSONBytes(dto));
             initProducer.getProducer().send(message, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
@@ -97,7 +97,7 @@ public class PaySuccessServiceImpl implements PaySuccessService {
             //创建一个消息实例，包含 topic、tag 和 消息体
             //如下：topic 为 "TopicTest"，tag 为 "push"
             Message message = new Message();
-            message.setTopic(MqTagsConstant.THIRD_PARTY_PAY_TOPIC);
+            message.setTopic(MqTagsConstant.THIRD_PAY_TOPIC);
             message.setTags(MqTagsConstant.PayModuleTopicTags.CONFIRM_REFUND);
             RefundConfirmBO refundBO = new RefundConfirmBO();
             refundBO.setOrderDetailId(refundOrderDetailId);
@@ -163,7 +163,7 @@ public class PaySuccessServiceImpl implements PaySuccessService {
             //创建一个消息实例，包含 topic、tag 和 消息体
             //如下：topic 为 "TopicTest"，tag 为 "push"
             Message message = new Message();
-            message.setTopic(MqTagsConstant.THIRD_PARTY_PAY_TOPIC);
+            message.setTopic(MqTagsConstant.THIRD_PAY_TOPIC);
             message.setTags(MqTagsConstant.PayModuleTopicTags.IOS_RECHARGE_SUCCESS);
             message.setBody(JSON.toJSONBytes(map));
 

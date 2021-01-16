@@ -16,6 +16,7 @@
         <module>xqoo-common-redis</module>
         <module>xqoo-common-swagger2</module>
         <module>xqoo-common-bean</module>
+        <module>xqoo-common-rocketmq</module>
     </modules>
 
 

@@ -4,8 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
-import com.xqoo.common.core.rocket.constant.MqTagsConstant;
-import com.xqoo.common.core.rocket.util.InitProducer;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.paycenter.bo.PayConfigPropertiesQueryBO;
@@ -18,6 +16,8 @@ import com.xqoo.paycenter.mapper.PayConfigPropertiesMapper;
 import com.xqoo.paycenter.service.PayConfigPropertiesService;
 import com.xqoo.paycenter.service.PayConfigService;
 import com.xqoo.paycenter.vo.PayConfigPropertiesVO;
+import com.xqoo.rocket.constant.MqTagsConstant;
+import com.xqoo.rocket.util.InitProducer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -174,7 +174,7 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
         //创建一个消息实例，包含 topic、tag 和 消息体
         //如下：topic 为 "TopicTest"，tag 为 "push"
         Message message = new Message();
-        message.setTopic(MqTagsConstant.THIRD_PARTY_PAY_TOPIC);
+        message.setTopic(MqTagsConstant.THIRD_PAY_TOPIC);
         message.setTags(MqTagsConstant.PayModuleTopicTags.CONFIG_REFRESH);
         message.setBody(refreshPlat.getBytes(RemotingHelper.DEFAULT_CHARSET));
         initProducer.getProducer().send(message, new SendCallback() {

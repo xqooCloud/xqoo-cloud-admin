@@ -3,10 +3,7 @@ package com.xqoo.paycenter.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.feign.common.vo.sysmanager.WechatAuthInfoVO;
-import com.xqoo.feign.service.system.SysUserFeign;
 import com.xqoo.feign.service.uidgenerator.UidGeneratorFeign;
-import com.xqoo.feign.utils.FeignReturnDataGzip;
 import com.xqoo.paycenter.bean.WxPayPropertiesBean;
 import com.xqoo.paycenter.bo.PayWaterFlowQueryBO;
 import com.xqoo.paycenter.bo.WxPayNeedParam;
@@ -61,8 +58,8 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
     @Autowired
     private PaySuccessService paySuccessService;
 
-    @Autowired
-    private SysUserFeign sysUserFeign;
+//    @Autowired
+//    private SysUserFeign sysUserFeign;
 
     @Autowired
     private WxPayJSAPIUtil wxPayJSAPIUtil;
@@ -122,7 +119,7 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
 
     @Override
     public ResultEntity WxJsApiPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
-        WechatAuthInfoVO authInfo = FeignReturnDataGzip.Unzip(sysUserFeign
+        /*WechatAuthInfoVO authInfo = FeignReturnDataGzip.Unzip(sysUserFeign
                 .getWechatInfo(wxPayNeedParam.getUserId()), WechatAuthInfoVO.class);
         if(authInfo == null || StringUtils.isEmpty(authInfo.getWapOpenId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE,"丢失微信openId，支付失败");
@@ -139,8 +136,9 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
                         wxPayNeedParam.getPayAmount().doubleValue()*100,
                         wxPayPropertiesBean.getNotifyUrl(),
                         wxPayNeedParam.getPayTransactionId(),
-                        "JSAPI");
-        return new ResultEntity<>(HttpStatus.OK,"微信支付预下单成功", response);
+                        "JSAPI");*/
+        // TODO 这里等修改了查询微信openId之后修改
+        return new ResultEntity<>(HttpStatus.OK,"微信支付预下单成功", "response");
     }
 
     @Override

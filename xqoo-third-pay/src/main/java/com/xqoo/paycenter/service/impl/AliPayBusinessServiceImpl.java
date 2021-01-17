@@ -67,7 +67,7 @@ public class AliPayBusinessServiceImpl implements AliPayBusinessService {
 
 
     @Override
-    public ResultEntity<String> AliPay(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException {
+    public ResultEntity<String> aliPay(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException {
         log.info("[支付模块][info]支付宝" + plat + "下单程序，支付单号:["
                 + aliPayNeedParam.getPayTransactionId() + "],支付金额:" + aliPayNeedParam.getPayAmount().toString());
         String returnUrl = aliPayPropertiesBean.getReturnUrl();
@@ -93,7 +93,7 @@ public class AliPayBusinessServiceImpl implements AliPayBusinessService {
     }
 
     @Override
-    public ResultEntity<String> AliPayApp(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException {
+    public ResultEntity<String> aliPayApp(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException {
         log.info("[支付模块][info]支付宝" + plat + "下单程序，支付单号:["
                 + aliPayNeedParam.getPayTransactionId() + "],支付金额:" + aliPayNeedParam.getPayAmount().toString());
         String returnUrl = aliPayPropertiesBean.getReturnUrl();
@@ -119,7 +119,7 @@ public class AliPayBusinessServiceImpl implements AliPayBusinessService {
     }
 
     @Override
-    public ResultEntity<String> AliRefundPay(AliRefundNeedParam aliRefundNeedParam) throws AlipayApiException {
+    public ResultEntity<String> aliRefundPay(AliRefundNeedParam aliRefundNeedParam) throws AlipayApiException {
         log.info("[支付模块][info]支付宝退款程序，支付单号:["
                 + aliRefundNeedParam.getPayTransactionId() + "],退款金额:" + aliRefundNeedParam.getRefundAmount().toString());
         if(StringUtils.isEmpty(aliRefundNeedParam.getPayTransactionId())){
@@ -138,16 +138,16 @@ public class AliPayBusinessServiceImpl implements AliPayBusinessService {
         String payUserId = "none";
 
         // 补充---此处需要新增根据付款单号查询交易流水号的操作
-        PayWaterFlowQueryBO queryWF = new PayWaterFlowQueryBO();
-        queryWF.setPayTransactionId(aliRefundNeedParam.getPayTransactionId());
-        List<PayWaterFlowVO> waterFlowVOS = payWaterFlowService.queryPayWaterFlow(queryWF);
-        if(CollUtil.isEmpty(waterFlowVOS)){
+        PayWaterFlowQueryBO queryWf = new PayWaterFlowQueryBO();
+        queryWf.setPayTransactionId(aliRefundNeedParam.getPayTransactionId());
+        List<PayWaterFlowVO> waterFlowVos = payWaterFlowService.queryPayWaterFlow(queryWf);
+        if(CollUtil.isEmpty(waterFlowVos)){
             throw new AlipayApiException("[customer010]", "未查询到对应付款记录，无法退款");
         }
-        if(waterFlowVOS.size() > 1){
+        if(waterFlowVos.size() > 1){
             throw new AlipayApiException("[customer011]", "对应付款记录大于1条，数据有误，无法退款");
         }
-        PayWaterFlowVO waterFlowVO = waterFlowVOS.get(0);
+        PayWaterFlowVO waterFlowVO = waterFlowVos.get(0);
         if(PayModuleConstant.AliPayConstant.PAY_DONE.compareTo(waterFlowVO.getPayStatus()) != 0){
             throw new AlipayApiException("[customer012]", "所选退款记录未完成付款，无法退款");
         }
@@ -208,7 +208,7 @@ public class AliPayBusinessServiceImpl implements AliPayBusinessService {
     }
 
     @Override
-    public Boolean AliPayNotifyNotice(Map<String, String> params) {
+    public Boolean aliPayNotifyNotice(Map<String, String> params) {
         // 系统的支付单号
         String payTransactionId =params.get("out_trade_no");
         // 交易流水号

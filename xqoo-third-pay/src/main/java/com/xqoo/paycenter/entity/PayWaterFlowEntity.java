@@ -43,8 +43,14 @@ public class PayWaterFlowEntity extends Model<PayWaterFlowEntity> {
     @ApiModelProperty("是否有退款，0-未退款，1-退过款")
     private Integer refundStatus;
 
-    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，FACE-POS机扫码")
+    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，POS-POS机扫码")
     private String payDevice;
+
+    @ApiModelProperty("所用支付平台，WxPay-微信支付，AliPay-支付宝支付，IOSApp-苹果内购，UnionPay-银联支付")
+    private String payPlatName;
+
+    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，POS-POS机扫码")
+    private String payDeviceName;
 
     @ApiModelProperty("付款金额")
     private BigDecimal payAmount;
@@ -93,6 +99,8 @@ public class PayWaterFlowEntity extends Model<PayWaterFlowEntity> {
                 .append("clientPayId", clientPayId)
                 .append("refundStatus", refundStatus)
                 .append("payDevice", payDevice)
+                .append("payPlatName", payPlatName)
+                .append("payDeviceName", payDeviceName)
                 .append("payAmount", payAmount)
                 .append("refundAmount", refundAmount)
                 .append("payUserId", payUserId)
@@ -119,12 +127,12 @@ public class PayWaterFlowEntity extends Model<PayWaterFlowEntity> {
 
         PayWaterFlowEntity that = (PayWaterFlowEntity) o;
 
-        return new EqualsBuilder().append(payTransactionId, that.payTransactionId).append(payPlat, that.payPlat).append(payStatus, that.payStatus).append(transactionId, that.transactionId).append(clientPayId, that.clientPayId).append(refundStatus, that.refundStatus).append(payDevice, that.payDevice).append(payAmount, that.payAmount).append(refundAmount, that.refundAmount).append(payUserId, that.payUserId).append(payUserName, that.payUserName).append(payComment, that.payComment).append(payTime, that.payTime).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
+        return new EqualsBuilder().append(payTransactionId, that.payTransactionId).append(payPlat, that.payPlat).append(payStatus, that.payStatus).append(transactionId, that.transactionId).append(clientPayId, that.clientPayId).append(refundStatus, that.refundStatus).append(payDevice, that.payDevice).append(payPlatName, that.payPlatName).append(payDeviceName, that.payDeviceName).append(payAmount, that.payAmount).append(refundAmount, that.refundAmount).append(payUserId, that.payUserId).append(payUserName, that.payUserName).append(payComment, that.payComment).append(payTime, that.payTime).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(payTransactionId).append(payPlat).append(payStatus).append(transactionId).append(clientPayId).append(refundStatus).append(payDevice).append(payAmount).append(refundAmount).append(payUserId).append(payUserName).append(payComment).append(payTime).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
+        return new HashCodeBuilder(17, 37).append(payTransactionId).append(payPlat).append(payStatus).append(transactionId).append(clientPayId).append(refundStatus).append(payDevice).append(payPlatName).append(payDeviceName).append(payAmount).append(refundAmount).append(payUserId).append(payUserName).append(payComment).append(payTime).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
     }
 
     public String getPayTransactionId() {
@@ -181,6 +189,22 @@ public class PayWaterFlowEntity extends Model<PayWaterFlowEntity> {
 
     public void setPayDevice(String payDevice) {
         this.payDevice = payDevice;
+    }
+
+    public String getPayPlatName() {
+        return payPlatName;
+    }
+
+    public void setPayPlatName(String payPlatName) {
+        this.payPlatName = payPlatName;
+    }
+
+    public String getPayDeviceName() {
+        return payDeviceName;
+    }
+
+    public void setPayDeviceName(String payDeviceName) {
+        this.payDeviceName = payDeviceName;
     }
 
     public BigDecimal getPayAmount() {

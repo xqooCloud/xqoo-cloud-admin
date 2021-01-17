@@ -1,5 +1,6 @@
 package com.xqoo.paycenter.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xqoo.common.page.PageRequestBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -31,9 +32,11 @@ public class PayRefundWaterFlowQueryBO extends PageRequestBean {
     private String tradeId;
 
     @ApiModelProperty("退款起始时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date startDate;
 
     @ApiModelProperty("退款结束时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date endDate;
 
     @Override

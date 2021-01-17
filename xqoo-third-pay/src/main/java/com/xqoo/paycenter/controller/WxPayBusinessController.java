@@ -33,7 +33,7 @@ public class WxPayBusinessController {
 
     @ApiOperation(value = "微信pc预支付，返回支付二维码")
     @PostMapping(value = "/pcPay")
-    public ResultEntity WxPcPay(@RequestBody WxPayNeedParam wxPayNeedParam){
+    public ResultEntity wxPcPay(@RequestBody WxPayNeedParam wxPayNeedParam){
         if(BigDecimal.ZERO.compareTo(wxPayNeedParam.getPayAmount()) > -1){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "支付失败，支付金额为0");
         }
@@ -53,7 +53,7 @@ public class WxPayBusinessController {
             wxPayNeedParam.setPayComment("微信付款程序[贵州兴黔科技有限公司提供]");
         }
         try{
-            return wxPayBusinessService.WxPcPay(wxPayNeedParam);
+            return wxPayBusinessService.wxPcPay(wxPayNeedParam);
         }catch (WechatAppPayServiceException e){
             System.out.print("[支付模块][Exception]微信支付时发生错误，错误单号[" +
                     wxPayNeedParam.getPayTransactionId() + "]，错误信息：[" + e.getErrorCode().value() + "]" + e.getMessage());
@@ -64,7 +64,7 @@ public class WxPayBusinessController {
 
     @ApiOperation(value = "微信APP预支付")
     @PostMapping(value = "/appPay")
-    public ResultEntity WxAppPayPayPay(@RequestBody WxPayNeedParam wxPayNeedParam){
+    public ResultEntity wxAppPay(@RequestBody WxPayNeedParam wxPayNeedParam){
         if(BigDecimal.ZERO.compareTo(wxPayNeedParam.getPayAmount()) > -1){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "支付失败，支付金额为0");
         }
@@ -84,7 +84,7 @@ public class WxPayBusinessController {
             wxPayNeedParam.setPayComment("微信付款程序[贵州兴黔科技有限公司提供]");
         }
         try{
-            return wxPayBusinessService.WxAppPay(wxPayNeedParam);
+            return wxPayBusinessService.wxAppPay(wxPayNeedParam);
         }catch (WechatAppPayServiceException e){
             System.out.print("[支付模块][Exception]微信支付时发生错误，错误单号[" +
                     wxPayNeedParam.getPayTransactionId() + "]，错误信息：[" + e.getErrorCode().value() + "]" + e.getMessage());
@@ -108,7 +108,7 @@ public class WxPayBusinessController {
         if(StringUtils.isEmpty(wxPayNeedParam.getUserId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "丢失用户id，发起支付失败");
         }
-        return wxPayBusinessService.WxJsApiPay(wxPayNeedParam);
+        return wxPayBusinessService.wxJsApiPay(wxPayNeedParam);
     }
 
     @ApiOperation(value = "微信退款链接")
@@ -117,7 +117,7 @@ public class WxPayBusinessController {
         WxRefundNeedParam wxRefundNeedParam = new WxRefundNeedParam();
         wxRefundNeedParam.fromMap(refundMap);
         try {
-            return wxPayBusinessService.WxRefundPay(wxRefundNeedParam);
+            return wxPayBusinessService.wxRefundPay(wxRefundNeedParam);
         } catch (WechatAppPayServiceException e) {
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
         }
@@ -128,7 +128,7 @@ public class WxPayBusinessController {
     public String wxPayNotify(HttpServletRequest request, HttpServletResponse response) {
         try {
             Map<String, Object> params = WxPayUtil.doXMLParse(request);
-            Boolean result = wxPayBusinessService.WxPayNotifyNotice(params);
+            Boolean result = wxPayBusinessService.wxPayNotifyNotice(params);
             if(result){
                 return "SUCCESS";
             }

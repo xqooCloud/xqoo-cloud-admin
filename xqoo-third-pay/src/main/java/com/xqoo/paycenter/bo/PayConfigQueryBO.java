@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * @author gaoyang
+ */
 @ApiModel("支付配查询实体")
 public class PayConfigQueryBO {
     @ApiModelProperty("支付平台，WxPay-微信支付,AliPay-支付宝，IOSApp-ios内购项目")

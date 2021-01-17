@@ -2,6 +2,7 @@ package com.xqoo.paycenter.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -36,12 +37,19 @@ public class PayConfigEntity extends Model<PayConfigEntity> {
     @ApiModelProperty("产品状态，0-草稿，1-已发布，2-已废弃")
     private Integer configStatus;
 
+    @ApiModelProperty("支付平台名称")
+    private String payPlatName;
+
+    @ApiModelProperty("刷新平台名称")
+    private String refreshCommand;
+
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     @ApiModelProperty("创建人")
     private String createBy;
 
     @TableField(value = "create_date", fill = FieldFill.INSERT)
     @ApiModelProperty("创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date createDate;
 
     @TableField(value = "update_by", fill = FieldFill.UPDATE)
@@ -50,6 +58,7 @@ public class PayConfigEntity extends Model<PayConfigEntity> {
 
     @TableField(value = "update_date", fill = FieldFill.UPDATE)
     @ApiModelProperty("最近修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date updateDate;
 
     @ApiModelProperty("备注信息")
@@ -63,6 +72,8 @@ public class PayConfigEntity extends Model<PayConfigEntity> {
                 .append("configVersion", configVersion)
                 .append("activeState", activeState)
                 .append("configStatus", configStatus)
+                .append("payPlatName", payPlatName)
+                .append("refreshCommand", refreshCommand)
                 .append("createBy", createBy)
                 .append("createDate", createDate)
                 .append("updateBy", updateBy)
@@ -83,12 +94,12 @@ public class PayConfigEntity extends Model<PayConfigEntity> {
 
         PayConfigEntity that = (PayConfigEntity) o;
 
-        return new EqualsBuilder().append(id, that.id).append(payPlat, that.payPlat).append(configVersion, that.configVersion).append(activeState, that.activeState).append(configStatus, that.configStatus).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(payPlat, that.payPlat).append(configVersion, that.configVersion).append(activeState, that.activeState).append(configStatus, that.configStatus).append(payPlatName, that.payPlatName).append(refreshCommand, that.refreshCommand).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(payPlat).append(configVersion).append(activeState).append(configStatus).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(payPlat).append(configVersion).append(activeState).append(configStatus).append(payPlatName).append(refreshCommand).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
     }
 
     public Integer getId() {
@@ -129,6 +140,22 @@ public class PayConfigEntity extends Model<PayConfigEntity> {
 
     public void setConfigStatus(Integer configStatus) {
         this.configStatus = configStatus;
+    }
+
+    public String getPayPlatName() {
+        return payPlatName;
+    }
+
+    public void setPayPlatName(String payPlatName) {
+        this.payPlatName = payPlatName;
+    }
+
+    public String getRefreshCommand() {
+        return refreshCommand;
+    }
+
+    public void setRefreshCommand(String refreshCommand) {
+        this.refreshCommand = refreshCommand;
     }
 
     public String getCreateBy() {

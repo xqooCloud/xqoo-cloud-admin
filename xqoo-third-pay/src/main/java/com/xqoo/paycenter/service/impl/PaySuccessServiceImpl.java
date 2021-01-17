@@ -2,6 +2,7 @@ package com.xqoo.paycenter.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xqoo.paycenter.enums.PayDeviceType;
 import com.xqoo.rocket.dto.thirdpay.PaySuccessNotifyDTO;
 import com.xqoo.rocket.constant.MqTagsConstant;
 import com.xqoo.rocket.util.InitProducer;
@@ -129,25 +130,27 @@ public class PaySuccessServiceImpl implements PaySuccessService {
      * @param payComment
      * @param transactionId
      * @param payUserId
-     * @param payUSerName
+     * @param payUserName
      * @param payPlatType
      * @return
      */
     @Override
     public Boolean addPayWaterFlowRecord(String deviceType,BigDecimal payAmount, String payComment,
-                                          String transactionId, String payUserId, String payUSerName, PayPlatType payPlatType){
-        PayWaterFlowEntity addPayWF = new PayWaterFlowEntity();
-        addPayWF.setClientPayId("none");
-        addPayWF.setPayDevice(deviceType);
-        addPayWF.setPayAmount(payAmount);
-        addPayWF.setPayComment(payComment);
-        addPayWF.setPayTransactionId(transactionId);
-        addPayWF.setPayPlat(payPlatType.getValue());
-        addPayWF.setPayUserId(payUserId);
-        addPayWF.setPayStatus(PayModuleConstant.AliPayConstant.NOT_PAY_YET);
-        addPayWF.setPayUserName(payUSerName);
-        addPayWF.setTransactionId("none");
-        return payWaterFlowService.addPayRecord(addPayWF);
+                                          String transactionId, String payUserId, String payUserName, PayPlatType payPlatType){
+        PayWaterFlowEntity addPayWf = new PayWaterFlowEntity();
+        addPayWf.setClientPayId("none");
+        addPayWf.setPayDevice(deviceType);
+        addPayWf.setPayDeviceName(PayDeviceType.getKeyByValue(deviceType));
+        addPayWf.setPayAmount(payAmount);
+        addPayWf.setPayComment(payComment);
+        addPayWf.setPayTransactionId(transactionId);
+        addPayWf.setPayPlat(payPlatType.getValue());
+        addPayWf.setPayPlatName(payPlatType.getKey());
+        addPayWf.setPayUserId(payUserId);
+        addPayWf.setPayStatus(PayModuleConstant.AliPayConstant.NOT_PAY_YET);
+        addPayWf.setPayUserName(payUserName);
+        addPayWf.setTransactionId("none");
+        return payWaterFlowService.addPayRecord(addPayWf);
     }
 
     /**

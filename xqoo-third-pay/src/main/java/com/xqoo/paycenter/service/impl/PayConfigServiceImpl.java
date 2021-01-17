@@ -37,8 +37,7 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
             queryWrapper.eq(PayConfigEntity::getConfigStatus, queryBO.getConfigStatus());
         }
         queryWrapper.orderByDesc(PayConfigEntity::getConfigVersion);
-        List<PayConfigEntity> payConfigEntityList = payConfigMapper.selectList(queryWrapper);
-        return payConfigEntityList;
+        return payConfigMapper.selectList(queryWrapper);
     }
 
 }

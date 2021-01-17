@@ -2,11 +2,11 @@ package com.xqoo.paycenter.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.paycenter.bo.PayConfigPropertiesQueryBO;
 import com.xqoo.paycenter.entity.PayConfigPropertiesEntity;
 import com.xqoo.paycenter.vo.PayConfigPropertiesVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +22,7 @@ public interface PayConfigPropertiesService extends IService<PayConfigProperties
      * @param queryBO
      * @return
      */
-    PageResponseBean<PayConfigPropertiesVO> queryPayConfigProperties(PayConfigPropertiesQueryBO queryBO);
+    List<PayConfigPropertiesVO> queryPayConfigProperties(PayConfigPropertiesQueryBO queryBO);
 
     /**
      * 增加参数明细
@@ -30,7 +30,7 @@ public interface PayConfigPropertiesService extends IService<PayConfigProperties
      * @return
      * @throws Exception
      */
-    ResultEntity addPropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception;
+    ResultEntity<PayConfigPropertiesEntity> addPropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception;
 
     /**
      * 修改参数明细
@@ -38,7 +38,7 @@ public interface PayConfigPropertiesService extends IService<PayConfigProperties
      * @return
      * @throws Exception
      */
-    ResultEntity updatePropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception;
+    ResultEntity<PayConfigPropertiesEntity> updatePropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception;
 
     /**
      * 封装支付宝参数明细，传递给bean使用

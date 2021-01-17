@@ -1,5 +1,6 @@
 package com.xqoo.paycenter.bo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xqoo.common.page.PageRequestBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,13 +31,15 @@ public class PayWaterFlowQueryBO extends PageRequestBean {
     @ApiModelProperty("是否有退款，0-未退款，1-退过款")
     private Integer refundStatus;
 
-    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，FACE-POS机扫码")
+    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，POS-POS机扫码")
     private String payDevice;
 
     @ApiModelProperty("起始时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date startDate;
 
     @ApiModelProperty("结束时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date endDate;
 
     public String getPayTransactionId() {

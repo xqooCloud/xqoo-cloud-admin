@@ -59,10 +59,10 @@ public class PayWaterFlowServiceImpl extends ServiceImpl<PayWaterFlowMapper, Pay
             queryWrapper.eq(PayWaterFlowEntity::getPayStatus, queryBO.getPayStatus());
         }
         if(queryBO.getStartDate() != null){
-            queryWrapper.ge(PayWaterFlowEntity::getPayTime, queryBO.getStartDate());
+            queryWrapper.ge(PayWaterFlowEntity::getCreateDate, queryBO.getStartDate());
         }
         if(queryBO.getEndDate() != null){
-            queryWrapper.le(PayWaterFlowEntity::getPayTime, queryBO.getEndDate());
+            queryWrapper.le(PayWaterFlowEntity::getCreateDate, queryBO.getEndDate());
         }
         int count = 0;
         count = payWaterFlowMapper.selectCount(queryWrapper);

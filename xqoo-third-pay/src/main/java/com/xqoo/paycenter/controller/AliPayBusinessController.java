@@ -51,7 +51,7 @@ public class AliPayBusinessController {
             aliPayNeedParam.setPayComment("支付宝付款程序[贵州兴黔科技有限公司提供]");
         }
         try{
-            return aliPayBusinessService.AliPay(aliPayNeedParam, "PC");
+            return aliPayBusinessService.aliPay(aliPayNeedParam, "PC");
         }catch (AlipayApiException e){
             System.out.print("[支付模块][Exception]支付宝支付时发生错误，错误单号[" +
                     aliPayNeedParam.getPayTransactionId() + "]，错误信息：[" + e.getErrCode() + "]" + e.getErrMsg());
@@ -82,7 +82,7 @@ public class AliPayBusinessController {
             aliPayNeedParam.setPayComment("支付宝付款程序[贵州兴黔科技有限公司提供]");
         }
         try{
-            return aliPayBusinessService.AliPayApp(aliPayNeedParam,"APP");
+            return aliPayBusinessService.aliPayApp(aliPayNeedParam,"APP");
         }catch (AlipayApiException e){
             System.out.print("[支付模块][Exception]支付宝支付时发生错误，错误单号[" +
                     aliPayNeedParam.getPayTransactionId() + "]，错误信息：[" + e.getErrCode() + "]" + e.getErrMsg());
@@ -97,7 +97,7 @@ public class AliPayBusinessController {
         AliRefundNeedParam aliRefundNeedParam = new AliRefundNeedParam();
         aliRefundNeedParam.fromMap(refundMap);
         try {
-            return aliPayBusinessService.AliRefundPay(aliRefundNeedParam);
+            return aliPayBusinessService.aliRefundPay(aliRefundNeedParam);
         } catch (AlipayApiException e) {
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, e.getErrMsg());
         }
@@ -125,7 +125,7 @@ public class AliPayBusinessController {
         Boolean handleOk = false;
         if ("TRADE_SUCCESS".equals(trade_status)) {
 
-            handleOk = aliPayBusinessService.AliPayNotifyNotice(params);
+            handleOk = aliPayBusinessService.aliPayNotifyNotice(params);
         }
         if(handleOk) {
             return "success";

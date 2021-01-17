@@ -16,7 +16,7 @@ public interface WxPayBusinessService {
      * @return
      * @throws WechatAppPayServiceException
      */
-    ResultEntity WxPcPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
+    ResultEntity wxPcPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
 
     /**
      * 微信APP端预支付
@@ -24,7 +24,7 @@ public interface WxPayBusinessService {
      * @return
      * @throws WechatAppPayServiceException
      */
-    ResultEntity WxAppPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
+    ResultEntity wxAppPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
 
     /**
      * 微信小程序端预支付
@@ -32,7 +32,7 @@ public interface WxPayBusinessService {
      * @return
      * @throws WechatAppPayServiceException
      */
-    ResultEntity WxSmallProgramPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
+    ResultEntity wxSmallProgramPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
 
     /**
      * 微信公众号端预支付
@@ -40,7 +40,7 @@ public interface WxPayBusinessService {
      * @return
      * @throws WechatAppPayServiceException
      */
-    ResultEntity WxJsApiPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
+    ResultEntity wxJsApiPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException;
 
     /**
      * 微信退款
@@ -48,14 +48,14 @@ public interface WxPayBusinessService {
      * @return
      * @throws WechatAppPayServiceException
      */
-    ResultEntity WxRefundPay(WxRefundNeedParam wxRefundNeedParam) throws WechatAppPayServiceException;
+    ResultEntity wxRefundPay(WxRefundNeedParam wxRefundNeedParam) throws WechatAppPayServiceException;
 
     /**
      * 微信收款回调通知
      * @param params
      * @return
      */
-    Boolean WxPayNotifyNotice(Map<String, Object> params);
+    Boolean wxPayNotifyNotice(Map<String, Object> params);
 
     /**
      * 获取微信参数

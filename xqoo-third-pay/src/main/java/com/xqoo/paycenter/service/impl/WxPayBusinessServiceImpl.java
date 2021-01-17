@@ -67,7 +67,7 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
 
 
     @Override
-    public ResultEntity WxPcPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
+    public ResultEntity wxPcPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
         Map<String, Object> prePayRtnMap =new HashMap<String, Object>();
         SortedMap<String, Object> parameterMap = new TreeMap<String, Object>();
         try {
@@ -97,7 +97,7 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
     }
 
     @Override
-    public ResultEntity WxAppPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
+    public ResultEntity wxAppPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
         FinalUnifiedOrderResponse response = wxPayAppUtilService.createOrder(wxPayPropertiesBean,
                 wxPayPropertiesBean.getSubject(),
                 wxPayNeedParam.getPayAmount().doubleValue()*100,
@@ -113,12 +113,12 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
     }
 
     @Override
-    public ResultEntity WxSmallProgramPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
+    public ResultEntity wxSmallProgramPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
         return null;
     }
 
     @Override
-    public ResultEntity WxJsApiPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
+    public ResultEntity wxJsApiPay(WxPayNeedParam wxPayNeedParam) throws WechatAppPayServiceException {
         /*WechatAuthInfoVO authInfo = FeignReturnDataGzip.Unzip(sysUserFeign
                 .getWechatInfo(wxPayNeedParam.getUserId()), WechatAuthInfoVO.class);
         if(authInfo == null || StringUtils.isEmpty(authInfo.getWapOpenId())){
@@ -142,7 +142,7 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
     }
 
     @Override
-    public ResultEntity WxRefundPay(WxRefundNeedParam wxRefundNeedParam) throws WechatAppPayServiceException {
+    public ResultEntity wxRefundPay(WxRefundNeedParam wxRefundNeedParam) throws WechatAppPayServiceException {
         String refundCode = this.getRefundUid();
         Map<String, Object> remap;
 
@@ -195,10 +195,9 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
         refundLog.setTradeId(tradeNo);
         refundLog.setRefundStatus(PayModuleConstant.AliPayConstant.REFUND_FAIL);
         //微信退款调用，付款不适用
-        WxClientCustomSSL clientCustomSSL = new WxClientCustomSSL();
         String restxml = null;
         try {
-            restxml = clientCustomSSL.doRefund(wxPayPropertiesBean.getRefundGatewayUrl(),
+            restxml = WxClientCustomSSL.doRefund(wxPayPropertiesBean.getRefundGatewayUrl(),
                     requestXml,
                     wxPayPropertiesBean.getSslPassword(),
                     wxPayPropertiesBean.getSslPath());
@@ -231,7 +230,7 @@ public class WxPayBusinessServiceImpl implements WxPayBusinessService {
     }
 
     @Override
-    public Boolean WxPayNotifyNotice(Map<String, Object> params) {
+    public Boolean wxPayNotifyNotice(Map<String, Object> params) {
         String status = params.getOrDefault("return_code", "").toString();
         String rtnMsg = params.getOrDefault("return_msg", "").toString();
 

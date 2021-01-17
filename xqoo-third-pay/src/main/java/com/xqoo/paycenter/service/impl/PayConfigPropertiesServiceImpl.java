@@ -3,9 +3,9 @@ package com.xqoo.paycenter.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.paycenter.bean.AliPayPropertiesBean;
+import com.xqoo.paycenter.bean.WxPayPropertiesBean;
 import com.xqoo.paycenter.bo.PayConfigPropertiesQueryBO;
 import com.xqoo.paycenter.bo.PayConfigQueryBO;
 import com.xqoo.paycenter.constant.PayModuleConstant;
@@ -23,8 +23,11 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,8 @@ import java.util.*;
 @Service("payConfigPropertiesService")
 public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropertiesMapper, PayConfigPropertiesEntity> implements PayConfigPropertiesService {
 
+    private final static Logger logger = LoggerFactory.getLogger(PayConfigPropertiesServiceImpl.class);
+
     @Autowired
     private InitProducer initProducer;
 
@@ -48,9 +53,17 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
     @Autowired
     private PayConfigService payConfigService;
 
+    @Autowired
+    @Qualifier("AliPayConfig")
+    private AliPayPropertiesBean aliPayPropertiesBean;
+
+    @Autowired
+    @Qualifier("WxPayConfig")
+    private WxPayPropertiesBean wxPayPropertiesBean;
+
 
     @Override
-    public PageResponseBean<PayConfigPropertiesVO> queryPayConfigProperties(PayConfigPropertiesQueryBO queryBO) {
+    public List<PayConfigPropertiesVO> queryPayConfigProperties(PayConfigPropertiesQueryBO queryBO) {
         LambdaQueryWrapper<PayConfigPropertiesEntity> queryWrapper = new LambdaQueryWrapper<>();
         if(queryBO.getParentId() != null){
             queryWrapper.eq(PayConfigPropertiesEntity::getParentId, queryBO.getParentId());
@@ -63,12 +76,9 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
         }
         int count = 0;
         count = payConfigPropertiesMapper.selectCount(queryWrapper);
-        PageResponseBean<PayConfigPropertiesVO> result = new PageResponseBean<>(queryBO, count);
         if(count < 1){
-            result.setContent(Collections.emptyList());
-            return result;
+            return Collections.emptyList();
         }
-        PageHelper.startPage(queryBO.getPage(), queryBO.getPageSize());
         List<PayConfigPropertiesEntity> list = payConfigPropertiesMapper.selectList(queryWrapper);
         List<PayConfigPropertiesVO> voList = new ArrayList<>(list.size());
         list.forEach(item -> {
@@ -76,12 +86,11 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
             BeanUtils.copyProperties(item, vo);
             voList.add(vo);
         });
-        result.setContent(voList);
-        return result;
+        return voList;
     }
 
     @Override
-    public ResultEntity addPropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception {
+    public ResultEntity<PayConfigPropertiesEntity> addPropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception {
         LambdaQueryWrapper<PayConfigPropertiesEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PayConfigPropertiesEntity::getParentId, payConfigPropertiesEntity.getParentId());
         queryWrapper.eq(PayConfigPropertiesEntity::getParentVersion, payConfigPropertiesEntity.getParentVersion());
@@ -93,11 +102,11 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
         }
         payConfigPropertiesMapper.insert(payConfigPropertiesEntity);
         return new ResultEntity<>(HttpStatus.OK,
-                "新增参数[" + payConfigPropertiesEntity.getPropertiesLabel() + "]成功");
+                "新增参数[" + payConfigPropertiesEntity.getPropertiesLabel() + "]成功", payConfigPropertiesEntity);
     }
 
     @Override
-    public ResultEntity updatePropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception {
+    public ResultEntity<PayConfigPropertiesEntity> updatePropertiesInfo(PayConfigPropertiesEntity payConfigPropertiesEntity) throws Exception {
         LambdaQueryWrapper<PayConfigPropertiesEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PayConfigPropertiesEntity::getParentVersion, payConfigPropertiesEntity.getParentVersion());
         queryWrapper.eq(PayConfigPropertiesEntity::getPropertiesLabel, payConfigPropertiesEntity.getPropertiesLabel());
@@ -114,7 +123,7 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
         queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(PayConfigPropertiesEntity::getId,payConfigPropertiesEntity.getId());
         payConfigPropertiesMapper.update(payConfigPropertiesEntity, queryWrapper);
-        return new ResultEntity<>(HttpStatus.OK, "修改参数成功");
+        return new ResultEntity<>(HttpStatus.OK, "修改参数成功", payConfigPropertiesEntity);
     }
 
     @Override
@@ -171,6 +180,7 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
 
     @Override
     public void updatePayConfig(String refreshPlat) throws Exception{
+
         //创建一个消息实例，包含 topic、tag 和 消息体
         //如下：topic 为 "TopicTest"，tag 为 "push"
         Message message = new Message();
@@ -180,12 +190,12 @@ public class PayConfigPropertiesServiceImpl extends ServiceImpl<PayConfigPropert
         initProducer.getProducer().send(message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                System.out.printf("发送结果=%s, msg=%s ", sendResult.getSendStatus(), sendResult.toString() + "\n");
+                logger.info("[支付模块]配置刷新参数更新消息发送结果={}, msg={} ", sendResult.getSendStatus(), sendResult.toString());
             }
 
             @Override
             public void onException(Throwable e) {
-                e.printStackTrace();
+                logger.error("[支付模块]配置刷新参数更新消息发送失败，失败原因{}, 失败信息{}", e.getClass().getSimpleName(), e.getMessage());
                 //补偿机制，根据业务情况进行使用，看是否进行重试
             }
         }, 3000L);

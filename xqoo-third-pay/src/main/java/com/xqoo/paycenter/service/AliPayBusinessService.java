@@ -15,11 +15,37 @@ import java.util.Map;
  */
 public interface AliPayBusinessService {
 
-    ResultEntity AliPay(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException;
+    /**
+     * 支付宝web支付预下单接口
+     * @param aliPayNeedParam
+     * @param plat
+     * @return
+     * @throws AlipayApiException
+     */
+    ResultEntity aliPay(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException;
 
-    ResultEntity AliPayApp(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException;
 
-    ResultEntity AliRefundPay(AliRefundNeedParam aliRefundNeedParam) throws AlipayApiException;
+    /**
+     * 支付宝APP支付接口
+     * @param aliPayNeedParam
+     * @param plat
+     * @return
+     * @throws AlipayApiException
+     */
+    ResultEntity aliPayApp(AliPayNeedParam aliPayNeedParam, String plat) throws AlipayApiException;
 
-    Boolean AliPayNotifyNotice(Map<String, String> params);
+    /**
+     * 支付支付宝退款接口
+     * @param aliRefundNeedParam
+     * @return
+     * @throws AlipayApiException
+     */
+    ResultEntity aliRefundPay(AliRefundNeedParam aliRefundNeedParam) throws AlipayApiException;
+
+    /**
+     * 支付宝支付回调接口
+     * @param params
+     * @return
+     */
+    Boolean aliPayNotifyNotice(Map<String, String> params);
 }

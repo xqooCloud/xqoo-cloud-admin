@@ -1,5 +1,6 @@
 package com.xqoo.paycenter.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -36,12 +37,14 @@ public class PayConfigPropertiesVO {
     private String createBy;
 
     @ApiModelProperty("创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date createDate;
 
     @ApiModelProperty("最近修改人")
     private String updateBy;
 
     @ApiModelProperty("最近修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date updateDate;
 
     @ApiModelProperty("备注信息")

@@ -10,7 +10,7 @@ import com.xqoo.paycenter.exception.WechatAppPayServiceException;
 public abstract class WxAbsPayService {
 
 
-    // TODO 仿真测试环境
+    // 仿真测试环境
     protected static final String UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     protected static final String ORDER_QUERY_URL = "https://api.mch.weixin.qq.com/pay/orderquery";
 

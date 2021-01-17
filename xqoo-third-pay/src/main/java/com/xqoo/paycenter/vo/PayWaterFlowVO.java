@@ -1,5 +1,6 @@
 package com.xqoo.paycenter.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -30,7 +31,7 @@ public class PayWaterFlowVO {
     @ApiModelProperty("是否有退款，0-未退款，1-退过款")
     private Integer refundStatus;
 
-    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，FACE-POS机扫码")
+    @ApiModelProperty("支付设备，PC-电脑浏览器，APP-手机APP，MOBILE-移动端网页，JSAPI-公众号，SMP-小程序，POS-POS机扫码")
     private String payDevice;
 
     @ApiModelProperty("付款金额")
@@ -49,18 +50,21 @@ public class PayWaterFlowVO {
     private String payComment;
 
     @ApiModelProperty("付款时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date payTime;
 
     @ApiModelProperty("创建人")
     private String createBy;
 
     @ApiModelProperty("创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date createDate;
 
     @ApiModelProperty("最近修改人")
     private String updateBy;
 
     @ApiModelProperty("最近修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "GMT+8")
     private Date updateDate;
 
     @ApiModelProperty("备注信息")

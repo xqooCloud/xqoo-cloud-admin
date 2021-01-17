@@ -12,7 +12,8 @@ public enum PayDeviceType {
     APP("手机APP","APP"),
     MOBILE("手机WEB","MOBILE "),
     JSAPI("微信公众号","JSAPI"),
-    FACE("POS机扫码","FACE");
+    SMP("小程序","SMP"),
+    FACE("POS机扫码","POS");
 
     private String key;
     private String value;

@@ -52,7 +52,7 @@ public class SysSmsTemplateController  {
         QueryWrapper<SysSmsTemplateEntity> queryWrapper = new QueryWrapper<>();
         List<SysSmsTemplateEntity> templateEntities = sysSmsTemplateService.list(queryWrapper);
 
-      return   new ResultEntity<>(templateEntities);
+      return   new ResultEntity(templateEntities);
     }
 
 }

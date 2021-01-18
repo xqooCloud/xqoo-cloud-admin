@@ -82,9 +82,7 @@ public class SendSmsServiceTest {
         //System.out.println(servicePlatformService.changeServiceParam().getData());
         ServicePlatformEntity servicePlatformEntity = new ServicePlatformEntity();
         servicePlatformEntity.setServicePlatformId("1");
-        servicePlatformEntity.setSecretParam("{\"accessKeyId\":\"LTAI4FyysbvTBa8a7HZNwY68\",\"accessKeySecret\":\"RJQWIH5ad4lxZiEb0V7JqAt2OH6pkm\",\"regionId\":\"cn-hangzhou1\",\"sysDomain\":\"dysmsapi.aliyuncs.com\",\"version\":\"2017-05-25\"}");
-        servicePlatformService.updateById(servicePlatformEntity);
-        System.out.println(servicePlatformService.changeServiceParam().getData());
+       System.out.println(servicePlatformService.changeServiceParam().getData());
     }
 
 

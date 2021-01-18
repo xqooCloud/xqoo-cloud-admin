@@ -35,3 +35,4 @@ test
 将删除 xqoo-cloud-feign/target/generated-sources/
 将删除 xqoo-common/xqoo-common-auth/src/main/resources/
 将删除 xqoo-common/xqoo-common-bean/src/main/resources/
+/third-party-jar/nacos/target/nacos-server.jar

@@ -5,5 +5,5 @@
   --MYSQL_TCP_PORT=3306 ^
   --MYSQL_DB=xqoo_system_zipkin ^
   --MYSQL_USER=root ^
-  --MYSQL_PASS=gao2236
+  --MYSQL_PASS=Zyj123456.
   pause

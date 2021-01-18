@@ -61,7 +61,7 @@ public class GatewayResponseFilter implements GlobalFilter, Ordered {
                         //释放掉内存
                         DataBufferUtils.release(dataBuffer);
                         String s = new String(content, StandardCharsets.UTF_8);
-                        //TODO，s就是response的值，想修改、查看就随意而为了
+                        //s就是response的值，想修改、查看就随意而为了
                         log.error("[网关]请求路径[{}]发生了异常返回，返回值为{}", exchange.getAttribute(ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR), s);
                         byte[] uppedContent = JacksonUtils.toJsonBytes(new ResultEntity<>(statusCode, "返回数据发生异常"));
                         return bufferFactory.wrap(uppedContent);

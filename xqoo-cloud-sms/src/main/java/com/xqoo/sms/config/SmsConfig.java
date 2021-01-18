@@ -2,15 +2,20 @@ package com.xqoo.sms.config;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xqoo.sms.constant.SmsConstant;
 import com.xqoo.common.core.utils.JacksonUtils;
 import com.xqoo.sms.bean.ALiSmsConfigBean;
+import com.xqoo.sms.constant.SmsConstant;
 import com.xqoo.sms.entity.ErrCodeMessageEntity;
 import com.xqoo.sms.entity.ServicePlatformEntity;
+import com.xqoo.sms.entity.SysSmsInitEntity;
 import com.xqoo.sms.service.ErrCodeMessageService;
 import com.xqoo.sms.service.ServicePlatformService;
+import com.xqoo.sms.service.SysSmsInitService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -19,17 +24,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Configuration
 public class SmsConfig {
     @Resource
     ServicePlatformService servicePlatformService;
 
-    @Resource
+    @Autowired
     ErrCodeMessageService errCodeMessageService;
 
-    @Bean(name = "ALiSmsConfigBean")
+    @Resource
+    RedisTemplate redisTemplate;
+    @Autowired
+    SysSmsInitService sysSmsInitService;
+    private ALiSmsConfigBean aLiSmsConfigBean =new ALiSmsConfigBean();
+
+    @Bean(name="aLiSmsConfigBean")
+    public ALiSmsConfigBean aLiSmsConfigBean(){
+        return this.aLiSmsConfigBean;
+    }
+
     @PostConstruct
-    public ALiSmsConfigBean getALiSmsConfigBean() {
+    public void getALiSmsConfigBean() {
         QueryWrapper<ServicePlatformEntity> platformEntityQueryWrapper = new QueryWrapper<>();
         platformEntityQueryWrapper.lambda().eq(ServicePlatformEntity::getServicePlatformName, SmsConstant.A_LI_SMS);
         ServicePlatformEntity platformEntity = servicePlatformService.getOne(platformEntityQueryWrapper);
@@ -41,6 +56,7 @@ public class SmsConfig {
         }
         ALiSmsConfigBean aLiSmsConfigBean = JacksonUtils.toObj(platformEntity.getSecretParam(), ALiSmsConfigBean.class);
         aLiSmsConfigBean.setErrCodeMap(errCodeMap);
-        return aLiSmsConfigBean;
+        aLiSmsConfigBean.setName(platformEntity.getServicePlatformName());
+        this.aLiSmsConfigBean = aLiSmsConfigBean;
     }
 }

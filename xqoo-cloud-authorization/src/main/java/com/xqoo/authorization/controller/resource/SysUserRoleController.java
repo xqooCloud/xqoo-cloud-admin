@@ -14,6 +14,8 @@ import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.annotations.LoginUser;
+import com.xqoo.feign.annotations.OperationLog;
+import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,7 @@ public class SysUserRoleController {
 
     @PostMapping("/deleteUserRole")
     @ApiOperation("删除用户角色信息")
+    @OperationLog(tips = "删除用户角色信息", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = true)
     public ResultEntity delUserRoleByList(@RequestBody List<Integer> userRoleList,
                                           @RequestParam(required = false, value = "userId") @NotBlank(message = "用户id不能为空") String userId,
                                           @ApiIgnore @LoginUser CurrentUser currentUser){
@@ -70,6 +73,7 @@ public class SysUserRoleController {
 
     @PostMapping("/addUserRole")
     @ApiOperation("增加用户角色")
+    @OperationLog(tips = "增加用户角色", operatorType = OperationTypeEnum.ADD, isSaveRequestData = true)
     public ResultEntity addUserRole(@RequestBody @Valid AddUserRoleInfoBO bo,
                                     @ApiIgnore @LoginUser CurrentUser currentUser){
         if(StringUtils.isEmpty(currentUser.getUserId())){

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.annex.mapper.AgreementInfoMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="agreementKey != null and agreementKey != ''">
+        and agreement_key = #{agreementKey}
+    </if>
+    <if test="agreementContent != null and agreementContent != ''">
+        and agreement_content = #{agreementContent}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into kxst_system_affiliated.agreement_info(
+            agreement_key,
+            agreement_content,
+            create_date,
+            create_by,
+            update_date,
+            update_by,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.agreementKey},
+            #{item.agreementContent},
+            #{item.createDate},
+            #{item.createBy},
+            #{item.updateDate},
+            #{item.updateBy},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

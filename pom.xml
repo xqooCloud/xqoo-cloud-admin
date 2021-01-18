@@ -24,6 +24,7 @@
         <module>xqoo-cloud-operation-log</module>
         <module>xqoo-cloud-code-generator</module>
         <module>xqoo-cloud-email</module>
+        <module>xqoo-cloud-annex</module>
     </modules>
     <packaging>pom</packaging>
 

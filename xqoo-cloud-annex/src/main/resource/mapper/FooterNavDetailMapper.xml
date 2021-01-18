@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.annex.mapper.FooterNavDetailMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="groupId != null">
+        and group_id = #{groupId}
+    </if>
+    <if test="labelText != null and labelText != ''">
+        and label_text = #{labelText}
+    </if>
+    <if test="labelTitle != null and labelTitle != ''">
+        and label_title = #{labelTitle}
+    </if>
+    <if test="redirectUrl != null and redirectUrl != ''">
+        and redirect_url = #{redirectUrl}
+    </if>
+    <if test="sortNo != null">
+        and sort_no = #{sortNo}
+    </if>
+    <if test="iconName != null and iconName != ''">
+        and icon_name = #{iconName}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into kxst_system_affiliated.footer_nav_detail(
+        group_id,
+        label_text,
+        label_title,
+        redirect_url,
+        sort_no,
+        icon_name,
+        create_date,
+        create_by,
+        update_date,
+        update_by,
+        remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.groupId},
+            #{item.labelText},
+            #{item.labelTitle},
+            #{item.redirectUrl},
+            #{item.sortNo},
+            #{item.iconName},
+            #{item.createDate},
+            #{item.createBy},
+            #{item.updateDate},
+            #{item.updateBy},
+            #{item.remarkTips}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

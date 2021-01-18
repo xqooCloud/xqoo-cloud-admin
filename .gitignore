@@ -6,9 +6,10 @@
 .idea
 xqoo-apollo-config
 third-party-jar/nacos/data
-third-party-jar/nacos/logs
+third-party-jar/nacos/logs 65 v
 third-party-jar/nacos/bin/logs
 third-party-jar/nacos/bin/work
+third-party-jar/nacos/bin/target
 application-local-test.yml
 *.iml
 out
@@ -36,3 +37,4 @@ test
 将删除 xqoo-common/xqoo-common-auth/src/main/resources/
 将删除 xqoo-common/xqoo-common-bean/src/main/resources/
 /third-party-jar/nacos/target/nacos-server.jar
+/xqoo-cloud-sms/src/test/

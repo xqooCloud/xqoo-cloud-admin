@@ -3,10 +3,11 @@ package com.xqoo.authorization.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 @ApiModel("用户列表实体vo")
 public class UserInfoVO implements Serializable {
@@ -29,6 +30,12 @@ public class UserInfoVO implements Serializable {
 
     @ApiModelProperty("用户类型中文，88-后台用户(包含前台用户),10-前台用户-不可登录后台管理系统，9-临时用户，后续有新的用户类型继续在中间相加")
     private String userTypeName;
+
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
 
     @ApiModelProperty("用户名，最多32字")
     private String userName;
@@ -64,53 +71,23 @@ public class UserInfoVO implements Serializable {
     private String remarkTips;
 
     @Override
-    public String toString() {
-        return "UserInfoVO{" +
-                "userId='" + userId + '\'' +
-                ", loginId='" + loginId + '\'' +
-                ", userStatus=" + userStatus +
-                ", userStatusName='" + userStatusName + '\'' +
-                ", userType=" + userType +
-                ", userTypeName='" + userTypeName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", checked=" + checked +
-                ", roleCount=" + roleCount +
-                ", lastLoginTime=" + lastLoginTime +
-                ", profileUrl='" + profileUrl + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", createDate=" + createDate +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateDate=" + updateDate +
-                ", remarkTips='" + remarkTips + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         UserInfoVO that = (UserInfoVO) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(loginId, that.loginId) &&
-                Objects.equals(userStatus, that.userStatus) &&
-                Objects.equals(userStatusName, that.userStatusName) &&
-                Objects.equals(userType, that.userType) &&
-                Objects.equals(userTypeName, that.userTypeName) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(checked, that.checked) &&
-                Objects.equals(roleCount, that.roleCount) &&
-                Objects.equals(lastLoginTime, that.lastLoginTime) &&
-                Objects.equals(profileUrl, that.profileUrl) &&
-                Objects.equals(createBy, that.createBy) &&
-                Objects.equals(createDate, that.createDate) &&
-                Objects.equals(updateBy, that.updateBy) &&
-                Objects.equals(updateDate, that.updateDate) &&
-                Objects.equals(remarkTips, that.remarkTips);
+
+        return new EqualsBuilder().append(userId, that.userId).append(loginId, that.loginId).append(userStatus, that.userStatus).append(userStatusName, that.userStatusName).append(userType, that.userType).append(userTypeName, that.userTypeName).append(userPhone, that.userPhone).append(userEmail, that.userEmail).append(userName, that.userName).append(checked, that.checked).append(roleCount, that.roleCount).append(lastLoginTime, that.lastLoginTime).append(profileUrl, that.profileUrl).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, loginId, userStatus, userStatusName, userType, userTypeName, userName, checked, roleCount, lastLoginTime, profileUrl, createBy, createDate, updateBy, updateDate, remarkTips);
+        return new HashCodeBuilder(17, 37).append(userId).append(loginId).append(userStatus).append(userStatusName).append(userType).append(userTypeName).append(userPhone).append(userEmail).append(userName).append(checked).append(roleCount).append(lastLoginTime).append(profileUrl).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
     }
 
     public String getUserId() {
@@ -159,6 +136,22 @@ public class UserInfoVO implements Serializable {
 
     public void setUserTypeName(String userTypeName) {
         this.userTypeName = userTypeName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getUserName() {

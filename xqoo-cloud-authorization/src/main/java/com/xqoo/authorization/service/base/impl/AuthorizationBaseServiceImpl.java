@@ -136,6 +136,8 @@ public class AuthorizationBaseServiceImpl extends AbstractAuthorizationBase impl
         returnEntity.setRoleIds(effective.getCurrentUser().getRoleIds());
         returnEntity.setRoleNames(effective.getCurrentUser().getRoleNames());
         returnEntity.setAdmin(effective.getCurrentUser().getAdmin());
+        returnEntity.setUserPhone(effective.getCurrentUser().getUserPhone());
+        returnEntity.setUserEmail(effective.getCurrentUser().getUserEmail());
 
         // 第五步，更新最近登录时间，新增登录记录
         // 更新登录时间 && 新增登录记录
@@ -272,6 +274,8 @@ public class AuthorizationBaseServiceImpl extends AbstractAuthorizationBase impl
         currentUser.setRoleIds(userInfo.getRoleIds());
         currentUser.setRoleNames(userInfo.getRoleNames());
         currentUser.setAdmin(userInfo.getAdmin());
+        currentUser.setUserPhone(userInfo.getUserPhone());
+        currentUser.setUserEmail(userInfo.getUserEmail());
         if(StringUtils.isEmpty(userInfo.getSysUserBaseInfoEntity().getProfileUrl())) {
             currentUser.setProfileUrl(AuthorizationCenterConstant.DEFAULT_AVATAR);
         }else{

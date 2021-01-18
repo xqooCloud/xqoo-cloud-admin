@@ -24,6 +24,12 @@ public class SysUserBaseInfoEntity {
     @ApiModelProperty("用户类型，99-超级管理员，88-后台用户(包含前台用户),10-前台用户-不可登录后台管理系统，9-临时用户，后续有新的用户类型继续在中间相加")
     private Integer userType;
 
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
+
     @ApiModelProperty("用户名，最多32字")
     private String userName;
 
@@ -41,40 +47,38 @@ public class SysUserBaseInfoEntity {
 
     @Override
     public String toString() {
-        return "SysUserBaseInfoEntity{" +
-                "userId='" + userId + '\'' +
-                ", delFlag=" + delFlag +
-                ", loginId='" + loginId + '\'' +
-                ", userStatus=" + userStatus +
-                ", userType=" + userType +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", lastLoginTime=" + lastLoginTime +
-                ", profileUrl='" + profileUrl + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("SysUserBaseInfoEntity{");
+        sb.append("userId='").append(userId).append('\'');
+        sb.append(", delFlag=").append(delFlag);
+        sb.append(", loginId='").append(loginId).append('\'');
+        sb.append(", userStatus=").append(userStatus);
+        sb.append(", userType=").append(userType);
+        sb.append(", userPhone='").append(userPhone).append('\'');
+        sb.append(", userEmail='").append(userEmail).append('\'');
+        sb.append(", userName='").append(userName).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", salt='").append(salt).append('\'');
+        sb.append(", lastLoginTime=").append(lastLoginTime);
+        sb.append(", profileUrl='").append(profileUrl).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SysUserBaseInfoEntity that = (SysUserBaseInfoEntity) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(delFlag, that.delFlag) &&
-                Objects.equals(loginId, that.loginId) &&
-                Objects.equals(userStatus, that.userStatus) &&
-                Objects.equals(userType, that.userType) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(salt, that.salt) &&
-                Objects.equals(lastLoginTime, that.lastLoginTime) &&
-                Objects.equals(profileUrl, that.profileUrl);
+        return Objects.equals(userId, that.userId) && Objects.equals(delFlag, that.delFlag) && Objects.equals(loginId, that.loginId) && Objects.equals(userStatus, that.userStatus) && Objects.equals(userType, that.userType) && Objects.equals(userPhone, that.userPhone) && Objects.equals(userEmail, that.userEmail) && Objects.equals(userName, that.userName) && Objects.equals(password, that.password) && Objects.equals(salt, that.salt) && Objects.equals(lastLoginTime, that.lastLoginTime) && Objects.equals(profileUrl, that.profileUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, delFlag, loginId, userStatus, userType, userName, password, salt, lastLoginTime, profileUrl);
+        return Objects.hash(userId, delFlag, loginId, userStatus, userType, userPhone, userEmail, userName, password, salt, lastLoginTime, profileUrl);
     }
 
     public String getUserId() {
@@ -123,6 +127,22 @@ public class SysUserBaseInfoEntity {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getPassword() {

@@ -100,6 +100,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         if(StringUtils.isNotEmpty(bo.getLoginId())){
             queryWrapper.like(SysUserEntity::getLoginId, bo.getLoginId());
         }
+        if(StringUtils.isNotEmpty(bo.getUserPhone())){
+            queryWrapper.like(SysUserEntity::getUserPhone, bo.getUserPhone());
+        }
         Integer count = sysUserMapper.selectCount(queryWrapper);
         count = count == null ? 0 : count;
         PageResponseBean<UserInfoVO> result = new PageResponseBean<>(bo.getPage(), bo.getPageSize(), count);
@@ -114,7 +117,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
-    public ResultEntity addUserInfo(AddUserInfoBO bo) {
+    public ResultEntity<String> addUserInfo(AddUserInfoBO bo) {
         if(loginIdExists(bo.getLoginId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前loginId已存在");
         }
@@ -127,6 +130,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
         entity.setUserStatus(UserStatusEnum.NORMAL.getKey());
         entity.setUserId(userId);
         entity.setUserType(bo.getUserType());
+        entity.setUserPhone(bo.getUserPhone());
+        entity.setUserEmail(bo.getUserEmail());
         try{
             sysUserMapper.insert(entity);
             return new ResultEntity<>(HttpStatus.OK, "新增成功", userId);

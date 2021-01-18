@@ -23,4 +23,4 @@ https://www.jianshu.com/p/912701cf1705
 启动完成之后，执行下列语句新增topic
 -n后面的地址为broker地址，-b后面的地址在broker启动日志中可以查到，默认都是本地内网IP+10911，-t 后面则是topic名
 
-sh /opt/rocketmq-bin/bin/mqadmin updateTopic -n 127.0.0.1:9876 -b 192.168.0.5:10911 -t THIRD_PAY_TOPIC
+sh /opt/rocketmq-bin/bin/mqadmin updateTopic -n 127.0.0.1:9876 -b 192.168.0.6:10911 -t THIRD_PAY_TOPIC

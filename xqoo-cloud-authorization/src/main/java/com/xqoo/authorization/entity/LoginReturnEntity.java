@@ -3,11 +3,13 @@ package com.xqoo.authorization.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @ApiModel("登录后返回的实体")
 public class LoginReturnEntity implements Serializable {
@@ -39,6 +41,12 @@ public class LoginReturnEntity implements Serializable {
     @ApiModelProperty("登录人姓名")
     private String userName;
 
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
+
     @ApiModelProperty("登录人头像地址")
     private String avatar;
 
@@ -52,45 +60,43 @@ public class LoginReturnEntity implements Serializable {
     private Boolean admin;
 
     @Override
-    public String toString() {
-        return "LoginReturnEntity{" +
-                "errCode='" + errCode + '\'' +
-                ", token='" + token + '\'' +
-                ", loginTime=" + loginTime +
-                ", loginIp='" + loginIp + '\'' +
-                ", loginEnv='" + loginEnv + '\'' +
-                ", userId='" + userId + '\'' +
-                ", lastLogin=" + lastLogin +
-                ", userName='" + userName + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", roleIds=" + roleIds +
-                ", roleNames=" + roleNames +
-                ", admin=" + admin +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         LoginReturnEntity that = (LoginReturnEntity) o;
-        return Objects.equals(errCode, that.errCode) &&
-                Objects.equals(token, that.token) &&
-                Objects.equals(loginTime, that.loginTime) &&
-                Objects.equals(loginIp, that.loginIp) &&
-                Objects.equals(loginEnv, that.loginEnv) &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(lastLogin, that.lastLogin) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(avatar, that.avatar) &&
-                Objects.equals(roleIds, that.roleIds) &&
-                Objects.equals(roleNames, that.roleNames) &&
-                Objects.equals(admin, that.admin);
+
+        return new EqualsBuilder().append(errCode, that.errCode).append(token, that.token).append(loginTime, that.loginTime).append(loginIp, that.loginIp).append(loginEnv, that.loginEnv).append(userId, that.userId).append(lastLogin, that.lastLogin).append(userName, that.userName).append(userPhone, that.userPhone).append(userEmail, that.userEmail).append(avatar, that.avatar).append(roleIds, that.roleIds).append(roleNames, that.roleNames).append(admin, that.admin).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(errCode, token, loginTime, loginIp, loginEnv, userId, lastLogin, userName, avatar, roleIds, roleNames, admin);
+        return new HashCodeBuilder(17, 37).append(errCode).append(token).append(loginTime).append(loginIp).append(loginEnv).append(userId).append(lastLogin).append(userName).append(userPhone).append(userEmail).append(avatar).append(roleIds).append(roleNames).append(admin).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("errCode", errCode)
+                .append("token", token)
+                .append("loginTime", loginTime)
+                .append("loginIp", loginIp)
+                .append("loginEnv", loginEnv)
+                .append("userId", userId)
+                .append("lastLogin", lastLogin)
+                .append("userName", userName)
+                .append("userPhone", userPhone)
+                .append("userEmail", userEmail)
+                .append("avatar", avatar)
+                .append("roleIds", roleIds)
+                .append("roleNames", roleNames)
+                .append("admin", admin)
+                .toString();
     }
 
     public String getErrCode() {
@@ -155,6 +161,22 @@ public class LoginReturnEntity implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getAvatar() {

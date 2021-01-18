@@ -20,5 +20,10 @@ import java.util.List;
 @Repository
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 
+    /**
+     * Dao
+     * @param bo
+     * @return
+     */
     List<UserInfoVO> pageQueryUserInfo(@Param("bo")QueryUserInfoBO bo);
 }

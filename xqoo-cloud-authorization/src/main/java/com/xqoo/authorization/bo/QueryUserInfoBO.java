@@ -2,8 +2,9 @@ package com.xqoo.authorization.bo;
 
 import com.xqoo.common.page.PageRequestBean;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class QueryUserInfoBO extends PageRequestBean {
     private static final long serialVersionUID = 7817705298834474552L;
@@ -23,33 +24,43 @@ public class QueryUserInfoBO extends PageRequestBean {
     @ApiModelProperty("用户昵称")
     private String userName;
 
-    @Override
-    public String toString() {
-        return "QueryUserInfoBO{" +
-                "userId='" + userId + '\'' +
-                ", loginId='" + loginId + '\'' +
-                ", userStatus=" + userStatus +
-                ", userType=" + userType +
-                ", userName='" + userName + '\'' +
-                '}';
-    }
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         QueryUserInfoBO that = (QueryUserInfoBO) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(loginId, that.loginId) &&
-                Objects.equals(userStatus, that.userStatus) &&
-                Objects.equals(userType, that.userType) &&
-                Objects.equals(userName, that.userName);
+
+        return new EqualsBuilder().appendSuper(super.equals(o)).append(userId, that.userId).append(loginId, that.loginId).append(userStatus, that.userStatus).append(userType, that.userType).append(userName, that.userName).append(userPhone, that.userPhone).append(userEmail, that.userEmail).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), userId, loginId, userStatus, userType, userName);
+        return new HashCodeBuilder(17, 37).appendSuper(super.hashCode()).append(userId).append(loginId).append(userStatus).append(userType).append(userName).append(userPhone).append(userEmail).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("userId", userId)
+                .append("loginId", loginId)
+                .append("userStatus", userStatus)
+                .append("userType", userType)
+                .append("userName", userName)
+                .append("userPhone", userPhone)
+                .append("userEmail", userEmail)
+                .toString();
     }
 
     public String getUserId() {
@@ -90,5 +101,21 @@ public class QueryUserInfoBO extends PageRequestBean {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }

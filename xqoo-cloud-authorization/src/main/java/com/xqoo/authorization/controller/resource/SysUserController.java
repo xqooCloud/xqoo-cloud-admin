@@ -43,7 +43,7 @@ public class SysUserController {
     @PostMapping("/addUser")
     @ApiOperation("新增用户")
     @OperationLog(tips = "新增系统用户", operatorType = OperationTypeEnum.ADD, isSaveRequestData = true)
-    public ResultEntity addUserInfo(@RequestBody @Valid AddUserInfoBO bo){
+    public ResultEntity<String> addUserInfo(@RequestBody @Valid AddUserInfoBO bo){
         if(!bo.getConfirmPassword().equals(bo.getPassword())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "两次密码输入不符，请重新输入");
         }

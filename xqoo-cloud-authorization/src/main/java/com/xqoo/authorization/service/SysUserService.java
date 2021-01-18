@@ -22,7 +22,7 @@ public interface SysUserService extends IService<SysUserEntity> {
 
     ResultEntity<PageResponseBean<UserInfoVO>>pageGetUserInfo(QueryUserInfoBO bo);
 
-    ResultEntity addUserInfo(AddUserInfoBO bo);
+    ResultEntity<String> addUserInfo(AddUserInfoBO bo);
 
     boolean loginIdExists(String loginId);
 

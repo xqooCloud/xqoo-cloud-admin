@@ -45,6 +45,8 @@
 	        false as "checked",
 	        count(usrRole.role_id) as "roleCount",
 	        usr.user_name as "userName",
+            usr.user_phone as "userPhone",
+            usr.user_email as "userEmail",
 	        usr.last_login_time as "lastLoginTime",
 	        usr.profile_url as "profileUrl",
 	        usr.create_by as "createBy",
@@ -69,6 +71,12 @@
             </if>
             <if test="bo.userName != null and bo.userName != ''">
                 and usr.user_name like concat('%',#{bo.userName},'%')
+            </if>
+            <if test="bo.userPhone != null and bo.userPhone != ''">
+                and usr.user_phone like concat('%',#{userPhone},'%')
+            </if>
+            <if test="bo.userEmail != null and bo.userEmail != ''">
+                and usr.user_email like concat('%',#{userEmail},'%')
             </if>
         group by usr.user_id
     </select>

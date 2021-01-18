@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * @author mumu
@@ -37,6 +39,12 @@ public class SysUserEntity extends Model<SysUserEntity> {
 
     @ApiModelProperty("用户类型，99-超级管理员，88-后台用户(包含前台用户),10-前台用户-不可登录后台管理系统，9-临时用户，后续有新的用户类型继续在中间相加")
     private Integer userType;
+
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
 
     @ApiModelProperty("用户名，最多32字")
     private String userName;
@@ -110,6 +118,22 @@ public class SysUserEntity extends Model<SysUserEntity> {
 
     public void setUserType(Integer userType) {
         this.userType = userType;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getUserName() {
@@ -193,51 +217,44 @@ public class SysUserEntity extends Model<SysUserEntity> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SysUserEntity that = (SysUserEntity) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(delFlag, that.delFlag) &&
-                Objects.equals(loginId, that.loginId) &&
-                Objects.equals(userStatus, that.userStatus) &&
-                Objects.equals(userType, that.userType) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(salt, that.salt) &&
-                Objects.equals(lastLoginTime, that.lastLoginTime) &&
-                Objects.equals(profileUrl, that.profileUrl) &&
-                Objects.equals(createBy, that.createBy) &&
-                Objects.equals(createDate, that.createDate) &&
-                Objects.equals(updateBy, that.updateBy) &&
-                Objects.equals(updateDate, that.updateDate) &&
-                Objects.equals(remarkTips, that.remarkTips);
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("userId", userId)
+                .append("delFlag", delFlag)
+                .append("loginId", loginId)
+                .append("userStatus", userStatus)
+                .append("userType", userType)
+                .append("userPhone", userPhone)
+                .append("userEmail", userEmail)
+                .append("userName", userName)
+                .append("password", password)
+                .append("salt", salt)
+                .append("lastLoginTime", lastLoginTime)
+                .append("profileUrl", profileUrl)
+                .append("createBy", createBy)
+                .append("createDate", createDate)
+                .append("updateBy", updateBy)
+                .append("updateDate", updateDate)
+                .append("remarkTips", remarkTips)
+                .toString();
     }
 
     @Override
-    public String toString() {
-        return "SysUserEntity{" +
-                "userId='" + userId + '\'' +
-                ", delFlag=" + delFlag +
-                ", loginId='" + loginId + '\'' +
-                ", userStatus=" + userStatus +
-                ", userType=" + userType +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", lastLoginTime=" + lastLoginTime +
-                ", profileUrl='" + profileUrl + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", createDate=" + createDate +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateDate=" + updateDate +
-                ", remarkTips='" + remarkTips + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SysUserEntity that = (SysUserEntity) o;
+
+        return new EqualsBuilder().append(userId, that.userId).append(delFlag, that.delFlag).append(loginId, that.loginId).append(userStatus, that.userStatus).append(userType, that.userType).append(userPhone, that.userPhone).append(userEmail, that.userEmail).append(userName, that.userName).append(password, that.password).append(salt, that.salt).append(lastLoginTime, that.lastLoginTime).append(profileUrl, that.profileUrl).append(createBy, that.createBy).append(createDate, that.createDate).append(updateBy, that.updateBy).append(updateDate, that.updateDate).append(remarkTips, that.remarkTips).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, delFlag, loginId, userStatus, userType, userName, password, salt, lastLoginTime, profileUrl, createBy, createDate, updateBy, updateDate, remarkTips);
+        return new HashCodeBuilder(17, 37).append(userId).append(delFlag).append(loginId).append(userStatus).append(userType).append(userPhone).append(userEmail).append(userName).append(password).append(salt).append(lastLoginTime).append(profileUrl).append(createBy).append(createDate).append(updateBy).append(updateDate).append(remarkTips).toHashCode();
     }
 
     /**

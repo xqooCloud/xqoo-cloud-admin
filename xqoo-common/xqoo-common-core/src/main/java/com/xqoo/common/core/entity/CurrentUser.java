@@ -5,6 +5,9 @@ import cn.hutool.core.date.DateUtil;
 import com.xqoo.common.core.utils.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 import java.util.*;
@@ -22,6 +25,12 @@ public class CurrentUser implements Serializable {
 
     @ApiModelProperty("用户名")
     private String userName;
+
+    @ApiModelProperty("用户电话号码")
+    private String userPhone;
+
+    @ApiModelProperty("用户邮箱")
+    private String userEmail;
 
     @ApiModelProperty("上次登录时间")
     private Date lastLoginTime;
@@ -90,38 +99,39 @@ public class CurrentUser implements Serializable {
 
     @Override
     public String toString() {
-        return "CurrentUser{" +
-                "userId='" + userId + '\'' +
-                ", userName='" + userName + '\'' +
-                ", lastLoginTime=" + lastLoginTime +
-                ", loginSource='" + loginSource + '\'' +
-                ", loginSourceName='" + loginSourceName + '\'' +
-                ", profileUrl='" + profileUrl + '\'' +
-                ", roleIds=" + roleIds +
-                ", roleNames=" + roleNames +
-                ", admin=" + admin +
-                '}';
+        return new ToStringBuilder(this)
+                .append("userId", userId)
+                .append("userName", userName)
+                .append("userPhone", userPhone)
+                .append("userEmail", userEmail)
+                .append("lastLoginTime", lastLoginTime)
+                .append("loginSource", loginSource)
+                .append("loginSourceName", loginSourceName)
+                .append("profileUrl", profileUrl)
+                .append("roleIds", roleIds)
+                .append("roleNames", roleNames)
+                .append("admin", admin)
+                .toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         CurrentUser that = (CurrentUser) o;
-        return Objects.equals(userId, that.userId) &&
-                Objects.equals(userName, that.userName) &&
-                Objects.equals(lastLoginTime, that.lastLoginTime) &&
-                Objects.equals(loginSource, that.loginSource) &&
-                Objects.equals(loginSourceName, that.loginSourceName) &&
-                Objects.equals(profileUrl, that.profileUrl) &&
-                Objects.equals(roleIds, that.roleIds) &&
-                Objects.equals(roleNames, that.roleNames) &&
-                Objects.equals(admin, that.admin);
+
+        return new EqualsBuilder().append(userId, that.userId).append(userName, that.userName).append(userPhone, that.userPhone).append(userEmail, that.userEmail).append(lastLoginTime, that.lastLoginTime).append(loginSource, that.loginSource).append(loginSourceName, that.loginSourceName).append(profileUrl, that.profileUrl).append(roleIds, that.roleIds).append(roleNames, that.roleNames).append(admin, that.admin).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, userName, lastLoginTime, loginSource, loginSourceName, profileUrl, roleIds, roleNames, admin);
+        return new HashCodeBuilder(17, 37).append(userId).append(userName).append(userPhone).append(userEmail).append(lastLoginTime).append(loginSource).append(loginSourceName).append(profileUrl).append(roleIds).append(roleNames).append(admin).toHashCode();
     }
 
     public String getUserId() {
@@ -138,6 +148,22 @@ public class CurrentUser implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserPhone() {
+        return userPhone;
+    }
+
+    public void setUserPhone(String userPhone) {
+        this.userPhone = userPhone;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Date getLastLoginTime() {

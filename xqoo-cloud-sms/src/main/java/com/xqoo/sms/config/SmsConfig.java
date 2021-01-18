@@ -38,25 +38,22 @@ public class SmsConfig {
     SysSmsInitService sysSmsInitService;
     private ALiSmsConfigBean aLiSmsConfigBean =new ALiSmsConfigBean();
 
+    public ALiSmsConfigBean getaLiSmsConfigBean() {
+        return aLiSmsConfigBean;
+    }
+
+    public void setaLiSmsConfigBean(ALiSmsConfigBean aLiSmsConfigBean) {
+        this.aLiSmsConfigBean = aLiSmsConfigBean;
+    }
+
     @Bean(name="aLiSmsConfigBean")
     public ALiSmsConfigBean aLiSmsConfigBean(){
         return this.aLiSmsConfigBean;
     }
-
     @PostConstruct
-    public void getALiSmsConfigBean() {
-        QueryWrapper<ServicePlatformEntity> platformEntityQueryWrapper = new QueryWrapper<>();
-        platformEntityQueryWrapper.lambda().eq(ServicePlatformEntity::getServicePlatformName, SmsConstant.A_LI_SMS);
-        ServicePlatformEntity platformEntity = servicePlatformService.getOne(platformEntityQueryWrapper);
-        List<ErrCodeMessageEntity> list = errCodeMessageService.list(new QueryWrapper<ErrCodeMessageEntity>().lambda().eq(ErrCodeMessageEntity::getServicePlatorm,SmsConstant.A_LI_SMS));
-        System.out.println(platformEntity.toString());
-        Map<String,String> errCodeMap = new HashMap<>();
-        for (ErrCodeMessageEntity errCodeMessageEntity : list) {
-            errCodeMap.put(errCodeMessageEntity.getCode(), errCodeMessageEntity.getMessage());
-        }
-        ALiSmsConfigBean aLiSmsConfigBean = JacksonUtils.toObj(platformEntity.getSecretParam(), ALiSmsConfigBean.class);
-        aLiSmsConfigBean.setErrCodeMap(errCodeMap);
-        aLiSmsConfigBean.setName(platformEntity.getServicePlatformName());
-        this.aLiSmsConfigBean = aLiSmsConfigBean;
+    public void initALiSmsConfigBean(){
+        servicePlatformService.getALiSmsConfigBean();
     }
+
+
 }

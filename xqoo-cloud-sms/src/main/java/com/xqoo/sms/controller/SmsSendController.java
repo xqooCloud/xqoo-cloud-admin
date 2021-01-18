@@ -6,6 +6,7 @@ import com.xqoo.feign.annotations.OperationLog;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import com.xqoo.sms.config.SmsConfig;
 import com.xqoo.sms.service.SendSmsService;
+import com.xqoo.sms.service.ServicePlatformService;
 import com.xqoo.sms.vo.SendSmsVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +31,8 @@ public class SmsSendController {
     SendSmsService sendSmsService;
     @Resource
     RedisTemplate redisTemplate;
+    @Resource
+    ServicePlatformService servicePlatformService;
 
     @PostMapping("sendShortMessage")
     @ApiOperation(value = "发送短信")
@@ -41,7 +44,7 @@ public class SmsSendController {
         String servicePlatformId = redisTemplate.opsForValue().get("servicePlatformId").toString();
         if (StringUtils.isEmpty(servicePlatformId)) {
             //重新加载配置进入redis
-       //     smsConfig.initSmsRedis();
+            servicePlatformService.initSmsRedis();
         }
         return sendSmsService.sendShortMessage(servicePlatformId, sendSmsVo);
     }
@@ -52,7 +55,7 @@ public class SmsSendController {
         String servicePlatformId = redisTemplate.opsForValue().get("servicePlatformId").toString();
         if (StringUtils.isEmpty(servicePlatformId)) {
             //重新加载配置进入redis
-         //   smsConfig.initSmsRedis();
+            servicePlatformService.initSmsRedis();
         }
         return sendSmsService.previewShortMessage(servicePlatformId, sendSmsVo);
     }

@@ -14,6 +14,7 @@ import com.xqoo.common.core.utils.StringUtils;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.feign.service.uidgenerator.UidGeneratorFeign;
 import com.xqoo.sms.bean.ALiSmsConfigBean;
+import com.xqoo.sms.config.SmsConfig;
 import com.xqoo.sms.constant.SmsConstant;
 import com.xqoo.sms.entity.SendLogEntity;
 import com.xqoo.sms.entity.SysSmsTemplateEntity;
@@ -23,6 +24,7 @@ import com.xqoo.sms.service.SysSmsTemplateService;
 import com.xqoo.sms.utils.FreemarkerUtil;
 import com.xqoo.sms.vo.SendSmsVo;
 import freemarker.template.TemplateException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -36,13 +38,14 @@ import java.util.Map;
 public class ALiSmsService implements SmsSendService {
 
     @Resource
-    ALiSmsConfigBean aLiSmsConfigBean;
-    @Resource
     UidGeneratorFeign uidGeneratorFeign;
-    @Resource
+    @Autowired
     SendLogService sendLogService;
-    @Resource
+    @Autowired
     SysSmsTemplateService sysSmsTemplateService;
+    @Resource
+    ALiSmsConfigBean aLiSmsConfigBean;
+
 
     @Override
 
@@ -58,6 +61,9 @@ public class ALiSmsService implements SmsSendService {
         String phoneNumbers = "";
         for (String phoneNumber : sendSmsVo.getPhoneNumbers()) {
             phoneNumbers = phoneNumbers + phoneNumber + ",";
+        }
+        if (StringUtils.isEmpty(sendSmsVo.getSign())){
+            sendSmsVo.setSign(aLiSmsConfigBean.getSign());
         }
         phoneNumbers = phoneNumbers.substring(0, phoneNumbers.length() - 1);
         SendLogEntity sendLogEntity = new SendLogEntity();
@@ -105,7 +111,10 @@ public class ALiSmsService implements SmsSendService {
         if (smsTemplateEntity == null || StringUtils.isEmpty(smsTemplateEntity.getTemplateContent())) {
             return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED, "模板不存在");
         }
-        String result = "";
+        if (StringUtils.isEmpty(sendSmsVo.getSign())){
+            sendSmsVo.setSign(aLiSmsConfigBean.getSign());
+        }
+        String result ;
         try {
             result = FreemarkerUtil.processTemplate(smsTemplateEntity.getTemplateName(), smsTemplateEntity
                     .getTemplateContent(), sendSmsVo.getSmsParamJson());
@@ -115,6 +124,6 @@ public class ALiSmsService implements SmsSendService {
             e.printStackTrace();
             return new ResultEntity(HttpStatus.METHOD_NOT_ALLOWED, "模板内容错误");
         }
-        return new ResultEntity(result);
+        return new ResultEntity("【"+sendSmsVo.getSign()+"】"+result);
     }
 }

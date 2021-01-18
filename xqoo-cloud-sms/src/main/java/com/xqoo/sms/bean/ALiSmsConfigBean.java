@@ -10,6 +10,7 @@ public class ALiSmsConfigBean {
     String sysDomain;//服务器名称
     String version;//服务器名称
     String name;
+    String sign;
     Map<String, String> errCodeMap;
 
     public ALiSmsConfigBean() {
@@ -69,6 +70,14 @@ public class ALiSmsConfigBean {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 
     /**

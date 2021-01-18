@@ -12,4 +12,7 @@ import com.xqoo.sms.entity.ServicePlatformEntity;
  */
 public interface ServicePlatformService extends IService<ServicePlatformEntity> {
     ResultEntity changeServiceParam();
+
+    void getALiSmsConfigBean();
+    void initSmsRedis();
 }

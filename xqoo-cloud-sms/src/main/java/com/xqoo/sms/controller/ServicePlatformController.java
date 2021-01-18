@@ -1,12 +1,12 @@
 package com.xqoo.sms.controller;
 
+import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.sms.entity.ServicePlatformEntity;
 import com.xqoo.sms.service.ServicePlatformService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (ServicePlatform)表控制层
@@ -34,4 +34,15 @@ public class ServicePlatformController {
         return null;
     }
 
+    @GetMapping("listService")
+    public ResultEntity listService(){
+        List<ServicePlatformEntity> list = servicePlatformService.list();
+        return new ResultEntity(list);
+    }
+
+    @PostMapping("updateServicePlatform")
+    public ResultEntity updateServicePlatform(@RequestBody ServicePlatformEntity servicePlatformEntity) {
+        boolean b = servicePlatformService.updateById(servicePlatformEntity);
+        return new ResultEntity(b);
+    }
 }

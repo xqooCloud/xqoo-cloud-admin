@@ -8,12 +8,18 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xqoo.common.entity.ResultEntity;
+import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.sms.entity.SysSmsTemplateEntity;
 import com.xqoo.sms.service.SysSmsTemplateService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (SysSmsTemplate)表控制层
@@ -41,27 +47,12 @@ public class SysSmsTemplateController  {
         return "";
     }
 
+    @GetMapping("getListSmsTemplate")
+    public ResultEntity<PageResponseBean<SysSmsTemplateEntity>> getListSmsTemplate(){
+        QueryWrapper<SysSmsTemplateEntity> queryWrapper = new QueryWrapper<>();
+        List<SysSmsTemplateEntity> templateEntities = sysSmsTemplateService.list(queryWrapper);
 
-    @GetMapping("sendSms")
-    public String sendSms(String id) {
-        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "<accessKeyId>", "<accessSecret>");
-        IAcsClient client = new DefaultAcsClient(profile);
-
-        CommonRequest request = new CommonRequest();
-        request.setSysMethod(MethodType.POST);
-        request.setSysDomain("dysmsapi.aliyuncs.com");
-        request.setSysVersion("2017-05-25");
-        request.setSysAction("SendSms");
-        request.putQueryParameter("RegionId", "cn-hangzhou");
-        try {
-            CommonResponse response = client.getCommonResponse(request);
-            System.out.println(response.getData());
-        } catch (ServerException e) {
-            e.printStackTrace();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
-        return "";
+      return   new ResultEntity<>(templateEntities);
     }
 
 }

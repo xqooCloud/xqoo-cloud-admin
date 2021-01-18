@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SpringBeanUtil {
@@ -232,7 +233,7 @@ public class SpringBeanUtil {
                     } else if ("Boolean".equalsIgnoreCase(fieldType)) {
                         Boolean temp = Boolean.parseBoolean(value);
                         fieldSetMet.invoke(bean, temp);
-                    } else {
+                    }else {
                         System.out.println("not supper type" + fieldType);
                     }
                 } else {//value=null或者""

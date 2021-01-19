@@ -4,7 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.xqoo.annex.bo.QueryFooterNavDetailInfoBO;
 import com.xqoo.annex.entity.FooterNavDetailEntity;
+import com.xqoo.annex.entity.FooterNavGroupEntity;
 import com.xqoo.annex.mapper.FooterNavDetailMapper;
 import com.xqoo.annex.service.FooterNavDetailService;
 import com.xqoo.common.core.entity.CurrentUser;
@@ -37,8 +39,9 @@ public class FooterNavDetailServiceImpl extends ServiceImpl<FooterNavDetailMappe
     private FooterNavDetailMapper footerNavDetailMapper;
 
     @Override
-    public ResultEntity<PageResponseBean<FooterNavDetailEntity>> pageGetList(PageRequestBean page){
+    public ResultEntity<PageResponseBean<FooterNavDetailEntity>> pageGetList(QueryFooterNavDetailInfoBO page){
         LambdaQueryWrapper<FooterNavDetailEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FooterNavDetailEntity::getGroupId, page.getGroupId());
         Integer count = footerNavDetailMapper.selectCount(queryWrapper);
         PageResponseBean<FooterNavDetailEntity> result = new PageResponseBean<>(page.getPage(), page.getPageSize(), count);
         if(count == null || count < 1){
@@ -77,6 +80,22 @@ public class FooterNavDetailServiceImpl extends ServiceImpl<FooterNavDetailMappe
             return entity;
         }
         return new FooterNavDetailEntity();
+    }
+
+    @Override
+    public ResultEntity insert(FooterNavDetailEntity footerNavDetailEntity) {
+
+        boolean b = false;
+        try {
+            b = this.save(footerNavDetailEntity);
+        } catch (Exception e) {
+            logger.error("[com.xqoo.codegen]数据库新增错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
+            return new ResultEntity(HttpStatus.NOT_ACCEPTABLE, "新增失败");
+        }
+
+        return new ResultEntity(true);
+
+
     }
 }
 

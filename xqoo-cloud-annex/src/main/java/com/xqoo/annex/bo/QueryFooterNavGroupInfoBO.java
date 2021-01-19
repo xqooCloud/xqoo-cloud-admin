@@ -11,7 +11,7 @@ public class QueryFooterNavGroupInfoBO extends PageRequestBean {
 
 
     private static final long serialVersionUID = 6077138806762990916L;
-    @ApiModelProperty("协议KEY")
+    @ApiModelProperty("分组名称")
     private String groupName;
 
     @Override

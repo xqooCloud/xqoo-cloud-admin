@@ -1,6 +1,8 @@
 package com.xqoo.annex.controller;
 
+import com.xqoo.annex.bo.QueryFooterNavDetailInfoBO;
 import com.xqoo.annex.entity.FooterNavDetailEntity;
+import com.xqoo.annex.entity.FooterNavGroupEntity;
 import com.xqoo.annex.service.FooterNavDetailService;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.core.utils.StringUtils;
@@ -51,17 +53,10 @@ public class FooterNavDetailController{
 
     @ApiOperation("分页获取页脚导航文字明细表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<FooterNavDetailEntity>> pageGetList(@RequestBody PageRequestBean page){
+    public ResultEntity<PageResponseBean<FooterNavDetailEntity>> pageGetList(@RequestBody QueryFooterNavDetailInfoBO page){
         return footerNavDetailService.pageGetList(page);
     }
 
-    @ApiOperation("分页获取页脚导航文字明细表数据")
-    @GetMapping("/qq")
-    public ResultEntity<PageResponseBean<FooterNavDetailEntity>> qq(){
-        System.out.println("qq");
-        return null;
-
-    }
 
     @ApiOperation("批量新增数据")
     @PostMapping("/addRecordByList")
@@ -74,10 +69,52 @@ public class FooterNavDetailController{
         return footerNavDetailService.insertList(list, currentUser);
     }
 
+    @ApiOperation("新增脚页分组数据")
+    @PostMapping("/addFooterNavDetail")
+    @OperationLog(tips="新增脚页分组数据", operatorType = OperationTypeEnum.ADD, isSaveRequestData = true)
+    public ResultEntity addFooterNavDetail(@ApiIgnore @LoginUser CurrentUser currentUser,
+                                          @RequestBody FooterNavDetailEntity footerNavDetailEntity){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        return footerNavDetailService.insert(footerNavDetailEntity);
+    }
+    @ApiOperation("更新脚页分组数据")
+    @PostMapping("/updateFooterNavDetail")
+    @OperationLog(tips="更新脚页分组数据", operatorType = OperationTypeEnum.ADD, isSaveRequestData = true)
+    public ResultEntity updateFooterNavDetail(@ApiIgnore @LoginUser CurrentUser currentUser,
+                                             @RequestBody FooterNavDetailEntity footerNavDetailEntity){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        boolean b = footerNavDetailService.updateById(footerNavDetailEntity);
+        if (b){
+            return new ResultEntity(true);
+        }else{
+            return new ResultEntity(HttpStatus.NOT_ACCEPTABLE,"更新失败");
+        }
+    }
+
+    @ApiOperation("删除脚页分组数据")
+    @GetMapping("/removeFooterNavDetail/{id}")
+    @OperationLog(tips="删除脚页分组数据", operatorType = OperationTypeEnum.ADD, isSaveRequestData = true)
+    public ResultEntity removeFooterNavDetail(@ApiIgnore @LoginUser CurrentUser currentUser,
+                                             @PathVariable("id")int id){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        boolean b = footerNavDetailService.removeById(id);
+        if (b){
+            return new ResultEntity(true);
+        }else{
+            return new ResultEntity(HttpStatus.NOT_ACCEPTABLE,"删除失败");
+        }
+    }
+
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<FooterNavDetailEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
-                                                                     @NotNull(message = "主键值不能为空") Integer id){
+                                                                    @NotNull(message = "主键值不能为空") Integer id){
         FooterNavDetailEntity entity = footerNavDetailService.getOneFooterNavDetailEntityByPrimaryKey(id);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
     }

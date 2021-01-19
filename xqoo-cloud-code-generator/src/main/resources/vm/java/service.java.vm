@@ -16,7 +16,7 @@ import java.util.List;
  * @date ${dateTime}
  */
 
-public interface ${className}Entity extends IService<${className}Entity> {
+public interface ${className}Service extends IService<${className}Entity> {
 
 #set($pkJavaFieldType='Integer')
 #set($pkJavaFieldName='id')
@@ -26,9 +26,24 @@ public interface ${className}Entity extends IService<${className}Entity> {
     #set($pkJavaFieldName=${column.javaFieldName})
 #end
 #end
+    /**
+    * 分页查询${tableName}
+    * @param page
+    * @return
+    */
     ResultEntity<PageResponseBean<${className}Entity>> pageGetList(PageRequestBean page);
 
-    ResultEntity insertList(List<${className}Entity> list, CurrentUser currentUser);
+    /**
+    * 批量插入${tableName}
+    * @param list
+    * @param currentUser
+    * @return
+    */
+    ResultEntity<String> insertList(List<${className}Entity> list, CurrentUser currentUser);
 
+    /**
+    * 获取${tableName}主键记录了
+    * @return
+    */
     ${className}Entity getOne${className}EntityByPrimaryKey(${pkJavaFieldType} ${pkJavaFieldName});
 }

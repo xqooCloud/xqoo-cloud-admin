@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import cn.hutool.core.bean.BeanUtil;
 import java.io.Serializable;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Map;
@@ -66,32 +68,24 @@ public class ${className} implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ${className} that = (${className}) o;
-        return
-#set($ArrLength=$columns.size())
-#foreach($column in $columns)
-#if($foreach.index < $ArrLength - 1)
-            Objects.equals(${column.javaFieldName}, that.${column.javaFieldName}) &&
-#end
-#if($foreach.index >= $ArrLength - 1)
+        if (this == o) { return true };
+        if (o == null || getClass() != o.getClass()) { return false };
+    ${className}Entity that = (${className}Entity) o;
+        return new EqualsBuilder()
+    #set($ArrLength=$columns.size())
+    #foreach($column in $columns)
+            .append${column.javaFieldName}, that.${column.javaFieldName})
             Objects.equals(${column.javaFieldName}, that.${column.javaFieldName});
-#end
-#end
+    #end
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-#foreach($column in $columns)
-#if($foreach.index < $ArrLength - 1)
-            ${column.javaFieldName},
-#end
-#if($foreach.index >= $ArrLength - 1)
-            ${column.javaFieldName}
-#end
-#end
-        );
+        new HashCodeBuilder(17, 37)
+    #foreach($column in $columns)
+            .append(${column.javaFieldName})
+    #end
+            .toHashCode();
     }
 }

@@ -93,6 +93,7 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${c
         }
     }
 
+    @Override
     public ${className}Entity getOne${className}EntityByPrimaryKey(${pkJavaFieldType} ${pkJavaFieldName}){
         LambdaQueryWrapper<${className}Entity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(${className}Entity::get${pkJavaFieldNameGet}, ${pkJavaFieldName});

@@ -32,7 +32,9 @@ spring-boot版本2.3.4，cloud版本 Hoxton.SR8, nacos 版本1.3。2
 ## 特别说明
   third-party-jar文件夹中包含一些第三方的jar包以及一部分启动脚本
 ### nacos
-  nacos因为jar包较大没有上传，官方下载[1.3.2版本(zip)](https://github.com/alibaba/nacos/releases/download/1.4.1/nacos-server-1.4.1.zip)或[1.3.2版本(tar.gz)](https://github.com/alibaba/nacos/releases/download/1.4.1/nacos-server-1.4.1.tar.gz)之后将target文件夹整个丢入third-party-jar/nacos/文件夹下,修改conf中链接数据库参数配置后在bin/目录下启动即可
+   ~~nacos因为jar包较大没有上传，官方下载[1.3.2版本(zip)](https://github.com/alibaba/nacos/releases/download/1.4.1/nacos-server-1.4.1.zip)或[1.3.2版本(tar.gz)](https://github.com/alibaba/nacos/releases/download/1.4.1/nacos-server-1.4.1.tar.gz)之后将target文件夹整个丢入third-party-jar/nacos/文件夹下,修改conf中链接数据库参数配置后在bin/目录下启动即可~~
+   nacos 1.3.2连接数据库存在一点小问题，连接过期断开之后不会重连，更换为1.4.2，同时1.4.2支持连接池参数修改[1.4.2版本(tar.gz)](https://github.com/alibaba/nacos/releases/download/1.4.1/nacos-server-1.4.1.tar.gz)
+   1.4.2版本以下的nacos库执行1.4.0-ipv6_support-update脚本，更新下主要几张表的src_ip这个字段的长度就行
 ### zipkin
   版本为2.21.7，需要改动链接参数或数据源参数请参照[官网](https://zipkin.io/)
   修改后运行zipkinStart.sh启动即可(windows提供了一个简单的bat文件启动，非后台启动，直接关闭shell即关闭zipkin)，访问GUI http://127.0.0.1:9411 即可
@@ -347,3 +349,7 @@ ENTRYPOINT java $JAVA_OPTS -Xshareclasses -Xquickstart -jar xqoo-cloud-eureka.ja
 JAVA_OPTS 是jvm优化 就设置这两个就行-Xms256m -Xmx512m 其他的镜像里面做的有优化
 -d 是后台运行 都是docker命令 最后面的是镜像名字
 docker run --env JAVA_OPTS=-Xms256m -Xmx512m --name xqoo-cloud-eureka -d xqoo-cloud-eureka:latest 
+
+  ~~~
+
+  ~~~

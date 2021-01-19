@@ -19,5 +19,10 @@ import java.util.List;
 @Repository
 public interface ${className}Mapper extends BaseMapper<${className}Entity> {
 
+    /**
+     * 数据源表(${tableName})批量插入
+     * @param list
+     * @throws RuntimeException
+     */
     void insertList(@Param("list") List<${className}Entity> list) throws RuntimeException;
 }

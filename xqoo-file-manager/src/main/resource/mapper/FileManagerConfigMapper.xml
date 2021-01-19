@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.filemanager.mapper.FileManagerConfigMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="uploadPlat != null and uploadPlat != ''">
+        and upload_plat = #{uploadPlat}
+    </if>
+    <if test="configStatus != null">
+        and config_status = #{configStatus}
+    </if>
+    <if test="uploadPlatName != null and uploadPlatName != ''">
+        and upload_plat_name = #{uploadPlatName}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_file_manager.file_manager_config(
+            upload_plat,
+            config_status,
+            upload_plat_name,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.uploadPlat},
+            #{item.configStatus},
+            #{item.uploadPlatName},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

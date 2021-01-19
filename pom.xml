@@ -25,6 +25,7 @@
         <module>xqoo-cloud-code-generator</module>
         <module>xqoo-cloud-email</module>
         <module>xqoo-cloud-annex</module>
+        <module>xqoo-file-manager</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -71,6 +72,7 @@
         <aliyun.core.version>4.4.2</aliyun.core.version>
         <aliyun.java.sdk.sts.version>2.1.6</aliyun.java.sdk.sts.version>
         <alipay.sdk.java.version>3.3.87.ALL</alipay.sdk.java.version>
+        <alioss.sdk.java.version>3.10.2</alioss.sdk.java.version>
     </properties>
 
     <dependencyManagement>
@@ -335,6 +337,11 @@
                 <groupId>com.alipay.sdk</groupId>
                 <artifactId>alipay-sdk-java</artifactId>
                 <version>${alipay.sdk.java.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${alioss.sdk.java.version}</version>
             </dependency>
 
 

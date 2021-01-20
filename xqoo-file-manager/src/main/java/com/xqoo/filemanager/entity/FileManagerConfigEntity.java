@@ -39,6 +39,9 @@ public class FileManagerConfigEntity extends Model<FileManagerConfigEntity> {
     @ApiModelProperty("平台名称")
     private String uploadPlatName;
 
+    @ApiModelProperty("刷新命令")
+    private String refreshCommand;
+
     @ApiModelProperty("创建人")
     @TableField(value = "create_by", fill = FieldFill.INSERT)
     private String createBy;
@@ -90,6 +93,14 @@ public class FileManagerConfigEntity extends Model<FileManagerConfigEntity> {
 
     public String getUploadPlatName(){
         return this.uploadPlatName;
+    }
+
+    public String getRefreshCommand() {
+        return refreshCommand;
+    }
+
+    public void setRefreshCommand(String refreshCommand) {
+        this.refreshCommand = refreshCommand;
     }
 
     public void setCreateBy(String createBy) {
@@ -151,6 +162,7 @@ public class FileManagerConfigEntity extends Model<FileManagerConfigEntity> {
             .append("uploadPlat", getUploadPlat())
             .append("configStatus", getConfigStatus())
             .append("uploadPlatName", getUploadPlatName())
+            .append("refreshCommand", getRefreshCommand())
             .append("createBy", getCreateBy())
             .append("createDate", getCreateDate())
             .append("updateBy", getUpdateBy())
@@ -174,6 +186,7 @@ public class FileManagerConfigEntity extends Model<FileManagerConfigEntity> {
                 .append(uploadPlat, that.uploadPlat)
                 .append(configStatus, that.configStatus)
                 .append(uploadPlatName, that.uploadPlatName)
+                .append(refreshCommand, that.refreshCommand)
                 .append(createBy, that.createBy)
                 .append(createDate, that.createDate)
                 .append(updateBy, that.updateBy)
@@ -189,6 +202,7 @@ public class FileManagerConfigEntity extends Model<FileManagerConfigEntity> {
                 .append(uploadPlat)
                 .append(configStatus)
                 .append(uploadPlatName)
+                .append(refreshCommand)
                 .append(createBy)
                 .append(createDate)
                 .append(updateBy)

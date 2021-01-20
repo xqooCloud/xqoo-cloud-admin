@@ -6,10 +6,10 @@ package com.xqoo.filemanager.enums;
  */
 public enum UploadPlatEnum {
 
-    PC("ALI","阿里云OSS"),
-    APP("TENCENT","腾讯云COS"),
-    MOBILE("QINIU","七牛云 "),
-    JSAPI("LOCAL","本地服务器");
+    ALI("ALI","阿里云OSS"),
+    TENCENT("TENCENT","腾讯云COS"),
+    QINIU("QINIU","七牛云 "),
+    LOCAL("LOCAL","本地服务器");
 
     private String key;
     private String value;

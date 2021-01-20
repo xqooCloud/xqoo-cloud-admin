@@ -11,6 +11,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Map;
 
@@ -31,12 +34,17 @@ public class FileConfigPropertiesEntity extends Model<FileConfigPropertiesEntity
     private Integer id;
 
     @ApiModelProperty("父级id")
+    @NotNull(message = "操作失败，父级id不能为空")
     private Integer parentId;
 
     @ApiModelProperty("")
+    @NotBlank(message = "操作失败，参数key名不能为空")
+    @Size(min = 2, max = 32, message = "参数key名在2-32个字符之间")
     private String propertiesLabel;
 
     @ApiModelProperty("属性值，最长2048位")
+    @NotBlank(message = "操作失败，参数值不能为空")
+    @Size(min = 2, max = 512, message = "参数值在2-512个字符之间")
     private String propertiesValue;
 
     @ApiModelProperty("属性备注说明，最多64字")

@@ -16,6 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author gaoyang
+ */
 @Configuration
 public class FileManagerPropertiesConifg {
 
@@ -28,7 +31,7 @@ public class FileManagerPropertiesConifg {
     private FileConfigPropertiesService fileConfigPropertiesService;
 
     @PostConstruct
-    public void initFileConfigPropertie(){
+    public void initFileConfigProperties(){
         List<FileManagerConfigEntity> mainList = fileManagerConfigService.getFileManagerConfig();
         Map<String, Map<String, String>> fileConfigMap = new HashMap<>(BigDecimal.valueOf(mainList.size())
                 .multiply(BigDecimal.valueOf(1.8)).intValue());

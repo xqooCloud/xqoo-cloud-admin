@@ -20,11 +20,26 @@ import java.util.Map;
 public interface FileConfigPropertiesService extends IService<FileConfigPropertiesEntity> {
 
     /**
+     * 根据父级id获取所有参数
+     * @param parentId
+     * @return
+     */
+    ResultEntity<List<FileConfigPropertiesEntity>> getAllPropertiesByParentId(Integer parentId);
+
+    /**
     * 分页查询file_config_properties
     * @param page
     * @return
     */
     ResultEntity<PageResponseBean<FileConfigPropertiesEntity>> pageGetList(PageRequestBean page);
+
+
+    /**
+     * 刷新文件模块最新配置参数
+     * @param refreshPlat
+     * @return
+     */
+    void refreshFileConfig(String refreshPlat) throws Exception;
 
     /**
     * 批量插入file_config_properties
@@ -46,4 +61,18 @@ public interface FileConfigPropertiesService extends IService<FileConfigProperti
      * @return
      */
     Map<String, String> getPropertiesByParentId(Integer parentId);
+
+    /**
+     * 新增配置参数
+     * @param entity
+     * @return
+     */
+    ResultEntity<FileConfigPropertiesEntity> addConfigProperties(FileConfigPropertiesEntity entity);
+
+    /**
+     * 修改配置参数
+     * @param entity
+     * @return
+     */
+    ResultEntity<FileConfigPropertiesEntity> updatePropertiesInfo(FileConfigPropertiesEntity entity);
 }

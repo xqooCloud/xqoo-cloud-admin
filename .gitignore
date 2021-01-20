@@ -4,6 +4,8 @@
 
 # IntelliJ project files
 .idea
+.gradle
+D:
 xqoo-apollo-config
 third-party-jar/nacos/data
 third-party-jar/nacos/logs 65 v

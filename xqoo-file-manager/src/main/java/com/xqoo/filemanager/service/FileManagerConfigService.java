@@ -18,11 +18,31 @@ import java.util.List;
 
 public interface FileManagerConfigService extends IService<FileManagerConfigEntity> {
 
+    /**
+     * 获取分页文件管理参数
+     * @param page
+     * @return
+     */
     ResultEntity<PageResponseBean<FileManagerConfigEntity>> pageGetList(PageRequestBean page);
 
+    /**
+     * 批量插入文件
+     * @param list
+     * @param currentUser
+     * @return
+     */
     ResultEntity<String> insertList(List<FileManagerConfigEntity> list, CurrentUser currentUser);
 
+    /**
+     * 根据主键获取文件管理参数
+     * @param id
+     * @return
+     */
     FileManagerConfigEntity getOneFileManagerConfigEntityByPrimaryKey(Integer id);
 
+    /**
+     * 获取全部可用的文件管理参数
+     * @return
+     */
     List<FileManagerConfigEntity> getFileManagerConfig();
 }

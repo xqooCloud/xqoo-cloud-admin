@@ -34,6 +34,16 @@
             <artifactId>aliyun-sdk-oss</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>xqoo.cloud</groupId>
+            <artifactId>xqoo-common-rocketmq</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <!-- 单元测试 -->
         <dependency>

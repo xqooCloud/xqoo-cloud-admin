@@ -8,14 +8,11 @@ import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.annotations.LoginUser;
 import com.xqoo.feign.annotations.OperationLog;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
-import com.xqoo.filemanager.bean.FileConfigPropertiesBean;
-import com.xqoo.filemanager.bean.FileManagerConfigBean;
 import com.xqoo.filemanager.entity.FileManagerConfigEntity;
 import com.xqoo.filemanager.service.FileManagerConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +20,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
 
 /**
  * FileManagerConfigController
@@ -37,14 +33,6 @@ import java.util.Map;
 @Api(tags = "文件管理配置总表控制器")
 @Validated
 public class FileManagerConfigController{
-
-    @Autowired
-    @Qualifier("fileManagerConfigBean")
-    private FileManagerConfigBean fileManagerConfigBean;
-
-    @Autowired
-    @Qualifier("fileConfigPropertiesBean")
-    private FileConfigPropertiesBean fileConfigPropertiesBean;
 
     /**
     * 注入当前登录人信息请在参数中添加 @ApiIgnore @LoginUser CurrentUser currentUser, @ApiIgnore是隐藏CurrentUser中的参数不在swagger中显示
@@ -60,7 +48,12 @@ public class FileManagerConfigController{
     @Autowired
     private FileManagerConfigService fileManagerConfigService;
 
-                                                                            
+    @ApiOperation("获得全部可用的配置住要类目")
+    @GetMapping("getAllActiveFileManager")
+    public ResultEntity<List<FileManagerConfigEntity>> getAllActiveFileManager(){
+        return new ResultEntity<>(HttpStatus.OK, "ok", fileManagerConfigService.getFileManagerConfig());
+    }
+
     @ApiOperation("分页获取文件管理配置总表表数据")
     @PostMapping("/pageGetList")
     public ResultEntity<PageResponseBean<FileManagerConfigEntity>> pageGetList(@RequestBody PageRequestBean page){
@@ -86,15 +79,4 @@ public class FileManagerConfigController{
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
     }
 
-    @ApiOperation("测试参数")
-    @GetMapping("/testProperties")
-    public Map testProperties(){
-        return fileConfigPropertiesBean.getFileManagerConfigBean();
-    }
-
-    @ApiOperation("测试参数主体")
-    @GetMapping("/testPropertiesMain")
-    public List<FileManagerConfigEntity> testPropertiesMain(){
-        return fileManagerConfigBean.getBeanList();
-    }
 }

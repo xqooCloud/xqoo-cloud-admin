@@ -1,11 +1,12 @@
 package com.xqoo.email.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xqoo.email.bo.EmailTemplateBO;
 import com.xqoo.email.entity.EmailTemplateEntity;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.email.vo.EmailTemplateVO;
 
 import java.util.List;
 
@@ -18,9 +19,15 @@ import java.util.List;
 
 public interface EmailTemplateService extends IService<EmailTemplateEntity> {
 
-    ResultEntity<PageResponseBean<EmailTemplateEntity>> pageGetList(PageRequestBean page);
+    ResultEntity<PageResponseBean<EmailTemplateEntity>> pageGetList(EmailTemplateBO page);
 
     ResultEntity insertList(List<EmailTemplateEntity> list, CurrentUser currentUser);
 
     EmailTemplateEntity getOneEmailTemplateEntityByPrimaryKey(Integer id);
+
+    ResultEntity updateDelFlag(Integer id);
+
+    ResultEntity<String> updateEmailTemplate(EmailTemplateVO vo);
+
+    ResultEntity<String> addEmailTemplate(EmailTemplateVO vo);
 }

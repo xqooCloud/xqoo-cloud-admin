@@ -91,7 +91,8 @@ public class EmailConfigController{
     public ResultEntity<String> updateDataSource(@RequestBody @Valid EmailConfigInfoVO vo){
         if(vo.getId() == null || vo.getId() == 0){
             return emailConfigService.addEmailConfig(vo);
+        }else{
+            return emailConfigService.updateEmailConfig(vo);
         }
-        return emailConfigService.updateEmailConfig(vo);
     }
 }

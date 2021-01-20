@@ -1,7 +1,8 @@
 package com.xqoo.email.controller;
 
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.email.bo.EmailTemplateBO;
+import com.xqoo.email.vo.EmailTemplateVO;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import com.xqoo.email.service.EmailTemplateService;
 import com.xqoo.email.entity.EmailTemplateEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.feign.annotations.LoginUser;
 import com.xqoo.feign.annotations.OperationLog;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -48,13 +49,13 @@ public class EmailTemplateController{
     */
 
     @Autowired
-    private EmailTemplateService EmailTemplateService;
+    private EmailTemplateService emailTemplateService;
 
 
     @ApiOperation("分页获取email_template表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<EmailTemplateEntity>> pageGetList(@RequestBody PageRequestBean page){
-        return EmailTemplateService.pageGetList(page);
+    public ResultEntity<PageResponseBean<EmailTemplateEntity>> pageGetList(@RequestBody EmailTemplateBO page){
+        return emailTemplateService.pageGetList(page);
     }
 
     @ApiOperation("批量新增数据")
@@ -65,14 +66,36 @@ public class EmailTemplateController{
         if(StringUtils.isEmpty(currentUser.getUserId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
         }
-        return EmailTemplateService.insertList(list, currentUser);
+        return emailTemplateService.insertList(list, currentUser);
     }
 
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<EmailTemplateEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
                                                                       @NotNull(message = "主键值不能为空") Integer id){
-        EmailTemplateEntity entity = EmailTemplateService.getOneEmailTemplateEntityByPrimaryKey(id);
+        EmailTemplateEntity entity = emailTemplateService.getOneEmailTemplateEntityByPrimaryKey(id);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
+    }
+
+    @ApiOperation("删除邮件模板")
+    @GetMapping("/deleteEmailTemplate")
+    @OperationLog(tips="删除email_template表数据", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = false)
+    public ResultEntity deleteEmailTemplateByKey(@ApiIgnore @LoginUser CurrentUser currentUser,Integer id){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        emailTemplateService.updateDelFlag(id);
+        return new ResultEntity<>(HttpStatus.OK, "删除成功");
+    }
+
+    @ApiOperation("新增/编辑邮件配置信息")
+    @PostMapping("/updateEmailTemplate")
+    @OperationLog(tips = "新增/编辑邮件配置信息", operatorType = OperationTypeEnum.EDIT, isSaveRequestData = true)
+    public ResultEntity<String> updateDataSource(@RequestBody @Valid EmailTemplateVO vo){
+        if(vo.getId() == null || vo.getId() == 0){
+            return emailTemplateService.addEmailTemplate(vo);
+        }else{
+            return emailTemplateService.updateEmailTemplate(vo);
+        }
     }
 }

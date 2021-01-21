@@ -83,7 +83,7 @@ public class FileManagerConsumerService {
                             this.updateConfig(UploadPlatEnum.TENCENT);
                             break;
                         default:
-                            logger.info("[支付模块]:刷新支付参数命令不明，未执行操作");
+                            logger.info("[文件模块]:刷新支付参数命令不明，未执行操作");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

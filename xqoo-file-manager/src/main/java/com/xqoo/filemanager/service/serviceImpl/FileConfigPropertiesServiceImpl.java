@@ -79,12 +79,12 @@ public class FileConfigPropertiesServiceImpl extends ServiceImpl<FileConfigPrope
         initProducer.getProducer().send(message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                logger.info("[支付模块]配置刷新参数更新消息发送结果={}, msg={} ", sendResult.getSendStatus(), sendResult.toString());
+                logger.info("[文件模块]配置刷新参数更新消息发送结果={}, msg={} ", sendResult.getSendStatus(), sendResult.toString());
             }
 
             @Override
             public void onException(Throwable e) {
-                logger.error("[支付模块]配置刷新参数更新消息发送失败，失败原因{}, 失败信息{}", e.getClass().getSimpleName(), e.getMessage());
+                logger.error("[文件模块]配置刷新参数更新消息发送失败，失败原因{}, 失败信息{}", e.getClass().getSimpleName(), e.getMessage());
                 //补偿机制，根据业务情况进行使用，看是否进行重试
             }
         }, 3000L);

@@ -1,7 +1,17 @@
 package com.xqoo.filemanager.service.aliyun.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
+import com.aliyun.oss.model.MatchMode;
+import com.aliyun.oss.model.PolicyConditions;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.xqoo.common.core.utils.JacksonUtils;
 import com.xqoo.common.core.utils.StringUtils;
+import com.xqoo.common.dto.SystemCommunicateDTO;
+import com.xqoo.common.enums.CommunicateStatusEnum;
 import com.xqoo.filemanager.bean.FileConfigPropertiesBean;
 import com.xqoo.filemanager.enums.UploadPlatEnum;
 import com.xqoo.filemanager.service.aliyun.AliyunOssBaseService;
@@ -17,11 +27,15 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -36,9 +50,66 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
     @Qualifier("fileConfigPropertiesBean")
     private FileConfigPropertiesBean fileConfigPropertiesBean;
 
+    protected Map<String, String> aliyunOssConfigMap = new LinkedHashMap<>();
+
     @Override
     public Map<String, String> getAliyunOssConfig() {
-        return fileConfigPropertiesBean.getFileManagerConfigBean().getOrDefault(UploadPlatEnum.ALI.getKey(), Collections.emptyMap());
+        if(CollUtil.isEmpty(this.aliyunOssConfigMap)){
+            this.aliyunOssConfigMap = fileConfigPropertiesBean.getFileManagerConfigBean().getOrDefault(UploadPlatEnum.ALI.getKey(), Collections.emptyMap());
+        }
+        return aliyunOssConfigMap;
+    }
+
+    @Override
+    public SystemCommunicateDTO<JsonNode> getUploadFileSign(String accessKey, String accessSecret,
+                                                            String endpoint, String dirPath, String host, String callbackUrl, long expire){
+        OSS client = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
+        try {
+            long expireEndTime = System.currentTimeMillis() + expire * 1000;
+            Date expiration = new Date(expireEndTime);
+            PolicyConditions policyConds = new PolicyConditions();
+            policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
+            policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dirPath);
+
+            String postPolicy = client.generatePostPolicy(expiration, policyConds);
+            byte[] binaryData = postPolicy.getBytes(StandardCharsets.UTF_8.name());
+            String encodedPolicy = BinaryUtil.toBase64String(binaryData);
+            String postSignature = client.calculatePostSignature(postPolicy);
+
+            Map<String, String> respMap = new LinkedHashMap<String, String>();
+            respMap.put("accessid", accessKey);
+            respMap.put("policy", encodedPolicy);
+            respMap.put("signature", postSignature);
+            respMap.put("dir", dirPath);
+            respMap.put("host", host);
+            respMap.put("expire", String.valueOf(expireEndTime / 1000));
+
+            ObjectNode jasonCallback = JacksonUtils.createObjectNode();
+            jasonCallback.put("callbackUrl", callbackUrl);
+            jasonCallback.put("callbackBody",
+                    "filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}");
+            jasonCallback.put("callbackBodyType", "application/x-www-form-urlencoded");
+            String base64CallbackBody = BinaryUtil.toBase64String(jasonCallback.toString().getBytes());
+            respMap.put("callback", base64CallbackBody);
+
+            JsonNode ja1 = JacksonUtils.transferToJsonNode(respMap);
+            return new SystemCommunicateDTO<>(CommunicateStatusEnum.SUCCESS, "ok" , ja1);
+
+        } catch (Exception e) {
+            // Assert.fail(e.getMessage());
+            logger.warn("[文件模块-aliyunOss]生成上传签名出错，出错原因：{}，出错信息：{}",
+                    e.getClass().getSimpleName(), e.getMessage());
+            return new SystemCommunicateDTO<>(CommunicateStatusEnum.FAIL, "获取签名失败，发生异常");
+        }
+    }
+
+    @Override
+    public boolean existsBucketName(String accessKey, String accessSecret, String endpoint, String bucketName) {
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
+
+        boolean exists = ossClient.doesBucketExist(bucketName);
+        ossClient.shutdown();
+        return exists;
     }
 
     /**
@@ -146,6 +217,35 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
                     e.getClass().getSimpleName(), e.getMessage());
             return false;
         }
+    }
+
+
+    /**
+     * 获取Post消息体
+     *
+     * @param is
+     * @param contentLen
+     * @return
+     */
+    public String GetPostBody(InputStream is, int contentLen) {
+        if (contentLen > 0) {
+            int readLen = 0;
+            int readLengthThisTime = 0;
+            byte[] message = new byte[contentLen];
+            try {
+                while (readLen != contentLen) {
+                    readLengthThisTime = is.read(message, readLen, contentLen - readLen);
+                    // Should not happen.
+                    if (readLengthThisTime == -1) {
+                        break;
+                    }
+                    readLen += readLengthThisTime;
+                }
+                return new String(message);
+            } catch (IOException e) {
+            }
+        }
+        return "";
     }
 
 }

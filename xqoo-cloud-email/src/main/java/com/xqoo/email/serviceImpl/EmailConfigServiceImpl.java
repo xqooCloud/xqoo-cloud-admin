@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xqoo.common.core.utils.StringUtils;
 import com.xqoo.email.bo.EmailConfigBO;
+import com.xqoo.email.constants.EmailConstant;
 import com.xqoo.email.entity.EmailConfigEntity;
 import com.xqoo.email.mapper.EmailConfigMapper;
 import com.github.pagehelper.PageHelper;
@@ -15,11 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,6 +40,9 @@ public class EmailConfigServiceImpl extends ServiceImpl<EmailConfigMapper, Email
 
     @Autowired
     private EmailConfigMapper emailConfigMapper;
+
+    @Resource
+    RedisTemplate redisTemplate;
 
     @Override
     public ResultEntity<PageResponseBean<EmailConfigEntity>> pageGetList(EmailConfigBO page) {
@@ -108,6 +114,7 @@ public class EmailConfigServiceImpl extends ServiceImpl<EmailConfigMapper, Email
         BeanUtils.copyProperties(vo, entity);
         try {
             emailConfigMapper.updateById(entity);
+            redisTemplate.opsForHash().put(EmailConstant.EMAIL_SEND_CONFIG,entity.getConfigKey(),entity.getConfigValue());
             return new ResultEntity<>(HttpStatus.OK, "修改完成");
         } catch (Exception e) {
             logger.error("[邮件中心]变更数据源参数发生错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
@@ -121,6 +128,7 @@ public class EmailConfigServiceImpl extends ServiceImpl<EmailConfigMapper, Email
         BeanUtils.copyProperties(vo, entity);
         try {
             emailConfigMapper.insert(entity);
+            redisTemplate.opsForHash().put(EmailConstant.EMAIL_SEND_CONFIG,entity.getConfigKey(),entity.getConfigValue());
             return new ResultEntity<>(HttpStatus.OK, "新增完成");
         } catch (Exception e) {
             logger.error("[邮件中心]新增数据源参数发生错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());

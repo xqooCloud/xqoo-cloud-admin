@@ -1,6 +1,5 @@
 package com.xqoo.filemanager.service.aliyun.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
@@ -50,14 +49,9 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
     @Qualifier("fileConfigPropertiesBean")
     private FileConfigPropertiesBean fileConfigPropertiesBean;
 
-    protected Map<String, String> aliyunOssConfigMap = new LinkedHashMap<>();
-
     @Override
     public Map<String, String> getAliyunOssConfig() {
-        if(CollUtil.isEmpty(this.aliyunOssConfigMap)){
-            this.aliyunOssConfigMap = fileConfigPropertiesBean.getFileManagerConfigBean().getOrDefault(UploadPlatEnum.ALI.getKey(), Collections.emptyMap());
-        }
-        return aliyunOssConfigMap;
+        return fileConfigPropertiesBean.getFileManagerConfigBean().getOrDefault(UploadPlatEnum.ALI.getKey(), Collections.emptyMap());
     }
 
     @Override
@@ -87,8 +81,10 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
             ObjectNode jasonCallback = JacksonUtils.createObjectNode();
             jasonCallback.put("callbackUrl", callbackUrl);
             jasonCallback.put("callbackBody",
-                    "filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}");
-            jasonCallback.put("callbackBodyType", "application/x-www-form-urlencoded");
+                    "filename=${object}&size=${size}&etag=${etag}&bucket=${bucket}&mimeType=${mimeType}" +
+                            "&height=${imageInfo.height}&width=${imageInfo.width}&fileUid=${x:uid_var}"
+            );
+            jasonCallback.put("callbackBodyType", "application/json");
             String base64CallbackBody = BinaryUtil.toBase64String(jasonCallback.toString().getBytes());
             respMap.put("callback", base64CallbackBody);
 

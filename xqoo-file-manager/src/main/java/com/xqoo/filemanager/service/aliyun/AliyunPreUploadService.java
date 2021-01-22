@@ -7,6 +7,7 @@ import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author gaoyang
@@ -42,5 +43,5 @@ public interface AliyunPreUploadService extends AliyunOssBaseService{
      * @return
      * @throws IOException
      */
-    boolean handleUploadCallback(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    Map<String, String> handleUploadCallback(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

@@ -1,6 +1,7 @@
 package com.xqoo.filemanager.controller.aliyun;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.xqoo.common.core.utils.JacksonUtils;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
 import com.xqoo.filemanager.service.aliyun.AliyunPreUploadService;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author gaoyang
@@ -58,12 +60,8 @@ public class AliYunOssController {
     @PostMapping("/uploadCallback")
     public String uploadCallback(HttpServletRequest request, HttpServletResponse response) {
         try {
-            boolean success = aliyunPreUploadService.handleUploadCallback(request, response);
-            if(success){
-                return "{\"Status\":\"OK\"}";
-            }else {
-                return "{\"Status\":\"verdify not ok\"}";
-            }
+            Map<String, String> json = aliyunPreUploadService.handleUploadCallback(request, response);
+            return JacksonUtils.toJson(json);
         }catch (IOException e){
             e.printStackTrace();
             return "{\"Status\":\"OK\"}";

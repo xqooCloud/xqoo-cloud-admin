@@ -32,7 +32,7 @@ public class HttpRequestUtil {
                 if(value.indexOf("\"") == value.length() - 1){
                     value = value.substring(0, value.length() - 1);
                 }
-                map.put(p.get(0), value);
+                map.put(p.get(0), Encodes.urlDecode(value));
             }
         });
         return map;

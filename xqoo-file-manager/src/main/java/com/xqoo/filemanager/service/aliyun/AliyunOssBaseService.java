@@ -1,6 +1,5 @@
 package com.xqoo.filemanager.service.aliyun;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.xqoo.common.dto.SystemCommunicateDTO;
 
 import java.util.Map;
@@ -24,7 +23,7 @@ public interface AliyunOssBaseService {
      * @param expire
      * @return
      */
-    SystemCommunicateDTO<JsonNode> getUploadFileSign(String accessKey, String accessSecret,
+    SystemCommunicateDTO<Map<String, String>> getUploadFileSign(String accessKey, String accessSecret,
                                                      String endpoint, String dirPath, String host, String callbackUrl, long expire);
 
     /**
@@ -36,4 +35,14 @@ public interface AliyunOssBaseService {
      * @return
      */
     boolean existsBucketName(String accessKey, String accessSecret, String endpoint, String bucketName);
+
+    /**
+     * 删除文件
+     * @param accessKey
+     * @param accessSecret
+     * @param endpoint
+     * @param bucketName
+     * @param fileObject
+     */
+    void removeOssFile(String accessKey, String accessSecret, String endpoint, String bucketName, String fileObject);
 }

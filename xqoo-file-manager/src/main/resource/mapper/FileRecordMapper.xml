@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.filemanager.mapper.FileRecordMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null and id != ''">
+        and id = #{id}
+    </if>
+    <if test="delFlag != null">
+        and del_flag = #{delFlag}
+    </if>
+    <if test="uploadPlat != null and uploadPlat != ''">
+        and upload_plat = #{uploadPlat}
+    </if>
+    <if test="uploadType != null">
+        and upload_type = #{uploadType}
+    </if>
+    <if test="uploadStatus != null and uploadStatus != ''">
+        and upload_status = #{uploadStatus}
+    </if>
+    <if test="platFileMd5 != null and platFileMd5 != ''">
+        and plat_file_md5 = #{platFileMd5}
+    </if>
+    <if test="fileName != null and fileName != ''">
+        and file_name = #{fileName}
+    </if>
+    <if test="fileMimeType != null and fileMimeType != ''">
+        and file_mime_type = #{fileMimeType}
+    </if>
+    <if test="fileMd5 != null and fileMd5 != ''">
+        and file_md5 = #{fileMd5}
+    </if>
+    <if test="fileRelativePath != null and fileRelativePath != ''">
+        and file_relative_path = #{fileRelativePath}
+    </if>
+    <if test="fileUrlPath != null and fileUrlPath != ''">
+        and file_url_path = #{fileUrlPath}
+    </if>
+    <if test="fileInitTime != null">
+        and file_init_time = #{fileInitTime}
+    </if>
+    <if test="fileFinishTime != null">
+        and file_finish_time = #{fileFinishTime}
+    </if>
+    <if test="fileUploadSpendTime != null">
+        and file_upload_spend_time = #{fileUploadSpendTime}
+    </if>
+    <if test="fileBucket != null and fileBucket != ''">
+        and file_bucket = #{fileBucket}
+    </if>
+    <if test="fileSize != null">
+        and file_size = #{fileSize}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_file_manager.file_record(
+            id,
+            del_flag,
+            upload_plat,
+            upload_type,
+            upload_status,
+            plat_file_md5,
+            file_name,
+            file_mime_type,
+            file_md5,
+            file_relative_path,
+            file_url_path,
+            file_init_time,
+            file_finish_time,
+            file_upload_spend_time,
+            file_bucket,
+            file_size,
+            create_date,
+            create_by,
+            update_date,
+            update_by,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.id},
+            #{item.delFlag},
+            #{item.uploadPlat},
+            #{item.uploadType},
+            #{item.uploadStatus},
+            #{item.platFileMd5},
+            #{item.fileName},
+            #{item.fileMimeType},
+            #{item.fileMd5},
+            #{item.fileRelativePath},
+            #{item.fileUrlPath},
+            #{item.fileInitTime},
+            #{item.fileFinishTime},
+            #{item.fileUploadSpendTime},
+            #{item.fileBucket},
+            #{item.fileSize},
+            #{item.createDate},
+            #{item.createBy},
+            #{item.updateDate},
+            #{item.updateBy},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

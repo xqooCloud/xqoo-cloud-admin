@@ -4,9 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -20,7 +17,7 @@ public interface AliyunPreUploadService extends AliyunOssBaseService{
      * @param uploadBucketTypeEnum
      * @return
      */
-    ResultEntity<JsonNode> getUploadSign(String path, UploadBucketTypeEnum uploadBucketTypeEnum);
+    ResultEntity<Map<String, String>> getUploadSign(String path, UploadBucketTypeEnum uploadBucketTypeEnum);
 
     /**
      * 获取阿里云oss文件列表
@@ -36,12 +33,4 @@ public interface AliyunPreUploadService extends AliyunOssBaseService{
      */
     ResultEntity<String> getFileAccessSign(String pathFile, String process);
 
-    /**
-     * 处理上传回调
-     * @param request
-     * @param response
-     * @return
-     * @throws IOException
-     */
-    Map<String, String> handleUploadCallback(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

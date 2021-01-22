@@ -80,8 +80,8 @@ public class ${className}Entity extends Model<${className}Entity> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true };
-        if (o == null || getClass() != o.getClass()) { return false };
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
         ${className}Entity that = (${className}Entity) o;
         return new EqualsBuilder()
 #set($ArrLength=$columns.size())

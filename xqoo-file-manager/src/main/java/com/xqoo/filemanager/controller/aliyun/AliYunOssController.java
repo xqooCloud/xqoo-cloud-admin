@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.xqoo.common.core.utils.JacksonUtils;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
+import com.xqoo.filemanager.service.aliyun.AliyunOssHandleService;
 import com.xqoo.filemanager.service.aliyun.AliyunPreUploadService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +31,12 @@ public class AliYunOssController {
     @Autowired
     private AliyunPreUploadService aliyunPreUploadService;
 
+    @Autowired
+    private AliyunOssHandleService aliyunOssHandleService;
+
     @ApiOperation("获取前端上传签名")
     @GetMapping("/getUploadSign")
-    public ResultEntity<JsonNode> getUploadSign(@RequestParam(required = false, value = "accessType")
+    public ResultEntity<Map<String, String>> getUploadSign(@RequestParam(required = false, value = "accessType")
                                                     @NotBlank(message = "上传文件的权限类型不能为空") String accessType,
                                                 @RequestParam(required = false, value = "path") String path){
         UploadBucketTypeEnum bucketTypeEnum = UploadBucketTypeEnum.getEnumsByKey(accessType);
@@ -40,6 +44,14 @@ public class AliYunOssController {
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "上传的文件访问权限错误，只能填写public或protected");
         }
         return aliyunPreUploadService.getUploadSign(path, bucketTypeEnum);
+    }
+
+    @ApiOperation("删除文件")
+    @GetMapping("/removeFile")
+    public ResultEntity<String> removeFile(@RequestParam(value = "fileKey", required = false) @NotBlank(message = "文件对象名不能为空") String fileKey,
+                                           @RequestParam(value = "bucketName", required = false) @NotBlank(message = "文件桶名不能为空") String bucketName,
+                                           @RequestParam(value = "fileId", required = false) @NotBlank(message = "文件id不能为空") String fileId){
+        return aliyunOssHandleService.removeFile(fileKey, bucketName, fileId);
     }
 
     @ApiOperation("列举oss文件")
@@ -60,7 +72,7 @@ public class AliYunOssController {
     @PostMapping("/uploadCallback")
     public String uploadCallback(HttpServletRequest request, HttpServletResponse response) {
         try {
-            Map<String, String> json = aliyunPreUploadService.handleUploadCallback(request, response);
+            Map<String, String> json = aliyunOssHandleService.handleUploadCallback(request, response);
             return JacksonUtils.toJson(json);
         }catch (IOException e){
             e.printStackTrace();

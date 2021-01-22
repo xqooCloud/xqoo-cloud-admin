@@ -5,7 +5,6 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.xqoo.common.core.utils.JacksonUtils;
 import com.xqoo.common.core.utils.StringUtils;
@@ -22,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -55,7 +55,7 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
     }
 
     @Override
-    public SystemCommunicateDTO<JsonNode> getUploadFileSign(String accessKey, String accessSecret,
+    public SystemCommunicateDTO<Map<String, String>> getUploadFileSign(String accessKey, String accessSecret,
                                                             String endpoint, String dirPath, String host, String callbackUrl, long expire){
         OSS client = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
         try {
@@ -82,16 +82,17 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
             jasonCallback.put("callbackUrl", callbackUrl);
             jasonCallback.put("callbackBody",
                     "filename=${object}&size=${size}&etag=${etag}&bucket=${bucket}&mimeType=${mimeType}" +
-                            "&height=${imageInfo.height}&width=${imageInfo.width}&fileUid=${x:uid_var}"
+                            "&height=${imageInfo.height}&width=${imageInfo.width}&fileUid=${x:uid_var}" +
+                            "&cacheData=${x:cache_var}&fileId=${x:file_id_var}&filePartType=${x:file_part_type}" +
+                            "&filePartNo=${x:file_part_no}&filePartFinish=${x:file_part_last}&accessType=${x:access_type}"
             );
             jasonCallback.put("callbackBodyType", "application/json");
             String base64CallbackBody = BinaryUtil.toBase64String(jasonCallback.toString().getBytes());
             respMap.put("callback", base64CallbackBody);
-
-            JsonNode ja1 = JacksonUtils.transferToJsonNode(respMap);
-            return new SystemCommunicateDTO<>(CommunicateStatusEnum.SUCCESS, "ok" , ja1);
+            return new SystemCommunicateDTO<>(CommunicateStatusEnum.SUCCESS, "ok" , respMap);
 
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             // Assert.fail(e.getMessage());
             logger.warn("[文件模块-aliyunOss]生成上传签名出错，出错原因：{}，出错信息：{}",
                     e.getClass().getSimpleName(), e.getMessage());
@@ -106,6 +107,20 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
         boolean exists = ossClient.doesBucketExist(bucketName);
         ossClient.shutdown();
         return exists;
+    }
+
+    @Override
+    public void removeOssFile(String accessKey, String accessSecret, String endpoint, String bucketName, String fileObject) {
+        // 创建OSSClient实例。
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
+        boolean found = ossClient.doesObjectExist(bucketName, fileObject, true);
+        if(found){
+            ossClient.deleteObject(bucketName, fileObject);
+        }
+        // 删除文件。如需删除文件夹，请将ObjectName设置为对应的文件夹名称。如果文件夹非空，则需要将文件夹下的所有object删除后才能删除该文件夹。
+
+        // 关闭OSSClient。
+        ossClient.shutdown();
     }
 
     /**

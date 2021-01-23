@@ -100,19 +100,4 @@ public class IosServerCheckUtil {
         return null;
     }
 
-
-    /**
-     * 用BASE64加密
-     *
-     * @param str
-     * @return
-     */
-    public static String getBASE64(String str) {
-        byte[] b = str.getBytes();
-        String s = null;
-        if (b != null) {
-            s = new sun.misc.BASE64Encoder().encode(b);
-        }
-        return s;
-    }
 }

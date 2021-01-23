@@ -2,14 +2,15 @@ package com.xqoo.common.core.utils;
 
 import com.xqoo.common.core.exception.SystemException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
 
 public class AESUtil {
 
@@ -35,8 +36,8 @@ public class AESUtil {
 //        SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), TYPE);
         Cipher cipher = Cipher.getInstance(SECURERANDOM_KEY, "BC");
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] c = decoder.decodeBuffer(content);
+        Decoder decoder = Base64.getDecoder();
+        byte[] c = decoder.decode(content);
         byte[] result = cipher.doFinal(c);
         return new String(result, StandardCharsets.UTF_8);
     }
@@ -56,8 +57,8 @@ public class AESUtil {
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         byte[] p = content.getBytes(StandardCharsets.UTF_8);
         byte[] result = cipher.doFinal(p);
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(result);
+        Encoder encoder = Base64.getEncoder();
+        return encoder.encodeToString(result);
     }
 
 

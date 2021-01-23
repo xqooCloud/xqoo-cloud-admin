@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author Gao by
  * @version 1.0
  */
-public class ValidateLoginEffectivePOJO {
+public class ValidateLoginEffectivePOJO{
 
     // 授权请求是否有效
     private boolean effective;
@@ -58,8 +58,12 @@ public class ValidateLoginEffectivePOJO {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         ValidateLoginEffectivePOJO pojo = (ValidateLoginEffectivePOJO) o;
         return effective == pojo.effective &&
                 code == pojo.code &&

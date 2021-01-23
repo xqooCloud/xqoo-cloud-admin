@@ -64,24 +64,8 @@ spring-boot版本2.3.4，cloud版本 Hoxton.SR8, nacos 版本1.3。2
 OpenJDK 64-Bit Server VM warning: UseCMSCompactAtFullCollection is deprecated and will likely be removed in a future release.
 The Name Server boot success. serializeType=JSON
 ```
-启动报错包含$JAVA_HOME/bin/lib/ext…… no such Directory 等字样则为jdk版本过高，rocketMQ目前版本暂不支持jdk 1.8+，如果不方便直接修改环境变量，请单独安装jdk1.8并修改rocketMq/bin目录下所有脚本文件中包含如下代码的地方
-```bash
-[ ! -e "$JAVA_HOME/bin/java" ] && JAVA_HOME=$HOME/jdk/java
-[ ! -e "$JAVA_HOME/bin/java" ] && JAVA_HOME=/usr/java
-[ ! -e "$JAVA_HOME/bin/java" ] && error_exit "Please set the JAVA_HOME variable in your environment, We need java(x64)!"
-
-export JAVA_HOME
-export JAVA="$JAVA_HOME/bin/java"
-```
-将上述三行判定jdk位置的命令直接注释，然后export JAVA_HOME为固定jdk1.8路径，如下所示
-```bash
-#[ ! -e "$JAVA_HOME/bin/java" ] && JAVA_HOME=$HOME/jdk/java
-#[ ! -e "$JAVA_HOME/bin/java" ] && JAVA_HOME=/usr/java
-#[ ! -e "$JAVA_HOME/bin/java" ] && error_exit "Please set the JAVA_HOME variable in your environment, We need java(x64)!"
-
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk"
-export JAVA="$JAVA_HOME/bin/java"
-```
+启动报错包含$JAVA_HOME/bin/lib/ext…… no such Directory 等字样则为jdk版本过高,java 9+以上版本需要修改mq的server，broker，tools三个启动脚本的参数
+具体请参看这里，[rocketMQ 在jdk9+修改启动参数](https://www.cnblogs.com/architectforest/p/13652282.html)
 #### broker
 出现以下日志打印说明启动成功
 ```verilog

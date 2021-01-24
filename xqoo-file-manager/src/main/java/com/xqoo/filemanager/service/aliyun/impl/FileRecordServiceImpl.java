@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.xqoo.common.constants.SqlQueryConstant;
 import com.xqoo.common.core.entity.CurrentUser;
+import com.xqoo.common.core.utils.StringUtils;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.filemanager.constants.FileManagerConstant;
 import com.xqoo.filemanager.entity.FileRecordEntity;
@@ -16,7 +16,9 @@ import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
 import com.xqoo.filemanager.enums.UploadPlatEnum;
 import com.xqoo.filemanager.enums.UploadStatusEnum;
 import com.xqoo.filemanager.mapper.FileRecordMapper;
+import com.xqoo.filemanager.pojo.UploadRecordQueryPOJO;
 import com.xqoo.filemanager.service.FileRecordService;
+import com.xqoo.filemanager.service.aliyun.AliyunOssHandleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 数据源表(file_record)表服务实现类
@@ -43,17 +46,37 @@ public class FileRecordServiceImpl extends ServiceImpl<FileRecordMapper, FileRec
     @Autowired
     private FileRecordMapper fileRecordMapper;
 
+    @Autowired
+    private AliyunOssHandleService aliyunOssHandleService;
+
     @Override
-    public ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(PageRequestBean page){
+    public ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(UploadRecordQueryPOJO pojo){
         LambdaQueryWrapper<FileRecordEntity> queryWrapper = new LambdaQueryWrapper<>();
-         queryWrapper.eq(FileRecordEntity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+        queryWrapper.eq(FileRecordEntity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+        Optional<UploadRecordQueryPOJO> queryResult = Optional.of(pojo);
+        queryResult.map(UploadRecordQueryPOJO::getUploadType).ifPresent(v -> queryWrapper.eq(FileRecordEntity::getUploadType, v));
+        Integer page = queryResult.map(UploadRecordQueryPOJO::getPage).orElseGet(() -> 1);
+        Integer pageSize = queryResult.map(UploadRecordQueryPOJO::getPageSize).orElseGet(() -> 10);
+        if(StringUtils.isNotEmpty(pojo.getUploadPlat())){
+            queryWrapper.eq(FileRecordEntity::getUploadPlat, pojo.getUploadPlat());
+        }
+        if(StringUtils.isNotEmpty(pojo.getUploadStatus())){
+            queryWrapper.eq(FileRecordEntity::getUploadStatus, pojo.getUploadStatus());
+        }
+        if(StringUtils.isNotEmpty(pojo.getFileRelativePath())){
+            queryWrapper.likeRight(FileRecordEntity::getFileRelativePath, pojo.getFileRelativePath());
+        }
+        if(StringUtils.isNotEmpty(pojo.getAccessType())){
+            queryWrapper.eq(FileRecordEntity::getAccessType, pojo.getAccessType());
+        }
         Integer count = fileRecordMapper.selectCount(queryWrapper);
-        PageResponseBean<FileRecordEntity> result = new PageResponseBean<>(page.getPage(), page.getPageSize(), count);
+        PageResponseBean<FileRecordEntity> result = new PageResponseBean<>(page, pageSize, count);
         if(count == null || count < 1){
             result.setContent(Collections.emptyList());
             return new ResultEntity<>(HttpStatus.OK, "ok", result);
         }
-        PageHelper.startPage(page.getPage(), page.getPageSize());
+        queryWrapper.orderByDesc(FileRecordEntity::getCreateDate);
+        PageHelper.startPage(page, pageSize);
         List<FileRecordEntity> list = fileRecordMapper.selectList(queryWrapper);
         result.setContent(list);
         return new ResultEntity<>(HttpStatus.OK, "ok", result);
@@ -75,6 +98,29 @@ public class FileRecordServiceImpl extends ServiceImpl<FileRecordMapper, FileRec
             logger.error("[com.xqoo.filemanager]数据库批量新增错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "新增失败");
         }
+    }
+
+    @Override
+    public ResultEntity<String> removeFile(String fileId) {
+        FileRecordEntity entity = fileRecordMapper.selectOne(new LambdaQueryWrapper<FileRecordEntity>()
+                .eq(FileRecordEntity::getId, fileId)
+                .eq(FileRecordEntity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL)
+        );
+        if(entity == null){
+            return new ResultEntity<>(HttpStatus.OK, "ok");
+        }
+        if(!UploadStatusEnum.FINISH.getKey().equals(entity.getUploadStatus())){
+            boolean success = deleteFileRecord(fileId);
+            if(success){
+                return new ResultEntity<>(HttpStatus.OK, "删除文件完成");
+            }else{
+                return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "删除记录失败");
+            }
+        }
+        if(UploadPlatEnum.ALI.getKey().equals(entity.getUploadPlat())){
+            return aliyunOssHandleService.removeFile(entity.getFileRelativePath(), entity.getFileBucket(), entity.getId());
+        }
+        return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "找不到相应的文件平台，无法删除");
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.xqoo.filemanager.controller;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.core.utils.StringUtils;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.annotations.LoginUser;
 import com.xqoo.feign.annotations.OperationLog;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import com.xqoo.filemanager.entity.FileRecordEntity;
+import com.xqoo.filemanager.pojo.UploadRecordQueryPOJO;
 import com.xqoo.filemanager.service.FileRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -51,8 +52,8 @@ public class FileRecordController{
                                                                                                                                                                                 
     @ApiOperation("分页获取文件传输记录表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(@RequestBody PageRequestBean page){
-        return fileRecordService.pageGetList(page);
+    public ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(@RequestBody UploadRecordQueryPOJO pojo){
+        return fileRecordService.pageGetList(pojo);
     }
 
     @ApiOperation("批量新增数据")
@@ -64,6 +65,13 @@ public class FileRecordController{
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
         }
         return fileRecordService.insertList(list, currentUser);
+    }
+
+    @ApiOperation("删除文件")
+    @GetMapping("/removeFile")
+    @OperationLog(tips="删除file_record表数据", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = true)
+    public ResultEntity<String> removeFile(@RequestParam(required = false, value = "fileId") @NotBlank(message = "文件id不能为空") String fileId){
+        return fileRecordService.removeFile(fileId);
     }
 
     @ApiOperation("根据主键查询单条记录")

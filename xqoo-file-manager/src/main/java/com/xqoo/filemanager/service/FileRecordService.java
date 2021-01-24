@@ -1,13 +1,13 @@
 package com.xqoo.filemanager.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xqoo.filemanager.entity.FileRecordEntity;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
+import com.xqoo.filemanager.entity.FileRecordEntity;
 import com.xqoo.filemanager.enums.UploadBucketTypeEnum;
 import com.xqoo.filemanager.enums.UploadPlatEnum;
+import com.xqoo.filemanager.pojo.UploadRecordQueryPOJO;
 
 import java.util.List;
 
@@ -22,10 +22,10 @@ public interface FileRecordService extends IService<FileRecordEntity> {
 
     /**
     * 分页查询file_record
-    * @param page
+    * @param pojo
     * @return
     */
-    ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(PageRequestBean page);
+    ResultEntity<PageResponseBean<FileRecordEntity>> pageGetList(UploadRecordQueryPOJO pojo);
 
     /**
     * 批量插入file_record
@@ -34,6 +34,13 @@ public interface FileRecordService extends IService<FileRecordEntity> {
     * @return
     */
     ResultEntity<String> insertList(List<FileRecordEntity> list, CurrentUser currentUser);
+
+    /**
+     * 删除文件
+     * @param fileId
+     * @return
+     */
+    ResultEntity<String> removeFile(String fileId);
 
     /**
     * 获取file_record主键记录了

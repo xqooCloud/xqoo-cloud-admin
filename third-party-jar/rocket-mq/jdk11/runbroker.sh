@@ -66,6 +66,7 @@ choose_gc_log_directory()
 choose_gc_log_directory
 
 JAVA_OPT="${JAVA_OPT} -server -Xms256m -Xmx512m -Xmn128m"
+JAVA_OPT="${JAVA_OPT} --add-exports java.base/jdk.internal.ref=ALL-UNNAMED"
 JAVA_OPT="${JAVA_OPT} -XX:+UseG1GC -XX:G1HeapRegionSize=16m -XX:G1ReservePercent=25 -XX:InitiatingHeapOccupancyPercent=30 -XX:SoftRefLRUPolicyMSPerMB=0"
 #JAVA_OPT="{JAVA_OPT} -verbose:gc -Xloggc:{GC_LOG_DIR}/rmq_broker_gc_%p_%t.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCApplicationStoppedTime -XX:+PrintAdaptiveSizePolicy"
 JAVA_OPT="${JAVA_OPT} -Xlog:gc*:file=${GC_LOG_DIR}/rmq_broker_gc_%p_%t.log:time,tags:filecount=5,filesize=30M"

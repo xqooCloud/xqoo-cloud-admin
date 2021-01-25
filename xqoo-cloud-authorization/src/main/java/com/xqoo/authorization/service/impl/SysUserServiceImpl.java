@@ -119,7 +119,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     @Override
     public ResultEntity<String> addUserInfo(AddUserInfoBO bo) {
         if(loginIdExists(bo.getLoginId())){
-            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前loginId已存在");
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "所用用户名已存在");
         }
         SysUserEntity entity = new SysUserEntity();
         String userId = getUserId(bo.getLoginId(), bo.getPassword());

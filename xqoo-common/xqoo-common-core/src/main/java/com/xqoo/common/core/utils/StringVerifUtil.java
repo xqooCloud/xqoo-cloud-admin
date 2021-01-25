@@ -21,4 +21,19 @@ public class StringVerifUtil {
         return m.find();
     }
 
+    /**
+     * 判断是否手机号
+     * @param phoneNumber
+     * @return
+     */
+    public static boolean isPhoneNumber(String phoneNumber){
+        if(StringUtils.isEmpty(phoneNumber)){
+            return false;
+        }
+        String regEx = "^1[1-9]\\d{9}$";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(phoneNumber);
+        return m.find();
+    }
+
 }

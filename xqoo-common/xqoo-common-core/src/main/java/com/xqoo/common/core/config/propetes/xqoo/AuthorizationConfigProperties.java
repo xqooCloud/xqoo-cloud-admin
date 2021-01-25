@@ -1,12 +1,17 @@
 package com.xqoo.common.core.config.propetes.xqoo;
 
 import com.xqoo.common.core.dto.authorization.LoginTypeSwitchDTO;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 
+/**
+ * @author gaoyang
+ */
 @Component
 @ConfigurationProperties(prefix = "xqoo.auth")
 public class AuthorizationConfigProperties {
@@ -35,6 +40,15 @@ public class AuthorizationConfigProperties {
 
     // 时间误差，当登录请求发送时间与服务器接收时间超过此误差值时，不允许登录，关闭时区校验后此项不可用，单位：秒
     private Integer timeExact;
+
+    // 注册访问的临时令牌
+    private String registerTmpCode;
+
+    // 注册时的验证码过期时间，单位为秒
+    private Long codeExpire;
+
+    // 发送短信验证码的间隔，单位为秒
+    private Long sendCodeSpace;
 
     public String getJwtSecretKey() {
         return jwtSecretKey;
@@ -136,42 +150,67 @@ public class AuthorizationConfigProperties {
         this.timeExact = timeExact;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AuthorizationConfigProperties that = (AuthorizationConfigProperties) o;
-        return loginSingle == that.loginSingle &&
-                Objects.equals(jwtSecretKey, that.jwtSecretKey) &&
-                Objects.equals(jwtExpire, that.jwtExpire) &&
-                Objects.equals(tokenExpire, that.tokenExpire) &&
-                Objects.equals(tokenRefreshLimit, that.tokenRefreshLimit) &&
-                Objects.equals(loginSingleType, that.loginSingleType) &&
-                Objects.equals(loginTypeSwitch, that.loginTypeSwitch) &&
-                Objects.equals(loginErrLock, that.loginErrLock) &&
-                Objects.equals(timeZoneCheck, that.timeZoneCheck) &&
-                Objects.equals(timeExact, that.timeExact);
+    public String getRegisterTmpCode() {
+        return registerTmpCode;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(jwtSecretKey, jwtExpire, tokenExpire, tokenRefreshLimit, loginSingle, loginSingleType, loginTypeSwitch, loginErrLock, timeZoneCheck, timeExact);
+    public void setRegisterTmpCode(String registerTmpCode) {
+        this.registerTmpCode = registerTmpCode;
+    }
+
+    public Long getCodeExpire() {
+        return codeExpire;
+    }
+
+    public void setCodeExpire(Long codeExpire) {
+        this.codeExpire = codeExpire;
+    }
+
+    public Long getSendCodeSpace() {
+        return sendCodeSpace;
+    }
+
+    public void setSendCodeSpace(Long sendCodeSpace) {
+        this.sendCodeSpace = sendCodeSpace;
     }
 
     @Override
     public String toString() {
-        return "AuthorizationConfigProperties{" +
-                "jwtSecretKey='" + jwtSecretKey + '\'' +
-                ", jwtExpire=" + jwtExpire +
-                ", tokenExpire=" + tokenExpire +
-                ", tokenRefreshLimit=" + tokenRefreshLimit +
-                ", loginSingle=" + loginSingle +
-                ", loginSingleType='" + loginSingleType + '\'' +
-                ", loginTypeSwitch=" + loginTypeSwitch +
-                ", loginErrLock=" + loginErrLock +
-                ", timeZoneCheck=" + timeZoneCheck +
-                ", timeExact=" + timeExact +
-                '}';
+        return new ToStringBuilder(this)
+                .append("jwtSecretKey", jwtSecretKey)
+                .append("jwtExpire", jwtExpire)
+                .append("tokenExpire", tokenExpire)
+                .append("tokenRefreshLimit", tokenRefreshLimit)
+                .append("loginSingle", loginSingle)
+                .append("loginSingleType", loginSingleType)
+                .append("loginTypeSwitch", loginTypeSwitch)
+                .append("loginErrLock", loginErrLock)
+                .append("timeZoneCheck", timeZoneCheck)
+                .append("timeExact", timeExact)
+                .append("registerTmpCode", registerTmpCode)
+                .append("codeExpire", codeExpire)
+                .append("sendCodeSpace", sendCodeSpace)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        AuthorizationConfigProperties that = (AuthorizationConfigProperties) o;
+
+        return new EqualsBuilder().append(loginSingle, that.loginSingle).append(jwtSecretKey, that.jwtSecretKey).append(jwtExpire, that.jwtExpire).append(tokenExpire, that.tokenExpire).append(tokenRefreshLimit, that.tokenRefreshLimit).append(loginSingleType, that.loginSingleType).append(loginTypeSwitch, that.loginTypeSwitch).append(loginErrLock, that.loginErrLock).append(timeZoneCheck, that.timeZoneCheck).append(timeExact, that.timeExact).append(registerTmpCode, that.registerTmpCode).append(codeExpire, that.codeExpire).append(sendCodeSpace, that.sendCodeSpace).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(jwtSecretKey).append(jwtExpire).append(tokenExpire).append(tokenRefreshLimit).append(loginSingle).append(loginSingleType).append(loginTypeSwitch).append(loginErrLock).append(timeZoneCheck).append(timeExact).append(registerTmpCode).append(codeExpire).append(sendCodeSpace).toHashCode();
     }
 
 
@@ -188,33 +227,35 @@ public class AuthorizationConfigProperties {
         // 错误验证码失效时间 分钟, 小于等于0时默认5分钟
         private Long errorCodeExpire;
 
-
         @Override
         public String toString() {
-            return "LoginErrLock{" +
-                    "active=" + active +
-                    ", maxErrorTime=" + maxErrorTime +
-                    ", lockTime=" + lockTime +
-                    ", needCheckErrorTime=" + needCheckErrorTime +
-                    ", errorCodeExpire=" + errorCodeExpire +
-                    '}';
+            return new ToStringBuilder(this)
+                    .append("active", active)
+                    .append("maxErrorTime", maxErrorTime)
+                    .append("lockTime", lockTime)
+                    .append("needCheckErrorTime", needCheckErrorTime)
+                    .append("errorCodeExpire", errorCodeExpire)
+                    .toString();
         }
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
             LoginErrLock that = (LoginErrLock) o;
-            return Objects.equals(active, that.active) &&
-                    Objects.equals(maxErrorTime, that.maxErrorTime) &&
-                    Objects.equals(lockTime, that.lockTime) &&
-                    Objects.equals(needCheckErrorTime, that.needCheckErrorTime) &&
-                    Objects.equals(errorCodeExpire, that.errorCodeExpire);
+
+            return new EqualsBuilder().append(active, that.active).append(maxErrorTime, that.maxErrorTime).append(lockTime, that.lockTime).append(needCheckErrorTime, that.needCheckErrorTime).append(errorCodeExpire, that.errorCodeExpire).isEquals();
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(active, maxErrorTime, lockTime, needCheckErrorTime, errorCodeExpire);
+            return new HashCodeBuilder(17, 37).append(active).append(maxErrorTime).append(lockTime).append(needCheckErrorTime).append(errorCodeExpire).toHashCode();
         }
 
         public Boolean getActive() {

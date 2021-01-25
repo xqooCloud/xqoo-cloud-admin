@@ -2,6 +2,7 @@ package com.xqoo.authorization.constants;
 
 /**
  * 授权中心常量
+ * @author gaoyang
  */
 public class AuthorizationCenterConstant {
 
@@ -18,6 +19,9 @@ public class AuthorizationCenterConstant {
 
     // errCode 前缀
     public final static String ERR_CODE_PREFIX = "login_err_code:";
+
+    // 注册手机验证码前缀
+    public final static String REGISTER_CODE_PREFIX = "register_code:";
 
     public final static String DEFAULT_AVATAR = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png";
 }

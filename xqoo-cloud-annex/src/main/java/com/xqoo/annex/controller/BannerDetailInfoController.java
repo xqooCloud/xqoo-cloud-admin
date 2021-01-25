@@ -1,6 +1,7 @@
 package com.xqoo.annex.controller;
 
-import com.xqoo.common.page.PageRequestBean;
+import com.xqoo.annex.bo.QueryBannerDetailInfoBO;
+import com.xqoo.annex.vo.BannerDetailVO;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import com.xqoo.annex.service.BannerDetailInfoService;
 import com.xqoo.annex.entity.BannerDetailInfoEntity;
@@ -46,13 +49,13 @@ public class BannerDetailInfoController{
     */
 
     @Autowired
-    private BannerDetailInfoService BannerDetailInfoService;
+    private BannerDetailInfoService bannerDetailInfoService;
 
 
     @ApiOperation("分页获取轮播图明细表表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<BannerDetailInfoEntity>> pageGetList(@RequestBody PageRequestBean page){
-        return BannerDetailInfoService.pageGetList(page);
+    public ResultEntity<PageResponseBean<BannerDetailInfoEntity>> pageGetList(@RequestBody QueryBannerDetailInfoBO page){
+        return bannerDetailInfoService.pageGetList(page);
     }
 
     @ApiOperation("批量新增数据")
@@ -63,14 +66,33 @@ public class BannerDetailInfoController{
         if(StringUtils.isEmpty(currentUser.getUserId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
         }
-        return BannerDetailInfoService.insertList(list, currentUser);
+        return bannerDetailInfoService.insertList(list, currentUser);
     }
 
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<BannerDetailInfoEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
                                                                       @NotNull(message = "主键值不能为空") Integer id){
-        BannerDetailInfoEntity entity = BannerDetailInfoService.getOneBannerDetailInfoEntityByPrimaryKey(id);
+        BannerDetailInfoEntity entity = bannerDetailInfoService.getOneBannerDetailInfoEntityByPrimaryKey(id);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
+    }
+
+    @ApiOperation("新增/编辑轮播信息")
+    @PostMapping("/updateBannerDetailInfo")
+    @OperationLog(tips = "新增/编辑轮播信息", operatorType = OperationTypeEnum.EDIT, isSaveRequestData = true)
+    public ResultEntity<String> updateBannerDetailInfo(@RequestBody @Valid BannerDetailVO vo) {
+        BannerDetailInfoEntity entity = bannerDetailInfoService.getOneBannerDetailInfoEntityByPrimaryKey(vo.getId());
+        if (entity == null) {
+            return bannerDetailInfoService.addBannerDetailInfo(vo);
+        }else{
+            return bannerDetailInfoService.updateBannerDetailInfo(vo);
+        }
+    }
+
+    @ApiOperation("删除轮播信息")
+    @GetMapping("/deleteBannerDetailInfo")
+    @OperationLog(tips = "删除轮播信息", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = true)
+    public ResultEntity<String> detailDetail(@RequestParam(required = false, value = "id") Integer id) {
+        return bannerDetailInfoService.deleteBannerDetailInfo(id);
     }
 }

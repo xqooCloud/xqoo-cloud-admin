@@ -1,7 +1,9 @@
 package com.xqoo.annex.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xqoo.annex.bo.QueryBannerDetailInfoBO;
 import com.xqoo.annex.entity.BannerDetailInfoEntity;
+import com.xqoo.annex.vo.BannerDetailVO;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageRequestBean;
@@ -18,9 +20,15 @@ import java.util.List;
 
 public interface BannerDetailInfoService extends IService<BannerDetailInfoEntity> {
 
-    ResultEntity<PageResponseBean<BannerDetailInfoEntity>> pageGetList(PageRequestBean page);
+    ResultEntity<PageResponseBean<BannerDetailInfoEntity>> pageGetList(QueryBannerDetailInfoBO page);
 
     ResultEntity insertList(List<BannerDetailInfoEntity> list, CurrentUser currentUser);
 
     BannerDetailInfoEntity getOneBannerDetailInfoEntityByPrimaryKey(Integer id);
+
+    ResultEntity<String> deleteBannerDetailInfo(Integer id);
+
+    ResultEntity<String> addBannerDetailInfo(BannerDetailVO vo);
+
+    ResultEntity<String> updateBannerDetailInfo(BannerDetailVO vo);
 }

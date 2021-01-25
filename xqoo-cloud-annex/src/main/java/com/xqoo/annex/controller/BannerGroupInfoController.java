@@ -1,6 +1,7 @@
 package com.xqoo.annex.controller;
 
-import com.xqoo.common.page.PageRequestBean;
+import com.xqoo.annex.bo.QueryBannerGroupInfoBO;
+import com.xqoo.annex.vo.BannerGroupInfoVO;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
@@ -11,8 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import com.xqoo.annex.service.BannerGroupInfoService;
 import com.xqoo.annex.entity.BannerGroupInfoEntity;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
@@ -46,13 +48,13 @@ public class BannerGroupInfoController{
     */
 
     @Autowired
-    private BannerGroupInfoService BannerGroupInfoService;
+    private com.xqoo.annex.service.BannerGroupInfoService bannerGroupInfoService;
 
 
     @ApiOperation("分页获取banner图类型分组表表数据")
     @PostMapping("/pageGetList")
-    public ResultEntity<PageResponseBean<BannerGroupInfoEntity>> pageGetList(@RequestBody PageRequestBean page){
-        return BannerGroupInfoService.pageGetList(page);
+    public ResultEntity<PageResponseBean<BannerGroupInfoEntity>> pageGetList(@RequestBody QueryBannerGroupInfoBO page){
+        return bannerGroupInfoService.pageGetList(page);
     }
 
     @ApiOperation("批量新增数据")
@@ -63,14 +65,33 @@ public class BannerGroupInfoController{
         if(StringUtils.isEmpty(currentUser.getUserId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
         }
-        return BannerGroupInfoService.insertList(list, currentUser);
+        return bannerGroupInfoService.insertList(list, currentUser);
     }
 
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<BannerGroupInfoEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
                                                                       @NotNull(message = "主键值不能为空") Integer id){
-        BannerGroupInfoEntity entity = BannerGroupInfoService.getOneBannerGroupInfoEntityByPrimaryKey(id);
+        BannerGroupInfoEntity entity = bannerGroupInfoService.getOneBannerGroupInfoEntityByPrimaryKey(id);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
+    }
+
+    @ApiOperation("新增/编辑轮播分组信息")
+    @PostMapping("/updateBannerGroupInfo")
+    @OperationLog(tips = "新增/编辑协议信息", operatorType = OperationTypeEnum.EDIT, isSaveRequestData = true)
+    public ResultEntity<String> updateBannerGroupInfo(@RequestBody @Valid BannerGroupInfoVO vo) {
+        BannerGroupInfoEntity entity = bannerGroupInfoService.getOneBannerGroupInfoEntityByPrimaryKey(vo.getId());
+        if (entity == null) {
+            return bannerGroupInfoService.addBannerGroupInfo(vo);
+        }else{
+            return bannerGroupInfoService.updateBannerGroupInfo(vo);
+        }
+    }
+
+    @ApiOperation("删除轮播分组")
+    @GetMapping("/deleteBannerGroupInfo")
+    @OperationLog(tips = "删除轮播分组信息", operatorType = OperationTypeEnum.REMOVE, isSaveRequestData = true)
+    public ResultEntity<String> deleteBannerGroupInfo(@RequestParam(required = false, value = "id") Integer id) {
+        return bannerGroupInfoService.deleteBannerGroupInfo(id);
     }
 }

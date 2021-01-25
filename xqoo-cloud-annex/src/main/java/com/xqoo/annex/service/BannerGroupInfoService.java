@@ -1,10 +1,11 @@
 package com.xqoo.annex.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.xqoo.annex.bo.QueryBannerGroupInfoBO;
 import com.xqoo.annex.entity.BannerGroupInfoEntity;
+import com.xqoo.annex.vo.BannerGroupInfoVO;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.entity.ResultEntity;
-import com.xqoo.common.page.PageRequestBean;
 import com.xqoo.common.page.PageResponseBean;
 
 import java.util.List;
@@ -18,9 +19,15 @@ import java.util.List;
 
 public interface BannerGroupInfoService extends IService<BannerGroupInfoEntity> {
 
-    ResultEntity<PageResponseBean<BannerGroupInfoEntity>> pageGetList(PageRequestBean page);
+    ResultEntity<PageResponseBean<BannerGroupInfoEntity>> pageGetList(QueryBannerGroupInfoBO page);
 
     ResultEntity insertList(List<BannerGroupInfoEntity> list, CurrentUser currentUser);
 
     BannerGroupInfoEntity getOneBannerGroupInfoEntityByPrimaryKey(Integer id);
+
+    ResultEntity<String> deleteBannerGroupInfo(Integer id);
+
+    ResultEntity<String> addBannerGroupInfo(BannerGroupInfoVO vo);
+
+    ResultEntity<String> updateBannerGroupInfo(BannerGroupInfoVO vo);
 }

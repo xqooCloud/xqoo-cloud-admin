@@ -1,6 +1,7 @@
 package com.xqoo.filemanager.service.aliyun;
 
 import com.xqoo.common.entity.ResultEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,4 +31,14 @@ public interface AliyunOssHandleService extends AliyunOssBaseService{
      * @throws IOException
      */
     Map<String, String> handleUploadCallback(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
+
+    /**
+     * 上传文件
+     * @param file
+     * @param path
+     * @param isProtected
+     * @return
+     */
+    String uploadFileByMultipartFile(MultipartFile file, String path, Boolean isProtected);
 }

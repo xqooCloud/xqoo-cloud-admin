@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -120,6 +117,14 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
         // 删除文件。如需删除文件夹，请将ObjectName设置为对应的文件夹名称。如果文件夹非空，则需要将文件夹下的所有object删除后才能删除该文件夹。
 
         // 关闭OSSClient。
+        ossClient.shutdown();
+    }
+
+    @Override
+    public void uploadFileByInputStream(String accessKey, String accessSecret, String endpoint, String bucketName, String fileObjectName, byte[] data) {
+        // 创建OSSClient实例。
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
+        ossClient.putObject(bucketName, fileObjectName, new ByteArrayInputStream(data));
         ossClient.shutdown();
     }
 

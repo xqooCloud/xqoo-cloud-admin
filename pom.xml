@@ -27,7 +27,7 @@
         <module>xqoo-cloud-sms</module>
         <module>xqoo-cloud-annex</module>
         <module>xqoo-file-manager</module>
-<!--        <module>xqoo-cloud-integral-center</module>-->
+        <module>xqoo-cloud-integral-center</module>
     </modules>
     <packaging>pom</packaging>
 

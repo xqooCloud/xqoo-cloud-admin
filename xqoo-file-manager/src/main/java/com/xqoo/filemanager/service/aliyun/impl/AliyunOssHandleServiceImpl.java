@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -97,6 +98,35 @@ public class AliyunOssHandleServiceImpl extends AliyunOssBaseServiceImpl impleme
         // TODO 这里下面补充分片上传的回调逻辑
         urlParams.put("Status", "OK");
         return urlParams;
+    }
+
+    @Override
+    public String uploadFileByMultipartFile(MultipartFile file, String path, Boolean isProtected) {
+        if(CollUtil.isEmpty(super.getAliyunOssConfig())){
+            return null;
+        }
+        String accessKey = super.getAliyunOssConfig().getOrDefault("accessKey", "");
+        String accessSecret = super.getAliyunOssConfig().getOrDefault("accessSecret", "");
+        String endpoint = super.getAliyunOssConfig().getOrDefault("endpoint", "");
+        String bucketName = isProtected == null || !isProtected
+                ? super.getAliyunOssConfig().getOrDefault("bucketPublic", "bucketPublic")
+                :
+                super.getAliyunOssConfig().getOrDefault("bucketProtected", "bucketPublic");
+        try {
+            super.uploadFileByInputStream(accessKey, accessSecret, endpoint, bucketName, path + file.getOriginalFilename(), file.getBytes());
+            return new StringBuilder()
+                    .append("https://")
+                    .append(bucketName)
+                    .append(".")
+                    .append(endpoint)
+                    .append("/")
+                    .append(path)
+                    .append(file.getOriginalFilename())
+                    .toString();
+        } catch (IOException e) {
+            logger.error("[文件模块]上传文件发生错误，错误原因：{}，错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
+            return null;
+        }
     }
 
     /**

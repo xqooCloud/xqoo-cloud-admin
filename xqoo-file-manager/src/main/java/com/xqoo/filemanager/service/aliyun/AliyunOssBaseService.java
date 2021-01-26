@@ -45,4 +45,17 @@ public interface AliyunOssBaseService {
      * @param fileObject
      */
     void removeOssFile(String accessKey, String accessSecret, String endpoint, String bucketName, String fileObject);
+
+    /**
+     * 二进制文件流上传
+     * @param accessKey
+     * @param accessSecret
+     * @param endpoint
+     * @param bucketName
+     * @param fileObjectName
+     * @param data
+     */
+    void uploadFileByInputStream(String accessKey, String accessSecret,
+                                   String endpoint, String bucketName,
+                                   String fileObjectName, byte[] data);
 }

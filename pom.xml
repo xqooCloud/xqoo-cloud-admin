@@ -28,6 +28,7 @@
         <module>xqoo-cloud-annex</module>
         <module>xqoo-file-manager</module>
         <module>xqoo-cloud-integral-center</module>
+        <module>xqoo-device-manager</module>
     </modules>
     <packaging>pom</packaging>
 

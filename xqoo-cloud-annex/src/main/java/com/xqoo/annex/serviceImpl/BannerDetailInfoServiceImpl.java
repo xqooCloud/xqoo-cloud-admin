@@ -92,7 +92,7 @@ public class BannerDetailInfoServiceImpl extends ServiceImpl<BannerDetailInfoMap
         LambdaQueryWrapper<BannerDetailInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(BannerDetailInfoEntity::getId, id);
         BannerDetailInfoEntity entity = bannerDetailInfoMapper.selectOne(queryWrapper);
-        entity.setActiveCode(SqlQueryConstant.LOGIC_DEL);
+        entity.setActiveCode(false);
         bannerDetailInfoMapper.update(entity, queryWrapper);
         return new ResultEntity<>(HttpStatus.OK, "删除成功");
     }

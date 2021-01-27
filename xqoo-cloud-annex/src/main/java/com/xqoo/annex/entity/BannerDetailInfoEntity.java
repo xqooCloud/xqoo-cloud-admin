@@ -34,7 +34,7 @@ public class BannerDetailInfoEntity extends Model<BannerDetailInfoEntity> {
     private Integer groupId;
 
     @ApiModelProperty("是否可用，0-否，1-是")
-    private Integer activeCode;
+    private Boolean activeCode;
 
     @ApiModelProperty("媒体来源url，http地址")
     private String mediaUrl;
@@ -88,11 +88,11 @@ public class BannerDetailInfoEntity extends Model<BannerDetailInfoEntity> {
         return this.groupId;
     }
 
-    public void setActiveCode(Integer activeCode) {
+    public void setActiveCode(Boolean activeCode) {
         this.activeCode = activeCode;
     }
 
-    public Integer getActiveCode(){
+    public Boolean getActiveCode(){
         return this.activeCode;
     }
 

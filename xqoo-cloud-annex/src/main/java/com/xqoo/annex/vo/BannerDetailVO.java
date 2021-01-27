@@ -21,7 +21,7 @@ public class BannerDetailVO implements Serializable {
     private Integer groupId;
 
     @ApiModelProperty("是否可用，0-否，1-是")
-    private Integer activeCode;
+    private Boolean activeCode;
 
     @ApiModelProperty("媒体来源url，http地址")
     @NotNull(message = "媒体来源url，http地址不能为空")
@@ -113,11 +113,11 @@ public class BannerDetailVO implements Serializable {
         this.groupId = groupId;
     }
 
-    public Integer getActiveCode() {
+    public Boolean getActiveCode() {
         return activeCode;
     }
 
-    public void setActiveCode(Integer activeCode) {
+    public void setActiveCode(Boolean activeCode) {
         this.activeCode = activeCode;
     }
 

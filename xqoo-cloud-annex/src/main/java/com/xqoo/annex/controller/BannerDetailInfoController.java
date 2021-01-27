@@ -1,6 +1,8 @@
 package com.xqoo.annex.controller;
 
 import com.xqoo.annex.bo.QueryBannerDetailInfoBO;
+import com.xqoo.annex.entity.BannerGroupInfoEntity;
+import com.xqoo.annex.service.BannerGroupInfoService;
 import com.xqoo.annex.vo.BannerDetailVO;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
@@ -51,6 +53,9 @@ public class BannerDetailInfoController{
     @Autowired
     private BannerDetailInfoService bannerDetailInfoService;
 
+    @Autowired
+    private BannerGroupInfoService bannerGroupInfoService;
+
 
     @ApiOperation("分页获取轮播图明细表表数据")
     @PostMapping("/pageGetList")
@@ -69,6 +74,13 @@ public class BannerDetailInfoController{
         return bannerDetailInfoService.insertList(list, currentUser);
     }
 
+    @ApiOperation("获取分组列表")
+    @GetMapping("/getGroupList")
+    public ResultEntity<List<BannerGroupInfoEntity>> getGroupList(){
+        List<BannerGroupInfoEntity> list = bannerGroupInfoService.list();
+        return new ResultEntity<>(HttpStatus.OK, "查询成功", list);
+    }
+
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<BannerDetailInfoEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "id")
@@ -82,7 +94,7 @@ public class BannerDetailInfoController{
     @OperationLog(tips = "新增/编辑轮播信息", operatorType = OperationTypeEnum.EDIT, isSaveRequestData = true)
     public ResultEntity<String> updateBannerDetailInfo(@RequestBody @Valid BannerDetailVO vo) {
         BannerDetailInfoEntity entity = bannerDetailInfoService.getOneBannerDetailInfoEntityByPrimaryKey(vo.getId());
-        if (entity == null) {
+        if (null == entity.getId()) {
             return bannerDetailInfoService.addBannerDetailInfo(vo);
         }else{
             return bannerDetailInfoService.updateBannerDetailInfo(vo);

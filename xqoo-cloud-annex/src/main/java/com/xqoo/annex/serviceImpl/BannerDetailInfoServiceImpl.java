@@ -92,9 +92,13 @@ public class BannerDetailInfoServiceImpl extends ServiceImpl<BannerDetailInfoMap
         LambdaQueryWrapper<BannerDetailInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(BannerDetailInfoEntity::getId, id);
         BannerDetailInfoEntity entity = bannerDetailInfoMapper.selectOne(queryWrapper);
-        entity.setActiveCode(false);
+        if(entity.getActiveCode()){
+            entity.setActiveCode(false);
+        }else{
+            entity.setActiveCode(true);
+        }
         bannerDetailInfoMapper.update(entity, queryWrapper);
-        return new ResultEntity<>(HttpStatus.OK, "删除成功");
+        return new ResultEntity<>(HttpStatus.OK, "操作成功");
     }
 
     @Override

@@ -23,13 +23,11 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author mumu
@@ -199,6 +197,21 @@ public class GlobalExceptionHandler {
             arr = e.getSupportedMethods();
         }
         return new ResultEntity<>(HttpStatus.METHOD_NOT_ALLOWED, "当前接口仅支持" + Joiner.on(",").join(arr) + "请求方式");
+
+    }
+
+    /**
+     * 请求类型错误
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResultEntity paramTypeError(MethodArgumentTypeMismatchException e){
+        log.warn("[参数类型类型错误]:字段：{}，的值：{}类型转换失败，此方法只支持的类型为：{}", e.getName(), e.getValue(),
+                Objects.requireNonNull(e.getRequiredType()).getSimpleName());
+
+        return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前接口仅支持" + Objects.requireNonNull(e.getRequiredType()).getSimpleName()+ "型参数，字段【" +
+                e.getName() + "】的值不能转换为此类型");
 
     }
     /**

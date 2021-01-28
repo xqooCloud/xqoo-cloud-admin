@@ -4,6 +4,7 @@ import com.xqoo.common.core.exception.SystemException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +18,7 @@ public class AESUtil {
 
     private static final String TYPE = "AES";
 
-    private static final String SECURERANDOM_KEY = "AES/ECB/PKCS7Padding";
+    private static final String SECURERANDOM_KEY = "AES/CBC/PKCS7Padding";
 
     static {
         //如果是PKCS7Padding填充方式，则必须加上下面这行
@@ -34,8 +35,9 @@ public class AESUtil {
     public static String decode(String content, String key) throws Exception {
         SecretKeySpec secretKey = getKey(key);
 //        SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), TYPE);
-        Cipher cipher = Cipher.getInstance(SECURERANDOM_KEY, "BC");
-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+        Cipher cipher = Cipher.getInstance(SECURERANDOM_KEY);
+        IvParameterSpec iv = new IvParameterSpec(key.getBytes());
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
         Decoder decoder = Base64.getDecoder();
         byte[] c = decoder.decode(content);
         byte[] result = cipher.doFinal(c);
@@ -53,8 +55,9 @@ public class AESUtil {
     public static String encode(String content, String key) throws Exception {
         SecretKeySpec secretKey = getKey(key);
 //        SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), TYPE);
-        Cipher cipher = Cipher.getInstance(SECURERANDOM_KEY, "BC");
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+        Cipher cipher = Cipher.getInstance(SECURERANDOM_KEY);
+        IvParameterSpec iv = new IvParameterSpec(key.getBytes());
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
         byte[] p = content.getBytes(StandardCharsets.UTF_8);
         byte[] result = cipher.doFinal(p);
         Encoder encoder = Base64.getEncoder();
@@ -69,5 +72,4 @@ public class AESUtil {
         return new SecretKeySpec(keySeed.getBytes(StandardCharsets.UTF_8) , TYPE);
 
     }
-
 }

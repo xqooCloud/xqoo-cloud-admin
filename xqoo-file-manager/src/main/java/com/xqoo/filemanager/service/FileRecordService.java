@@ -43,6 +43,13 @@ public interface FileRecordService extends IService<FileRecordEntity> {
     ResultEntity<String> removeFile(String fileId);
 
     /**
+     * 根据id列表删除文件
+     * @param fileIds
+     * @return
+     */
+    ResultEntity<String> removeFileByFileIds(List<String> fileIds);
+
+    /**
     * 获取file_record主键记录了
      * @param id
     *   @return

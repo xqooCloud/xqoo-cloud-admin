@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.google.common.collect.HashMultimap;
 import com.xqoo.common.constants.SqlQueryConstant;
 import com.xqoo.common.core.entity.CurrentUser;
 import com.xqoo.common.core.utils.StringUtils;
@@ -121,6 +122,33 @@ public class FileRecordServiceImpl extends ServiceImpl<FileRecordMapper, FileRec
             return aliyunOssHandleService.removeFile(entity.getFileRelativePath(), entity.getFileBucket(), entity.getId());
         }
         return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "找不到相应的文件平台，无法删除");
+    }
+
+    @Override
+    public ResultEntity<String> removeFileByFileIds(List<String> fileIds) {
+        LambdaQueryWrapper<FileRecordEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(FileRecordEntity::getId, fileIds);
+        queryWrapper.eq(FileRecordEntity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+        List<FileRecordEntity> list = fileRecordMapper.selectList(queryWrapper);
+        if(CollUtil.isEmpty(list)){
+            return new ResultEntity<>(HttpStatus.OK, "ok");
+        }
+        HashMultimap<String, String> multimap = HashMultimap.create();
+        list.forEach(item -> {
+            if(UploadPlatEnum.ALI.getKey().equals(item.getUploadPlat())){
+                multimap.put(item.getFileBucket(), item.getFileRelativePath());
+            }
+        });
+        FileRecordEntity delEntity = new FileRecordEntity();
+        delEntity.setDelFlag(SqlQueryConstant.LOGIC_DEL);
+        try {
+            aliyunOssHandleService.removeFileBatch(multimap);
+            fileRecordMapper.update(delEntity, queryWrapper);
+            return new ResultEntity<>(HttpStatus.OK, "ok");
+        }catch (Exception e){
+            logger.error("[文件管理模块]删除oss文件发生错误，文件ID：{},请核对结果", fileIds.toString());
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "fail");
+        }
     }
 
     @Override

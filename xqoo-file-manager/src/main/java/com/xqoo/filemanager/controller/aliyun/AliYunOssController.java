@@ -48,9 +48,9 @@ public class AliYunOssController {
 
     @ApiOperation("删除文件")
     @GetMapping("/removeFile")
-    public ResultEntity<String> removeFile(@RequestParam(value = "fileKey", required = false) @NotBlank(message = "文件对象名不能为空") String fileKey,
-                                           @RequestParam(value = "bucketName", required = false) @NotBlank(message = "文件桶名不能为空") String bucketName,
-                                           @RequestParam(value = "fileId", required = false) @NotBlank(message = "文件id不能为空") String fileId){
+    public ResultEntity<String> removeFile(@RequestParam(value = "fileKey", required = false) String fileKey,
+                                           @RequestParam(value = "bucketName", required = false) String bucketName,
+                                           @RequestParam(value = "fileId", required = false) String fileId){
         return aliyunOssHandleService.removeFile(fileKey, bucketName, fileId);
     }
 

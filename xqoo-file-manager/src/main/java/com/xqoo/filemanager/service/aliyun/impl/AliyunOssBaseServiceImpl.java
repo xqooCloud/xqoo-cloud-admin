@@ -3,6 +3,8 @@ package com.xqoo.filemanager.service.aliyun.impl;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
+import com.aliyun.oss.model.DeleteObjectsRequest;
+import com.aliyun.oss.model.DeleteObjectsResult;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -29,10 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author gaoyang
@@ -116,6 +115,16 @@ public class AliyunOssBaseServiceImpl implements AliyunOssBaseService {
         }
         // 删除文件。如需删除文件夹，请将ObjectName设置为对应的文件夹名称。如果文件夹非空，则需要将文件夹下的所有object删除后才能删除该文件夹。
 
+        // 关闭OSSClient。
+        ossClient.shutdown();
+    }
+
+    @Override
+    public void removeOssFileBatch(String accessKey, String accessSecret, String endpoint, String bucketName, List<String> fileObjects) {
+        // 创建OSSClient实例。
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKey, accessSecret);
+        DeleteObjectsResult deleteObjectsResult = ossClient.deleteObjects(new DeleteObjectsRequest(bucketName).withKeys(fileObjects));
+        List<String> deletedObjects = deleteObjectsResult.getDeletedObjects();
         // 关闭OSSClient。
         ossClient.shutdown();
     }

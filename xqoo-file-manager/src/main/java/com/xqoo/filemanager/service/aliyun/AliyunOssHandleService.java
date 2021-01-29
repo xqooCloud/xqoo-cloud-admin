@@ -1,5 +1,6 @@
 package com.xqoo.filemanager.service.aliyun;
 
+import com.google.common.collect.HashMultimap;
 import com.xqoo.common.entity.ResultEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,13 @@ public interface AliyunOssHandleService extends AliyunOssBaseService{
      * @return
      */
     ResultEntity<String> removeFile(String fileKey, String bucketName, String fileId);
+
+    /**
+     * 批量删除文件
+     * @param multimap
+     * @return
+     */
+    Boolean removeFileBatch(HashMultimap<String, String> multimap);
 
 
     /**

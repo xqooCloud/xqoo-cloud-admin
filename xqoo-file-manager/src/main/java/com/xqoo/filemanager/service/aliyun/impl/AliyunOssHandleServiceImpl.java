@@ -7,6 +7,7 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.CopyObjectRequest;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.google.common.base.Splitter;
+import com.google.common.collect.HashMultimap;
 import com.xqoo.common.core.utils.HttpRequestUtil;
 import com.xqoo.common.core.utils.StringUtils;
 import com.xqoo.common.entity.ResultEntity;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +49,15 @@ public class AliyunOssHandleServiceImpl extends AliyunOssBaseServiceImpl impleme
         String accessKey = super.getAliyunOssConfig().getOrDefault("accessKey", "");
         String accessSecret = super.getAliyunOssConfig().getOrDefault("accessSecret", "");
         String endpoint = super.getAliyunOssConfig().getOrDefault("endpoint", "");
+        FileRecordEntity file = fileRecordService.getOneFileRecordEntityByPrimaryKey(StringUtils.isEmpty(fileId) ? "none" : fileId);
+        if(StringUtils.isNotEmpty(fileId) && file != null && StringUtils.isNotEmpty(file.getId())){
+            bucketName = file.getFileBucket();
+            fileKey = file.getFileRelativePath();
+        }else{
+            if(StringUtils.isEmpty(bucketName) || StringUtils.isEmpty(fileKey)){
+                return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "删除文件失败，丢失关键参数");
+            }
+        }
         if(!super.existsBucketName(accessKey, accessSecret, endpoint, bucketName)){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前oss账户下没有可用的存储桶【" + bucketName + "】");
         }
@@ -55,6 +66,24 @@ public class AliyunOssHandleServiceImpl extends AliyunOssBaseServiceImpl impleme
             super.removeOssFile(accessKey, accessSecret, endpoint, bucketName, fileKey);
         }
         return new ResultEntity<>(HttpStatus.OK, "OK");
+    }
+
+    @Override
+    public Boolean removeFileBatch(HashMultimap<String, String> multimap) {
+        if(CollUtil.isEmpty(super.getAliyunOssConfig())){
+            return false;
+        }
+        String accessKey = super.getAliyunOssConfig().getOrDefault("accessKey", "");
+        String accessSecret = super.getAliyunOssConfig().getOrDefault("accessSecret", "");
+        String endpoint = super.getAliyunOssConfig().getOrDefault("endpoint", "");
+        multimap.keySet().forEach(item -> {
+            if(!super.existsBucketName(accessKey, accessSecret, endpoint, item)){
+                return;
+            }
+            List<String> fileKeys = new ArrayList<>(multimap.get(item));
+            super.removeOssFileBatch(accessKey, accessSecret, endpoint, item, fileKeys);
+        });
+        return false;
     }
 
     @Override

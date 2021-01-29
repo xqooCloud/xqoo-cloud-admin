@@ -2,6 +2,7 @@ package com.xqoo.filemanager.service.aliyun;
 
 import com.xqoo.common.dto.SystemCommunicateDTO;
 
+import java.util.List;
 import java.util.Map;
 
 public interface AliyunOssBaseService {
@@ -45,6 +46,16 @@ public interface AliyunOssBaseService {
      * @param fileObject
      */
     void removeOssFile(String accessKey, String accessSecret, String endpoint, String bucketName, String fileObject);
+
+    /**
+     * 批量删除文件
+     * @param accessKey
+     * @param accessSecret
+     * @param endpoint
+     * @param bucketName
+     * @param fileObjects
+     */
+    void removeOssFileBatch(String accessKey, String accessSecret, String endpoint, String bucketName, List<String> fileObjects);
 
     /**
      * 二进制文件流上传

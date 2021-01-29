@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.device.mapper.ScreenPictureViewMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="parentId != null">
+        and parent_id = #{parentId}
+    </if>
+    <if test="fileName != null and fileName != ''">
+        and file_name = #{fileName}
+    </if>
+    <if test="filePath != null and filePath != ''">
+        and file_path = #{filePath}
+    </if>
+    <if test="fileId != null and fileId != ''">
+        and file_id = #{fileId}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_device_manager.screen_picture_view(
+            parent_id,
+            file_name,
+            file_path,
+            file_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.parentId},
+            #{item.fileName},
+            #{item.filePath},
+            #{item.fileId}
+        )
+        </foreach>
+    </insert>
+
+    <select id="getIdsByParentId" parameterType="java.lang.String" resultType="java.lang.Long">
+        select id from xqoo_device_manager.screen_picture_view where parent_id = #{parentId}
+    </select>
+
+</mapper>

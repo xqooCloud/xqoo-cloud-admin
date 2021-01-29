@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.device.mapper.ScreenPropertiesMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="parentId != null">
+        and parent_id = #{parentId}
+    </if>
+    <if test="propertiesLabel != null and propertiesLabel != ''">
+        and properties_label = #{propertiesLabel}
+    </if>
+    <if test="propertiesValue != null and propertiesValue != ''">
+        and properties_value = #{propertiesValue}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_device_manager.screen_properties(
+            parent_id,
+            properties_label,
+            properties_value
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.parentId},
+            #{item.propertiesLabel},
+            #{item.propertiesValue}
+        )
+        </foreach>
+    </insert>
+
+    <select id="getIdsByParentId" parameterType="java.lang.String" resultType="java.lang.Long">
+        select id from xqoo_device_manager.screen_properties where parent_id = #{parentId}
+    </select>
+
+</mapper>

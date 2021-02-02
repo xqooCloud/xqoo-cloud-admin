@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.salecenter.mapper.SaleGoodsInfoMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="goodsId != null and goodsId != ''">
+        and goods_id = #{goodsId}
+    </if>
+    <if test="screenId != null">
+        and screen_id = #{screenId}
+    </if>
+    <if test="status != null">
+        and status = #{status}
+    </if>
+    <if test="salePrice != null">
+        and sale_price = #{salePrice}
+    </if>
+    <if test="saleOrgPrice != null">
+        and sale_org_price = #{saleOrgPrice}
+    </if>
+    <if test="overPeople != null">
+        and over_people = #{overPeople}
+    </if>
+    <if test="saleTitle != null and saleTitle != ''">
+        and sale_title = #{saleTitle}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_sale_center.sale_goods_info(
+            goods_id,
+            screen_id,
+            status,
+            sale_price,
+            sale_org_price,
+            over_people,
+            sale_title,
+            create_date,
+            create_by,
+            update_date,
+            update_by,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.goodsId},
+            #{item.screenId},
+            #{item.status},
+            #{item.salePrice},
+            #{item.saleOrgPrice},
+            #{item.overPeople},
+            #{item.saleTitle},
+            #{item.createDate},
+            #{item.createBy},
+            #{item.updateDate},
+            #{item.updateBy},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

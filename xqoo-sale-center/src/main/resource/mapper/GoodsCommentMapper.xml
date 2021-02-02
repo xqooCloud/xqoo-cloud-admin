@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.salecenter.mapper.GoodsCommentMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="commentId != null and commentId != ''">
+        and comment_id = #{commentId}
+    </if>
+    <if test="commentUserId != null and commentUserId != ''">
+        and comment_user_id = #{commentUserId}
+    </if>
+    <if test="commentGoodsId != null and commentGoodsId != ''">
+        and comment_goods_id = #{commentGoodsId}
+    </if>
+    <if test="commentScreenId != null">
+        and comment_screen_id = #{commentScreenId}
+    </if>
+    <if test="commentOrderDetailId != null and commentOrderDetailId != ''">
+        and comment_order_detail_id = #{commentOrderDetailId}
+    </if>
+    <if test="commentUserName != null and commentUserName != ''">
+        and comment_user_name = #{commentUserName}
+    </if>
+    <if test="commentRate != null">
+        and comment_rate = #{commentRate}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_sale_center.goods_comment(
+            comment_id,
+            comment_user_id,
+            comment_goods_id,
+            comment_screen_id,
+            comment_order_detail_id,
+            comment_user_name,
+            comment_rate,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.commentId},
+            #{item.commentUserId},
+            #{item.commentGoodsId},
+            #{item.commentScreenId},
+            #{item.commentOrderDetailId},
+            #{item.commentUserName},
+            #{item.commentRate},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

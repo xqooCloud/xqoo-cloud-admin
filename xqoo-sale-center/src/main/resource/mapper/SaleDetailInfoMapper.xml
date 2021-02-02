@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.salecenter.mapper.SaleDetailInfoMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="parentGoodsId != null and parentGoodsId != ''">
+        and parent_goods_id = #{parentGoodsId}
+    </if>
+    <if test="contentDetail != null and contentDetail != ''">
+        and content_detail = #{contentDetail}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_sale_center.sale_detail_info(
+            parent_goods_id,
+            content_detail
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.parentGoodsId},
+            #{item.contentDetail}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

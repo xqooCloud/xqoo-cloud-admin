@@ -29,6 +29,7 @@
         <module>xqoo-file-manager</module>
         <module>xqoo-cloud-integral-center</module>
         <module>xqoo-device-manager</module>
+        <module>xqoo-sale-center</module>
     </modules>
     <packaging>pom</packaging>
 

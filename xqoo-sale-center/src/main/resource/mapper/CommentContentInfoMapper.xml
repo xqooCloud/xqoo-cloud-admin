@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xqoo.salecenter.mapper.CommentContentInfoMapper">
+
+    <!-- 查询条件 -->
+    <!-- 此处仅生成批量insert方法和当前表所有字段查询条件，其余单条记录插叙和分页查询等使用myBatisPlus -->
+    <!--
+    <if test="id != null">
+        and id = #{id}
+    </if>
+    <if test="parentCommentId != null and parentCommentId != ''">
+        and parent_comment_id = #{parentCommentId}
+    </if>
+    <if test="contentValue != null and contentValue != ''">
+        and content_value = #{contentValue}
+    </if>
+    <if test="contentAccessories != null and contentAccessories != ''">
+        and content_accessories = #{contentAccessories}
+    </if>
+    <if test="replyUserId != null and replyUserId != ''">
+        and reply_user_id = #{replyUserId}
+    </if>
+    <if test="replyType != null">
+        and reply_type = #{replyType}
+    </if>
+    <if test="replyContent != null and replyContent != ''">
+        and reply_content = #{replyContent}
+    </if>
+    <if test="createBy != null and createBy != ''">
+        and create_by = #{createBy}
+    </if>
+    <if test="createDate != null">
+        and create_date = #{createDate}
+    </if>
+    <if test="updateBy != null and updateBy != ''">
+        and update_by = #{updateBy}
+    </if>
+    <if test="updateDate != null">
+        and update_date = #{updateDate}
+    </if>
+    <if test="remarkTips != null and remarkTips != ''">
+        and remark_tips = #{remarkTips}
+    </if>
+    -->
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into xqoo_sale_center.comment_conten_info(
+            parent_comment_id,
+            content_value,
+            content_accessories,
+            reply_user_id,
+            reply_type,
+            reply_content,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remark_tips
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.parentCommentId},
+            #{item.contentValue},
+            #{item.contentAccessories},
+            #{item.replyUserId},
+            #{item.replyType},
+            #{item.replyContent},
+            #{item.createBy},
+            #{item.createDate},
+            #{item.updateBy},
+            #{item.updateDate},
+            #{item.remarkTips}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

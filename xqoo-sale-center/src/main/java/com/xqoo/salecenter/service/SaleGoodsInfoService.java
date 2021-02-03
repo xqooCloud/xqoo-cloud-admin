@@ -6,6 +6,7 @@ import com.xqoo.common.entity.ResultEntity;
 import com.xqoo.common.page.PageResponseBean;
 import com.xqoo.salecenter.entity.SaleGoodsInfoEntity;
 import com.xqoo.salecenter.pojo.SaleGoodsInfoQuery;
+import com.xqoo.salecenter.vo.SaleGoodsInfoVO;
 
 import java.util.List;
 
@@ -73,4 +74,27 @@ public interface SaleGoodsInfoService extends IService<SaleGoodsInfoEntity> {
     * @return
     */
     SaleGoodsInfoEntity getOneSaleGoodsInfoEntityByPrimaryKey(String goodsId);
+
+    /**
+     * 根据主键获取明细信息
+     * @param goodsId
+     * @return
+     */
+    ResultEntity<SaleGoodsInfoVO> getSaleInfoDetail(String goodsId);
+
+    /**
+     * 新增商品信息参数
+     * @param vo
+     * @param currentUser
+     * @return
+     */
+    ResultEntity<String> addGoodsInfo(SaleGoodsInfoVO vo, CurrentUser currentUser);
+
+    /**
+     * 修改商品信息参数
+     * @param vo
+     * @param currentUser
+     * @return
+     */
+    ResultEntity<String> updateGoodsInfo(SaleGoodsInfoVO vo, CurrentUser currentUser);
 }

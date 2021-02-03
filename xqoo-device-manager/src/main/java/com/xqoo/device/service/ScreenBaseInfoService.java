@@ -9,6 +9,7 @@ import com.xqoo.device.pojo.DeviceInfoPageQueryPOJO;
 import com.xqoo.device.vo.DeviceDetailInfoVO;
 import com.xqoo.device.vo.DeviceInfoVO;
 import com.xqoo.device.vo.ScreenConfigPropertiesVO;
+import com.xqoo.feign.dto.device.DeviceInfoDetailDTO;
 
 import java.util.List;
 
@@ -77,6 +78,13 @@ public interface ScreenBaseInfoService extends IService<ScreenBaseInfoEntity> {
      * @return
      */
     DeviceDetailInfoVO getOneScreenBaseInfoEntityByPrimaryKey(String id);
+
+    /**
+     * 内部根据屏幕id获取相关信息
+     * @param id
+     * @return
+     */
+    DeviceInfoDetailDTO getDeviceInfoForPrivate(String id);
 
     /**
      * 获取屏幕信息配置参数

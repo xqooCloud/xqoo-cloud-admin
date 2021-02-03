@@ -1,5 +1,6 @@
 package com.xqoo.salecenter.vo;
 
+import com.xqoo.feign.dto.device.ScreenPropertiesDTO;
 import com.xqoo.salecenter.entity.GoodsPictureInfoEntity;
 import com.xqoo.salecenter.entity.SaleGoodsInfoEntity;
 import io.swagger.annotations.ApiModel;
@@ -20,6 +21,9 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
     @ApiModelProperty("屏幕的图片列表")
     private List<GoodsPictureInfoEntity> pictureList;
 
+    @ApiModelProperty("屏幕参数列表")
+    private List<ScreenPropertiesDTO> propertiesList;
+
     @ApiModelProperty("屏幕尺寸")
     private BigDecimal screenSize;
 
@@ -36,6 +40,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
     public String toString() {
         return new ToStringBuilder(this)
                 .append("pictureList", pictureList)
+                .append("propertiesList", propertiesList)
                 .append("screenSize", screenSize)
                 .append("screenName", screenName)
                 .append("screenAddress", screenAddress)
@@ -55,6 +60,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
                 .append(pictureList, that.pictureList)
+                .append(propertiesList, that.propertiesList)
                 .append(screenSize, that.screenSize)
                 .append(screenName, that.screenName)
                 .append(screenAddress, that.screenAddress)
@@ -67,6 +73,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
         return new HashCodeBuilder(17, 37)
                 .appendSuper(super.hashCode())
                 .append(pictureList)
+                .append(propertiesList)
                 .append(screenSize)
                 .append(screenName)
                 .append(screenAddress)
@@ -84,6 +91,14 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
 
     public BigDecimal getScreenSize() {
         return screenSize;
+    }
+
+    public List<ScreenPropertiesDTO> getPropertiesList() {
+        return propertiesList;
+    }
+
+    public void setPropertiesList(List<ScreenPropertiesDTO> propertiesList) {
+        this.propertiesList = propertiesList;
     }
 
     public void setScreenSize(BigDecimal screenSize) {

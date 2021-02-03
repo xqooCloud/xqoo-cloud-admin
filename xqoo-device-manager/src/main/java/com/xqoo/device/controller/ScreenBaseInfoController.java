@@ -12,6 +12,7 @@ import com.xqoo.device.vo.DeviceInfoVO;
 import com.xqoo.device.vo.ScreenConfigPropertiesVO;
 import com.xqoo.feign.annotations.LoginUser;
 import com.xqoo.feign.annotations.OperationLog;
+import com.xqoo.feign.dto.device.DeviceInfoDetailDTO;
 import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -151,5 +152,15 @@ public class ScreenBaseInfoController{
             return screenBaseInfoService.addDeviceBaseInfo(vo, currentUser);
         }
         return screenBaseInfoService.updateDeviceBaseInfo(vo, currentUser);
+    }
+
+    @ApiOperation("外部调用获取屏幕信息整合结构")
+    @GetMapping("/getDeviceInfoForPublic")
+    public ResultEntity<DeviceInfoDetailDTO> getDeviceInfoForPublic(@RequestParam(value = "id", required = false) @NotBlank(message = "id不能为空") String id){
+        DeviceInfoDetailDTO dto = screenBaseInfoService.getDeviceInfoForPrivate(id);
+        if(dto == null || StringUtils.isEmpty(dto.getScreenName())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "获取屏幕信息失败，请重试");
+        }
+        return new ResultEntity<>(HttpStatus.OK, "ok", dto);
     }
 }

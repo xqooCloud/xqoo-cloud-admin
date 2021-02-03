@@ -26,6 +26,9 @@ import com.xqoo.device.vo.DeviceDetailInfoVO;
 import com.xqoo.device.vo.DeviceInfoVO;
 import com.xqoo.device.vo.ScreenConfigPropertiesVO;
 import com.xqoo.device.vo.ScreenPictureDetailVO;
+import com.xqoo.feign.dto.device.DeviceInfoDetailDTO;
+import com.xqoo.feign.dto.device.ScreenPictureDetailDTO;
+import com.xqoo.feign.dto.device.ScreenPropertiesDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -264,6 +267,36 @@ public class ScreenBaseInfoServiceImpl extends ServiceImpl<ScreenBaseInfoMapper,
             vo.setPropertiesList(propertiesList);
             vo.setPictureList(pictureList);
             return vo;
+        }
+        return null;
+    }
+
+    @Override
+    public DeviceInfoDetailDTO getDeviceInfoForPrivate(String id) {
+        LambdaQueryWrapper<ScreenBaseInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ScreenBaseInfoEntity::getId, id);
+        queryWrapper.eq(ScreenBaseInfoEntity::getDelFlag, SqlQueryConstant.NOT_LOGIC_DEL);
+        ScreenBaseInfoEntity entity = screenBaseInfoMapper.selectOne(queryWrapper);
+        if(entity != null){
+            DeviceInfoDetailDTO dto = new DeviceInfoDetailDTO();
+            BeanUtils.copyProperties(entity, dto);
+
+            List<ScreenPropertiesEntity> propertiesList = screenPropertiesService.getListByParentId(id);
+            List<ScreenPictureDetailVO> pictureList = screenPictureViewService.getListByParentId(id);
+            List<ScreenPropertiesDTO> properties = propertiesList.stream().map(item -> {
+                ScreenPropertiesDTO proDto = new ScreenPropertiesDTO();
+                BeanUtils.copyProperties(item, proDto);
+                return proDto;
+            }).sorted(Comparator.comparing(ScreenPropertiesDTO::getSortNo)).collect(Collectors.toList());
+
+            List<ScreenPictureDetailDTO> pictures = pictureList.stream().map(item -> {
+                ScreenPictureDetailDTO picDto = new ScreenPictureDetailDTO();
+                BeanUtils.copyProperties(item, picDto);
+                return picDto;
+            }).sorted(Comparator.comparing(ScreenPictureDetailDTO::getSortNo)).collect(Collectors.toList());
+            dto.setPropertiesList(properties);
+            dto.setPictureList(pictures);
+            return dto;
         }
         return null;
     }

@@ -11,6 +11,7 @@ import com.xqoo.feign.enums.operlog.OperationTypeEnum;
 import com.xqoo.salecenter.entity.SaleGoodsInfoEntity;
 import com.xqoo.salecenter.pojo.SaleGoodsInfoQuery;
 import com.xqoo.salecenter.service.SaleGoodsInfoService;
+import com.xqoo.salecenter.vo.SaleGoodsInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,12 +128,31 @@ public class SaleGoodsInfoController{
         return saleGoodsInfoService.undercarriageGoods(goodsIds);
     }
 
-
     @ApiOperation("根据主键查询单条记录")
     @GetMapping("/getRecordByPrimaryKey")
     public ResultEntity<SaleGoodsInfoEntity> getRecordByPrimaryKey(@RequestParam(required = false, value = "goodsId")
                                                                       @NotNull(message = "主键值不能为空") String goodsId){
         SaleGoodsInfoEntity entity = saleGoodsInfoService.getOneSaleGoodsInfoEntityByPrimaryKey(goodsId);
         return new ResultEntity<>(HttpStatus.OK, "查询成功", entity);
+    }
+
+    @ApiOperation("根据主键查询明细记录")
+    @GetMapping("/getSaleInfoDetail")
+    public ResultEntity<SaleGoodsInfoVO> getSaleInfoDetail(@RequestParam(required = false, value = "goodsId")
+                                                                   @NotNull(message = "主键值不能为空") String goodsId){
+        return saleGoodsInfoService.getSaleInfoDetail(goodsId);
+    }
+
+    @ApiOperation("新增/修改商品信息")
+    @PostMapping("/updateSaleInfo")
+    public ResultEntity<String> updateSaleInfo(@RequestBody SaleGoodsInfoVO updateVo,
+                                               @ApiIgnore @LoginUser CurrentUser currentUser){
+        if(StringUtils.isEmpty(currentUser.getUserId())){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "未找到当前登录人信息，请重新登录重试");
+        }
+        if(StringUtils.isEmpty(updateVo.getGoodsId())){
+            return saleGoodsInfoService.addGoodsInfo(updateVo, currentUser);
+        }
+        return saleGoodsInfoService.updateGoodsInfo(updateVo, currentUser);
     }
 }

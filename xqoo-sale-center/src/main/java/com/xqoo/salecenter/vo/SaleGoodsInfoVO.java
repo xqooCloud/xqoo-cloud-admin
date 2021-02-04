@@ -30,6 +30,9 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
     @ApiModelProperty("屏幕名字")
     private String screenName;
 
+    @ApiModelProperty("设备默认最大资源承载量")
+    private Integer screenMaxSourceCount;
+
     @ApiModelProperty("屏幕所在地址")
     private String screenAddress;
 
@@ -43,6 +46,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
                 .append("propertiesList", propertiesList)
                 .append("screenSize", screenSize)
                 .append("screenName", screenName)
+                .append("screenMaxSourceCount", screenMaxSourceCount)
                 .append("screenAddress", screenAddress)
                 .append("favoriteCount", favoriteCount)
                 .toString();
@@ -63,6 +67,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
                 .append(propertiesList, that.propertiesList)
                 .append(screenSize, that.screenSize)
                 .append(screenName, that.screenName)
+                .append(screenMaxSourceCount, that.screenMaxSourceCount)
                 .append(screenAddress, that.screenAddress)
                 .append(favoriteCount, that.favoriteCount)
                 .isEquals();
@@ -76,6 +81,7 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
                 .append(propertiesList)
                 .append(screenSize)
                 .append(screenName)
+                .append(screenMaxSourceCount)
                 .append(screenAddress)
                 .append(favoriteCount)
                 .toHashCode();
@@ -111,6 +117,14 @@ public class SaleGoodsInfoVO extends SaleGoodsInfoEntity {
 
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+    }
+
+    public Integer getScreenMaxSourceCount() {
+        return screenMaxSourceCount;
+    }
+
+    public void setScreenMaxSourceCount(Integer screenMaxSourceCount) {
+        this.screenMaxSourceCount = screenMaxSourceCount;
     }
 
     public String getScreenAddress() {

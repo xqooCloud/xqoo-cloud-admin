@@ -18,6 +18,8 @@ public class DeviceInfoDetailDTO {
 
     private BigDecimal screenSize;
 
+    private Integer screenMaxSourceCount;
+
     private String screenName;
 
     private String screenAddress;
@@ -32,6 +34,7 @@ public class DeviceInfoDetailDTO {
                 .append("screenPositionLong", screenPositionLong)
                 .append("screenPositionLati", screenPositionLati)
                 .append("screenSize", screenSize)
+                .append("screenMaxSourceCount", screenMaxSourceCount)
                 .append("screenName", screenName)
                 .append("screenAddress", screenAddress)
                 .append("propertiesList", propertiesList)
@@ -52,6 +55,7 @@ public class DeviceInfoDetailDTO {
                 .append(screenPositionLong, that.screenPositionLong)
                 .append(screenPositionLati, that.screenPositionLati)
                 .append(screenSize, that.screenSize)
+                .append(screenMaxSourceCount, that.screenMaxSourceCount)
                 .append(screenName, that.screenName)
                 .append(screenAddress, that.screenAddress)
                 .append(propertiesList, that.propertiesList)
@@ -65,6 +69,7 @@ public class DeviceInfoDetailDTO {
                 .append(screenPositionLong)
                 .append(screenPositionLati)
                 .append(screenSize)
+                .append(screenMaxSourceCount)
                 .append(screenName)
                 .append(screenAddress)
                 .append(propertiesList)
@@ -94,6 +99,14 @@ public class DeviceInfoDetailDTO {
 
     public void setScreenSize(BigDecimal screenSize) {
         this.screenSize = screenSize;
+    }
+
+    public Integer getScreenMaxSourceCount() {
+        return screenMaxSourceCount;
+    }
+
+    public void setScreenMaxSourceCount(Integer screenMaxSourceCount) {
+        this.screenMaxSourceCount = screenMaxSourceCount;
     }
 
     public String getScreenName() {

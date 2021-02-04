@@ -27,6 +27,9 @@ public class ScreenConfigPropertiesVO {
     @ApiModelProperty("最大单张图片大小限制，单位kb")
     private Long maxImageSize;
 
+    @ApiModelProperty("默认设备最大资源承载量")
+    private Integer maxSourceCount;
+
     @ApiModelProperty("默认标签参数")
     private List<Map<String, String>> labelList;
 
@@ -37,6 +40,7 @@ public class ScreenConfigPropertiesVO {
                 .append("maxPropertiesCount", maxPropertiesCount)
                 .append("maxImageCount", maxImageCount)
                 .append("maxImageSize", maxImageSize)
+                .append("maxSourceCount", maxSourceCount)
                 .append("labelList", labelList)
                 .toString();
     }
@@ -53,12 +57,12 @@ public class ScreenConfigPropertiesVO {
 
         ScreenConfigPropertiesVO that = (ScreenConfigPropertiesVO) o;
 
-        return new EqualsBuilder().append(minPropertiesCount, that.minPropertiesCount).append(maxPropertiesCount, that.maxPropertiesCount).append(maxImageCount, that.maxImageCount).append(maxImageSize, that.maxImageSize).append(labelList, that.labelList).isEquals();
+        return new EqualsBuilder().append(minPropertiesCount, that.minPropertiesCount).append(maxPropertiesCount, that.maxPropertiesCount).append(maxImageCount, that.maxImageCount).append(maxImageSize, that.maxImageSize).append(maxSourceCount, that.maxSourceCount).append(labelList, that.labelList).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(minPropertiesCount).append(maxPropertiesCount).append(maxImageCount).append(maxImageSize).append(labelList).toHashCode();
+        return new HashCodeBuilder(17, 37).append(minPropertiesCount).append(maxPropertiesCount).append(maxImageCount).append(maxImageSize).append(maxSourceCount).append(labelList).toHashCode();
     }
 
     public Integer getMinPropertiesCount() {
@@ -91,6 +95,14 @@ public class ScreenConfigPropertiesVO {
 
     public void setMaxImageSize(Long maxImageSize) {
         this.maxImageSize = maxImageSize;
+    }
+
+    public Integer getMaxSourceCount() {
+        return maxSourceCount;
+    }
+
+    public void setMaxSourceCount(Integer maxSourceCount) {
+        this.maxSourceCount = maxSourceCount;
     }
 
     public List<Map<String, String>> getLabelList() {

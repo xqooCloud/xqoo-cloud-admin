@@ -1,10 +1,8 @@
 package com.xqoo.feign.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.alibaba.fastjson.JSONArray;
 import com.xqoo.common.core.utils.JacksonUtils;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,15 +41,10 @@ public class FeignReturnDataGzip {
         if(zipData == null){
             return null;
         }
-        JsonNode jsonNode = JacksonUtils.toObj(zipData, JsonNode.class);
+        JSONArray jsonNode = JacksonUtils.toObj(zipData, JSONArray.class);
         List<T> rtnList = new ArrayList<>(jsonNode.size());
         jsonNode.forEach(item -> {
-            T t = JacksonUtils.toObj(item, new TypeReference<T>() {
-                @Override
-                public Type getType() {
-                    return super.getType();
-                }
-            });
+            T t = JacksonUtils.toObj(JacksonUtils.toJsonBytes(item), returnClass);
             rtnList.add(t);
         });
         return rtnList;

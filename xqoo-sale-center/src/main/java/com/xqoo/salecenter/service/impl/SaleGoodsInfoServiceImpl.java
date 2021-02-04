@@ -257,6 +257,7 @@ public class SaleGoodsInfoServiceImpl extends ServiceImpl<SaleGoodsInfoMapper, S
             vo.setScreenAddress(deviceInfo.getScreenAddress());
             vo.setScreenSize(deviceInfo.getScreenSize());
             vo.setPropertiesList(deviceInfo.getPropertiesList());
+            vo.setScreenMaxSourceCount(deviceInfo.getScreenMaxSourceCount());
         }
         return new ResultEntity<>(HttpStatus.OK, "ok", vo);
     }
@@ -319,6 +320,32 @@ public class SaleGoodsInfoServiceImpl extends ServiceImpl<SaleGoodsInfoMapper, S
             logger.error("[商品模块]更新商品数据时发生错误，错误原因:{}, 错误信息：{}", e.getClass().getSimpleName(), e.getMessage());
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "保存更新失败，请稍后重试");
         }
+    }
+
+    @Override
+    public List<String> getHasSaleInfoScreen(List<String> screenIds) {
+        LambdaQueryWrapper<SaleGoodsInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(SaleGoodsInfoEntity::getScreenId, screenIds);
+        queryWrapper.in(SaleGoodsInfoEntity::getStatus, SaleGoodsStatusEnum.DRAFT, SaleGoodsStatusEnum.AUDITING,
+                SaleGoodsStatusEnum.AUDITED, SaleGoodsStatusEnum.PUBLISH);
+        List<SaleGoodsInfoEntity> list = saleGoodsInfoMapper.selectList(queryWrapper);
+        if(CollUtil.isEmpty(list)){
+            return Collections.emptyList();
+        }
+        return list.stream().map(SaleGoodsInfoEntity::getScreenId).collect(Collectors.toList());
+    }
+
+    @Override
+    public Boolean getExistSaleInfoByScreenId(String screenId) {
+        LambdaQueryWrapper<SaleGoodsInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SaleGoodsInfoEntity::getScreenId, screenId);
+        queryWrapper.in(SaleGoodsInfoEntity::getStatus, SaleGoodsStatusEnum.DRAFT, SaleGoodsStatusEnum.AUDITING,
+                SaleGoodsStatusEnum.AUDITED, SaleGoodsStatusEnum.PUBLISH);
+        Integer count = saleGoodsInfoMapper.selectCount(queryWrapper);
+        if(count == null || count == 0){
+            return false;
+        }
+        return true;
     }
 
     private String getUidForEmergency(String userId){

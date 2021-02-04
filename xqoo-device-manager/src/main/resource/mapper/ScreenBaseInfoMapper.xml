@@ -26,6 +26,9 @@
     <if test="screenName != null and screenName != ''">
         and screen_name = #{screenName}
     </if>
+    <if test="screenMaxSourceCount != null">
+        and screen_max_source_count = #{screenMaxSourceCount}
+    </if>
     <if test="screenAddress != null and screenAddress != ''">
         and screen_address = #{screenAddress}
     </if>
@@ -67,6 +70,7 @@
             screen_position_lati,
             screen_size,
             screen_name,
+            screen_max_source_count,
             screen_address,
             screen_label,
             screen_installer,
@@ -88,6 +92,7 @@
             #{item.screenPositionLati},
             #{item.screenSize},
             #{item.screenName},
+            #{item.screenMaxSourceCount},
             #{item.screenAddress},
             #{item.screenLabel},
             #{item.screenInstaller},

@@ -49,6 +49,9 @@ public class ScreenBaseInfoEntity extends Model<ScreenBaseInfoEntity> {
     @ApiModelProperty("屏幕名字")
     private String screenName;
 
+    @ApiModelProperty("设备默认最大资源承载量")
+    private Integer screenMaxSourceCount;
+
     @ApiModelProperty("屏幕所在地址")
     private String screenAddress;
 
@@ -139,6 +142,14 @@ public class ScreenBaseInfoEntity extends Model<ScreenBaseInfoEntity> {
 
     public String getScreenName(){
         return this.screenName;
+    }
+
+    public Integer getScreenMaxSourceCount() {
+        return screenMaxSourceCount;
+    }
+
+    public void setScreenMaxSourceCount(Integer screenMaxSourceCount) {
+        this.screenMaxSourceCount = screenMaxSourceCount;
     }
 
     public void setScreenAddress(String screenAddress) {
@@ -243,6 +254,7 @@ public class ScreenBaseInfoEntity extends Model<ScreenBaseInfoEntity> {
             .append("screenPositionLati", getScreenPositionLati())
             .append("screenSize", getScreenSize())
             .append("screenName", getScreenName())
+            .append("screenMaxSourceCount", getScreenMaxSourceCount())
             .append("screenAddress", getScreenAddress())
             .append("screenLabel", getScreenLabel())
             .append("screenInstaller", getScreenInstaller())
@@ -269,6 +281,7 @@ public class ScreenBaseInfoEntity extends Model<ScreenBaseInfoEntity> {
                 .append(screenPositionLati, that.screenPositionLati)
                 .append(screenSize, that.screenSize)
                 .append(screenName, that.screenName)
+                .append(screenMaxSourceCount, that.screenMaxSourceCount)
                 .append(screenAddress, that.screenAddress)
                 .append(screenLabel, that.screenLabel)
                 .append(screenInstaller, that.screenInstaller)
@@ -292,6 +305,7 @@ public class ScreenBaseInfoEntity extends Model<ScreenBaseInfoEntity> {
                 .append(screenPositionLati)
                 .append(screenSize)
                 .append(screenName)
+                .append(screenMaxSourceCount)
                 .append(screenAddress)
                 .append(screenLabel)
                 .append(screenInstaller)

@@ -97,4 +97,18 @@ public interface SaleGoodsInfoService extends IService<SaleGoodsInfoEntity> {
      * @return
      */
     ResultEntity<String> updateGoodsInfo(SaleGoodsInfoVO vo, CurrentUser currentUser);
+
+    /**
+     * 获取已经管理销售商品的屏幕id
+     * @param screenIds
+     * @return
+     */
+    List<String> getHasSaleInfoScreen(List<String> screenIds);
+
+    /**
+     * 查找是否存在销售信息
+     * @param screenId
+     * @return
+     */
+    Boolean getExistSaleInfoByScreenId(String screenId);
 }

@@ -27,6 +27,9 @@ public class DeviceInfoVO {
     @ApiModelProperty("屏幕状态，0-计划部署，1-正在部署，2-已部署投入使用，3-故障停机，4-拆机移除")
     private Integer screenStatus;
 
+    @ApiModelProperty("屏幕是否已关联销售信息")
+    private Boolean hasSaleInfo;
+
     @ApiModelProperty("屏幕所在经度")
     @NotNull(message = "经度数值不能为空")
     @Max(value = 180, message = "经度最大数180")
@@ -49,6 +52,10 @@ public class DeviceInfoVO {
     @NotBlank(message = "屏幕名字不能为空")
     @Size(min = 4, max = 255, message = "地址最多255字，最少4字")
     private String screenName;
+
+    @ApiModelProperty("设备默认最大资源承载量")
+    @NotNull(message = "最大资源承载量不能为空")
+    private Integer screenMaxSourceCount;
 
     @ApiModelProperty("屏幕所在地址")
     @NotBlank(message = "屏幕所在地址不能为空")
@@ -97,10 +104,12 @@ public class DeviceInfoVO {
                 .append("id", id)
                 .append("delFlag", delFlag)
                 .append("screenStatus", screenStatus)
+                .append("hasSaleInfo", hasSaleInfo)
                 .append("screenPositionLong", screenPositionLong)
                 .append("screenPositionLati", screenPositionLati)
                 .append("screenSize", screenSize)
                 .append("screenName", screenName)
+                .append("screenMaxSourceCount", screenMaxSourceCount)
                 .append("screenAddress", screenAddress)
                 .append("screenLabel", screenLabel)
                 .append("screenInstaller", screenInstaller)
@@ -126,12 +135,12 @@ public class DeviceInfoVO {
 
         DeviceInfoVO that = (DeviceInfoVO) o;
 
-        return new EqualsBuilder().append(id, that.id).append(delFlag, that.delFlag).append(screenStatus, that.screenStatus).append(screenPositionLong, that.screenPositionLong).append(screenPositionLati, that.screenPositionLati).append(screenSize, that.screenSize).append(screenName, that.screenName).append(screenAddress, that.screenAddress).append(screenLabel, that.screenLabel).append(screenInstaller, that.screenInstaller).append(screenInstallerPhone, that.screenInstallerPhone).append(screenTips, that.screenTips).append(createDate, that.createDate).append(createBy, that.createBy).append(updateDate, that.updateDate).append(updateBy, that.updateBy).append(remarkTips, that.remarkTips).isEquals();
+        return new EqualsBuilder().append(id, that.id).append(delFlag, that.delFlag).append(screenStatus, that.screenStatus).append(hasSaleInfo, that.hasSaleInfo).append(screenPositionLong, that.screenPositionLong).append(screenPositionLati, that.screenPositionLati).append(screenSize, that.screenSize).append(screenName, that.screenName).append(screenMaxSourceCount, that.screenMaxSourceCount).append(screenAddress, that.screenAddress).append(screenLabel, that.screenLabel).append(screenInstaller, that.screenInstaller).append(screenInstallerPhone, that.screenInstallerPhone).append(screenTips, that.screenTips).append(createDate, that.createDate).append(createBy, that.createBy).append(updateDate, that.updateDate).append(updateBy, that.updateBy).append(remarkTips, that.remarkTips).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(id).append(delFlag).append(screenStatus).append(screenPositionLong).append(screenPositionLati).append(screenSize).append(screenName).append(screenAddress).append(screenLabel).append(screenInstaller).append(screenInstallerPhone).append(screenTips).append(createDate).append(createBy).append(updateDate).append(updateBy).append(remarkTips).toHashCode();
+        return new HashCodeBuilder(17, 37).append(id).append(delFlag).append(screenStatus).append(hasSaleInfo).append(screenPositionLong).append(screenPositionLati).append(screenSize).append(screenName).append(screenMaxSourceCount).append(screenAddress).append(screenLabel).append(screenInstaller).append(screenInstallerPhone).append(screenTips).append(createDate).append(createBy).append(updateDate).append(updateBy).append(remarkTips).toHashCode();
     }
 
     public String getId() {
@@ -156,6 +165,14 @@ public class DeviceInfoVO {
 
     public void setScreenStatus(Integer screenStatus) {
         this.screenStatus = screenStatus;
+    }
+
+    public Boolean getHasSaleInfo() {
+        return hasSaleInfo;
+    }
+
+    public void setHasSaleInfo(Boolean hasSaleInfo) {
+        this.hasSaleInfo = hasSaleInfo;
     }
 
     public BigDecimal getScreenPositionLong() {
@@ -188,6 +205,14 @@ public class DeviceInfoVO {
 
     public void setScreenName(String screenName) {
         this.screenName = screenName;
+    }
+
+    public Integer getScreenMaxSourceCount() {
+        return screenMaxSourceCount;
+    }
+
+    public void setScreenMaxSourceCount(Integer screenMaxSourceCount) {
+        this.screenMaxSourceCount = screenMaxSourceCount;
     }
 
     public String getScreenAddress() {

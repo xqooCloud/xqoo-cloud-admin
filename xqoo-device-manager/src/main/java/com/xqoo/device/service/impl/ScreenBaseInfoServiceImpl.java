@@ -29,6 +29,8 @@ import com.xqoo.device.vo.ScreenPictureDetailVO;
 import com.xqoo.feign.dto.device.DeviceInfoDetailDTO;
 import com.xqoo.feign.dto.device.ScreenPictureDetailDTO;
 import com.xqoo.feign.dto.device.ScreenPropertiesDTO;
+import com.xqoo.feign.service.salecenter.SaleCenterFeign;
+import com.xqoo.feign.utils.FeignReturnDataGzip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -66,6 +68,9 @@ public class ScreenBaseInfoServiceImpl extends ServiceImpl<ScreenBaseInfoMapper,
     @Autowired
     private DeviceConfigProperties deviceConfigProperties;
 
+    @Autowired
+    private SaleCenterFeign saleCenterFeign;
+
     @Override
     public ResultEntity<PageResponseBean<DeviceInfoVO>> pageGetList(DeviceInfoPageQueryPOJO page){
         LambdaQueryWrapper<ScreenBaseInfoEntity> queryWrapper = new LambdaQueryWrapper<>();
@@ -87,12 +92,19 @@ public class ScreenBaseInfoServiceImpl extends ServiceImpl<ScreenBaseInfoMapper,
         }
         PageHelper.startPage(page.getPage(), page.getPageSize());
         List<ScreenBaseInfoEntity> list = screenBaseInfoMapper.selectList(queryWrapper);
+        List<String> screenIds = list.stream().map(ScreenBaseInfoEntity::getId).collect(Collectors.toList());
+        List<String> existSaleInfo = FeignReturnDataGzip.UnzipList(saleCenterFeign.getHasSaleInfoScreen(screenIds), String.class);
         List<DeviceInfoVO> voList = list.stream().map(item -> {
             DeviceInfoVO vo = new DeviceInfoVO();
             BeanUtils.copyProperties(item, vo);
             List<String> labelList = Splitter.on("|").trimResults().splitToList(item.getScreenLabel());
             if(CollUtil.isNotEmpty(labelList)){
                 vo.setScreenLabel(labelList);
+            }
+            if(existSaleInfo.contains(vo.getId())){
+                vo.setHasSaleInfo(true);
+            }else{
+                vo.setHasSaleInfo(false);
             }
             return vo;
         }).collect(Collectors.toList());
@@ -203,6 +215,13 @@ public class ScreenBaseInfoServiceImpl extends ServiceImpl<ScreenBaseInfoMapper,
         );
         if(entity == null || StringUtils.isEmpty(entity.getId())){
             return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "设备不为停止状态或未启动状态，不能直接拆除");
+        }
+        Boolean existSaleInfo = saleCenterFeign.getExistSaleInfoByScreenId(entity.getId());
+        if(existSaleInfo == null){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "获取设备是否存在销售信息失败，不能拆除，请检查销售信息状态");
+        }
+        if(existSaleInfo){
+            return new ResultEntity<>(HttpStatus.NOT_ACCEPTABLE, "当前设备包含正在使用的销售信息，请先废除销售信息后再拆除设备");
         }
         entity.setScreenStatus(ScreenStatusEnum.REMOVE.getKey());
         entity.setScreenTips("设备已经拆除使用");

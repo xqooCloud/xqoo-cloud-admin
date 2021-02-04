@@ -23,6 +23,8 @@ public class DeviceConfigProperties {
 
     private Long maxImageSize;
 
+    private Integer maxSourceCount;
+
     private List<String> defaultLabel;
 
     @Override
@@ -32,6 +34,7 @@ public class DeviceConfigProperties {
                 .append("maxPropertiesCount", maxPropertiesCount)
                 .append("maxImageCount", maxImageCount)
                 .append("maxImageSize", maxImageSize)
+                .append("maxSourceCount", maxSourceCount)
                 .append("defaultLabel", defaultLabel)
                 .toString();
     }
@@ -48,12 +51,12 @@ public class DeviceConfigProperties {
 
         DeviceConfigProperties that = (DeviceConfigProperties) o;
 
-        return new EqualsBuilder().append(minPropertiesCount, that.minPropertiesCount).append(maxPropertiesCount, that.maxPropertiesCount).append(maxImageCount, that.maxImageCount).append(maxImageSize, that.maxImageSize).append(defaultLabel, that.defaultLabel).isEquals();
+        return new EqualsBuilder().append(minPropertiesCount, that.minPropertiesCount).append(maxPropertiesCount, that.maxPropertiesCount).append(maxImageCount, that.maxImageCount).append(maxImageSize, that.maxImageSize).append(maxSourceCount, that.maxSourceCount).append(defaultLabel, that.defaultLabel).isEquals();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(minPropertiesCount).append(maxPropertiesCount).append(maxImageCount).append(maxImageSize).append(defaultLabel).toHashCode();
+        return new HashCodeBuilder(17, 37).append(minPropertiesCount).append(maxPropertiesCount).append(maxImageCount).append(maxImageSize).append(maxSourceCount).append(defaultLabel).toHashCode();
     }
 
     public Integer getMinPropertiesCount() {
@@ -86,6 +89,14 @@ public class DeviceConfigProperties {
 
     public void setMaxImageSize(Long maxImageSize) {
         this.maxImageSize = maxImageSize;
+    }
+
+    public Integer getMaxSourceCount() {
+        return maxSourceCount;
+    }
+
+    public void setMaxSourceCount(Integer maxSourceCount) {
+        this.maxSourceCount = maxSourceCount;
     }
 
     public List<String> getDefaultLabel() {

@@ -13,23 +13,23 @@
     <description>xqoo后台微服务管理系统</description>
 
     <modules>
-        <module>xqoo-cloud-gateway</module>
-        <module>xqoo-third-pay</module>
+<!--        <module>xqoo-cloud-gateway</module>-->
+<!--        <module>xqoo-third-pay</module>-->
         <module>xqoo-cloud-feign</module>
         <module>xqoo-common</module>
-        <module>xqoo-client</module>
-        <module>xqoo-uid-generator</module>
-        <module>xqoo-spring-admin-watch</module>
-        <module>xqoo-cloud-authorization</module>
-        <module>xqoo-cloud-operation-log</module>
-        <module>xqoo-cloud-code-generator</module>
-        <module>xqoo-cloud-email</module>
-        <module>xqoo-cloud-sms</module>
-        <module>xqoo-cloud-annex</module>
+<!--        <module>xqoo-client</module>-->
+<!--        <module>xqoo-uid-generator</module>-->
+<!--        <module>xqoo-spring-admin-watch</module>-->
+<!--        <module>xqoo-cloud-authorization</module>-->
+<!--        <module>xqoo-cloud-operation-log</module>-->
+<!--        <module>xqoo-cloud-code-generator</module>-->
+<!--        <module>xqoo-cloud-email</module>-->
+<!--        <module>xqoo-cloud-sms</module>-->
+<!--        <module>xqoo-cloud-annex</module>-->
         <module>xqoo-file-manager</module>
-        <module>xqoo-cloud-integral-center</module>
-        <module>xqoo-device-manager</module>
-        <module>xqoo-sale-center</module>
+<!--        <module>xqoo-cloud-integral-center</module>-->
+<!--        <module>xqoo-device-manager</module>-->
+<!--        <module>xqoo-sale-center</module>-->
     </modules>
     <packaging>pom</packaging>
 

@@ -23,6 +23,9 @@ public class RequestEnvUtils {
         if(userAgent.contains("Windows")){
             return "PC电脑";
         }
+        if(userAgent.contains("Linux")){
+            return "Linux电脑";
+        }
         return "未知设备";
     }
 }
